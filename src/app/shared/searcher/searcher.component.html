@@ -1,1 +1,34 @@
-<p>searcher works!</p>
+<div class='flex items-center gap-8 px-8  shadow-md justify-between h-20'>
+    <h1 class="text-2xl">Fernanpop</h1>
+    <div class="flex rounded-full px-2 w-full shadow-md bg-white dark:bg-[#0d1829]">
+        <button type="submit" class="relative p-2 rounded-full darKbg-[#0d1829]">
+            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M14.9536 14.9458L21 21M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                        stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+            </svg>
+        </button>
+        <div class="relative">
+            <input type="search" id="search" class="text-black w-full rounded-full p-3 z-10 pl-3 truncate" #valor
+                    (input)="onInput(valor.value)" (focus)="changeMessage()" (blur)="changeMessage()">
+                <label for="search" class="cursor-text">
+                    @if(messageActivate()) {
+                    <div class="absolute top-1/2 left-0 right-0 transform -translate-y-1/2 flex">
+                    
+                        <div class="w-full mx-3 truncate text-black">
+                             <h1 class="text-black inline">{{ buy }}</h1>
+                             <h1 class="text-black font-bold ml-2 inline animate-duration-[2000ms]" [ngClass]="{ 'animate-fade': animate() }">{{ product() }}</h1>
+                        </div>
+                    </div>
+                    }
+            </label>
+        </div>
+    </div>
+</div>
