@@ -1,4 +1,4 @@
-<div class='flex items-center gap-8 px-8  shadow-md justify-between h-20'>
+<div class='flex items-center gap-6 px-6  shadow-md justify-between h-20'>
     <h1 class="text-2xl">Fernanpop</h1>
     <div class="flex rounded-full px-2 w-full shadow-md bg-white dark:bg-[#0d1829]">
         <button type="submit" class="relative p-2 rounded-full darKbg-[#0d1829]">
@@ -15,20 +15,43 @@
                 </g>
             </svg>
         </button>
-        <div class="relative">
-            <input type="search" id="search" class="text-black w-full rounded-full p-3 z-10 pl-3 truncate" #valor
-                    (input)="onInput(valor.value)" (focus)="changeMessage()" (blur)="changeMessage()">
-                <label for="search" class="cursor-text">
-                    @if(messageActivate()) {
-                    <div class="absolute top-1/2 left-0 right-0 transform -translate-y-1/2 flex">
-                    
-                        <div class="w-full mx-3 truncate text-black">
-                             <h1 class="text-black inline">{{ buy }}</h1>
-                             <h1 class="text-black font-bold ml-2 inline animate-duration-[2000ms]" [ngClass]="{ 'animate-fade': animate() }">{{ product() }}</h1>
-                        </div>
+        <div class="relative w-full">
+            <input type="search" id="search" class="text-black w-full rounded-full p-3 z-10 pl-3 outline-none truncate" #valor
+                (input)="onInput(valor.value)" (focus)="changeMessage()" (blur)="changeMessage()">
+            <label for="search" class="cursor-text">
+                @if(messageActivate()) {
+                <div class="mr-3 absolute top-1/2 left-0 right-0 transform -translate-y-1/2">
+
+                    <div class="w-full mx-3 truncate text-black">
+                        <h1 class="text-black inline">{{ buy }}</h1>
+                        <h1 class="text-black font-bold ml-2 inline animate-duration-[2000ms]"
+                            [ngClass]="{ 'animate-fade': animate() }">{{ product() }}</h1>
                     </div>
-                    }
+                </div>
+                }
             </label>
         </div>
     </div>
+
+    <button
+        class="max-w-40 relative w-fit inline-flex items-center justify-center 
+        p-0.5  me-2 text-sm font-medium text-gray-900 
+        rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 
+        group-hover:from-teal-300 group-hover:to-lime-400 dark:text-white dark:hover:text-gray-900 
+        focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800">
+        <span
+            class="w-full flex gap-3 truncate relative px-5 py-2.5 transition-all ease-in duration-75 bg-white
+             dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black hover:text-white">
+             <i class="pi pi-user"></i>
+            <h1 class="hidden sm:inline-block">Iniciar sesión</h1>
+        </span>
+    </button>
+
+    <button (click)="changeTheme()">
+        @if(!darkMode()) {
+        <i class="pi pi-moon text-black text-2xl hover:animate-jump"></i>
+        } @else {
+        <i class="pi pi-sun text-2xl hover:animate-jump"></i>
+        }
+    </button>
 </div>

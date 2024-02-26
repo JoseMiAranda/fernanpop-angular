@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostBinding, signal } from '@angular/core';
 import { interval } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-searcher',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonModule],
   templateUrl: './searcher.component.html',
   styles: ``
 })
