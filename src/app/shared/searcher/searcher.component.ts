@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-searcher',
   standalone: true,
   imports: [],
-  templateUrl: './navbar.component.html',
+  templateUrl: './searcher.component.html',
   styles: ``
 })
-export class NavbarComponent {
+export class SearcherComponent {
 
 }
