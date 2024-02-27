@@ -16,15 +16,15 @@ export class SearcherComponent {
   title = 'auth-firebase';
   darkMode = signal<boolean>(JSON.parse(localStorage.getItem('dark_mode') ?? 'false'));
   animate = signal<boolean>(true);
-  buy = 'Compra';
+  buy = 'Busca';
   product = signal<string>('un café');
   messageActivate = signal<boolean>(true);
   text = '';
 
   constructor() {
-    interval(2000).subscribe(() => this.animate.set(!this.animate()));
+    interval(4000).subscribe(() => this.animate.set(!this.animate()));
 
-    interval(4000).subscribe(() => {
+    interval(8000).subscribe(() => {
       this.cont = (this.cont + 1) % this.products.length;
       this.product.set(this.products[this.cont]);
     });
