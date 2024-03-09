@@ -1,5 +1,9 @@
 <div class='flex items-center gap-6 px-6  shadow-md justify-between h-20'>
-    <h1 class="text-2xl font-bold text-emerald-700">Fernanpop</h1>
+    <a routerLink="">
+        <h1 class="text-2xl font-bold text-emerald-700">
+            {{ title }}
+        </h1>
+    </a>
     <div class="flex rounded-full px-2 w-full shadow-md bg-white dark:bg-[#0d1829]">
         <button type="submit" class="relative p-2 rounded-full darKbg-[#0d1829]">
             <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +21,8 @@
         </button>
         <div class="relative w-full">
             <input type="search" id="search" class="text-black w-full rounded-full p-3 z-10 pl-3 outline-none truncate"
-                #valor (input)="onInput(valor.value)" (focus)="changeMessage()" (blur)="changeMessage()">
+                #valor (keyup.enter)="onSubmit(valor.value)" (input)="onInput(valor.value)" (focus)="changeMessage()"
+                (blur)="changeMessage()">
             <label for="search" class="cursor-text">
                 @if(messageActivate()) {
                 <div class="mr-3 absolute top-1/2 left-0 right-0 transform -translate-y-1/2">
@@ -33,7 +38,11 @@
         </div>
     </div>
 
-    <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
+    @if(user()) {
+    <p-splitButton label="{{user()!.email}}" [model]="items">
+    </p-splitButton>
+    } @else {
+    <a [routerLink]="['/fernanpop/login']" class="max-w-40 relative w-fit inline-flex items-center justify-center 
         text-sm font-medium text-gray-900 
         rounded-lg bg-teal-700 hover:bg-teal-600 hover:shadow-sm hover:shadow-teal-600
       dark:text-white">
@@ -41,9 +50,11 @@
             <i class="pi pi-user"></i>
             <h1 class="hidden sm:inline-block">Iniciar sesión</h1>
         </span>
-    </button>
+    </a>
+    }
 
-    <button (click)="changeTheme()">
+    <!-- <button (click)="changeTheme()"> -->
+    <button>
         @if(!darkMode()) {
         <i class="pi pi-moon text-black text-2xl hover:animate-jump"></i>
         } @else {

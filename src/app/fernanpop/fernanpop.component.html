@@ -1,3 +1,9 @@
-<app-searcher />
-<router-outlet />
-<app-footer />
+<div class="min-h-screen flex flex-col justify-between">
+    <app-searcher />
+    <div class="flex flex-grow">
+        <div class="flex-grow">
+            <router-outlet/>
+        </div>
+    </div>
+    <app-footer />
+</div>

@@ -2,41 +2,47 @@ import { CommonModule } from '@angular/common';
 import { Component, HostBinding, signal } from '@angular/core';
 import { interval } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-searcher',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
+  imports: [CommonModule, ButtonModule, RouterLink, SplitButtonModule],
   templateUrl: './searcher.component.html',
   styles: ``
 })
 export class SearcherComponent {
+  public title = 'Fernanpop'
   private cont = -1;
-  private products: string[] = ['nintendo', 'polystation', 'odoo premium', 'un café'];
-  title = 'auth-firebase';
+  private products: string[] = ['nintendo', 'polystation', 'odoo premium', 'un café', 'como programar en Angular', 'una mazana', 'peluche Flutter Dash'];
   darkMode = signal<boolean>(JSON.parse(localStorage.getItem('dark_mode') ?? 'false'));
   animate = signal<boolean>(true);
   buy = 'Busca';
   product = signal<string>('un café');
   messageActivate = signal<boolean>(true);
   text = '';
+  user = this.authService.currentUser;
+  items: MenuItem[];
 
-  constructor() {
+
+  constructor(private router: Router, private authService: AuthService) {
+    this.items = [
+      {
+        label: 'Productos',
+        command: () => {
+          console.log('hola');
+        }
+      },
+    ]
     interval(4000).subscribe(() => this.animate.set(!this.animate()));
 
     interval(8000).subscribe(() => {
       this.cont = (this.cont + 1) % this.products.length;
       this.product.set(this.products[this.cont]);
     });
-  }
-
-  @HostBinding('class.dark') get mode() {
-    return this.darkMode();
-  }
-
-  changeTheme() {
-    this.darkMode.set(!this.darkMode());
-    localStorage.setItem('dark_mode', `${this.darkMode()}`);
   }
 
   changeMessage() {
@@ -48,4 +54,27 @@ export class SearcherComponent {
   onInput(value: string) {
     this.text = value;
   }
+
+  onSubmit(value: string) {
+    this.router.navigate(['/fernanpop/products'], {
+      queryParams: {
+        q: this.text
+      }
+    });
+  }
+
+
 }
+
+
+
+
+// @HostBinding('class.dark') get mode() {
+//   console.log('od');
+//   return this.darkMode();
+// }
+
+// changeTheme() {
+//   this.darkMode.set(!this.darkMode());
+//   localStorage.setItem('dark_mode', `${this.darkMode()}`);
+// }

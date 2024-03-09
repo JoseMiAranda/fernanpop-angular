@@ -1,12 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Product } from '../../../../interfaces/product.interface';
+import { ProductsService } from '../../../../services/products.service';
+import { Router } from '@angular/router';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [],
+  imports: [SkeletonModule],
   templateUrl: './info-product.component.html',
-  styles: ``
+  styleUrl: './info-product.component.css'
 })
-export class InfoProductComponent {
+export class InfoProductComponent implements OnInit {
+
+  @Input('id') productId: string | undefined;
+
+  public product?: Product | null;
+
+  constructor(private productService: ProductsService, private router: Router) { }
+
+  ngOnInit(): void {
+    console.log(this.productId);
+    this.productService.getProductById(this.productId!).subscribe((result: Product | null) => {
+      if (!result) {
+        // Redirección a error con mensaje
+        this.router.navigate(['fernanpop/error/'], {
+          state: {
+            message: 'Parece que el producto no se encuentra'
+          }
+        });
+      } else {
+        this.product = result;
+      }
+    });
+  }
 
 }

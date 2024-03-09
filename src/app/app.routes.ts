@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './fernanpop/pages/home/home.component';
-import { SearchProductComponent } from './fernanpop/pages/products/search-product/search-product.component';
-import { InfoProductComponent } from './fernanpop/pages/products/info-product/info-product.component';
 import { LoginComponent } from './fernanpop/pages/auth/login/login.component';
 import { RegisterComponent } from './fernanpop/pages/auth/register/register.component';
+import { InfoProductComponent } from './fernanpop/pages/products/info-product/info-product.component';
+import { ErrorComponent } from './fernanpop/pages/error/error.component';
+import { SearchProductComponent } from './fernanpop/pages/products/search-product/search-product.component';
+import { loggedUserGuard } from './guards/logged-user.guard';
 
 export const routes: Routes = [
     {
@@ -16,24 +18,31 @@ export const routes: Routes = [
                 loadComponent: () => HomeComponent,
             },
             {
-                path: 'products/search/:queryParams',
+                path: 'product/:id',
+                title: 'product',
+                loadComponent: () => InfoProductComponent,
+            },
+            {
+                path: 'products',
                 title: 'products',
                 loadComponent: () => SearchProductComponent,
             },
             {
-                path: 'product/:id',
-                title: 'product',
-                loadChildren: () => InfoProductComponent,
-            },
-            {
+                canActivate: [loggedUserGuard],
                 path: 'login',
                 title: 'login',
                 loadComponent: () => LoginComponent,
             },
             {
+                canActivate: [loggedUserGuard],
                 path: 'register',
                 title: 'register',
                 loadComponent: () => RegisterComponent,
+            },
+            {
+                path: 'error',
+                title: 'error',
+                loadComponent: () => ErrorComponent,
             },
             {
                 path: '',
