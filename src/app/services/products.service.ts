@@ -21,8 +21,8 @@ export class ProductsService {
       );
   }
 
-  getUserProducts(apiToken: string): Observable<ProductsResponse | null> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${apiToken}`);
+  getUserProducts(accessToken: string): Observable<ProductsResponse | null> {
+    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
     return this.http.get<ProductsResponse | null>(this.baseUrl + `/seller/products`, { headers: headers }).pipe(
       catchError(error => {
         console.error(error);
@@ -32,12 +32,25 @@ export class ProductsService {
   }
 
   getProductById(id: string): Observable<Product | null> {
-    return this.http.get<Product>(this.baseUrl + '/products/' + id)
+    return this.http.get<Product | null>(this.baseUrl + '/products/' + id)
     .pipe(
       catchError((err) => {
       console.log(err);
       return of(null);
     }));
+  }
+  
+  addProduct(accessToken: string, title: string, desc: string, price: number, img: string): Observable<Product | null> {
+    const productData = { title, desc, price, img };
+    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+    return this.http.post<Product>(this.baseUrl + '/seller/product', productData, {
+      headers: headers
+    }).pipe(
+      catchError((err) => {
+        console.log(err);
+        return of(null);
+      })
+    );
   }
 
 }

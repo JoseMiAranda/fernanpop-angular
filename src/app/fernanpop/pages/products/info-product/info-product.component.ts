@@ -39,7 +39,18 @@ export class InfoProductComponent implements OnInit {
   }
 
   onClick() {
-    console.log(this.authService.currentUser());
+    // Si no hay usuario logueado
+    if(!this.authService.currentUser()) {
+      this.router.navigate(['/fernanpop/login']);
+    } 
+    // Si el usuario es el propietario
+    else if(this.authService.currentUser()!.uid == this.product!.sellerId) {
+      console.log('Hora de modificar')
+    }   
+    // El usuario es otro y quiere comprar
+    else {
+      console.log('Hora de comprar')
+    }
   }
 
 }

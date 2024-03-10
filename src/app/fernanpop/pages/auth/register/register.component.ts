@@ -57,9 +57,5 @@ export class RegisterComponent {
       () => {this.router.navigate(['fernanpop']);}
     ).catch()
   }
-
-  onReset(): void {
-    this.submitted = false;
-    this.form.reset();
-  }
+  
 }

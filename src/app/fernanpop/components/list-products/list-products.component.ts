@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../pipes/current-currency.pipe';
+import { User } from '@angular/fire/auth';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-list-products',
@@ -14,8 +16,12 @@ import { CurrentCurrencyPipe } from '../../pipes/current-currency.pipe';
 })
 export class ListProductsComponent implements OnInit {
   numbers: number[] = [];
+ 
+  user = this.authService.currentUser;
   
   @Input() listProducts: Product[] | undefined;
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.numbers = Array(20).fill(0).map((_, i) => i + 1);

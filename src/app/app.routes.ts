@@ -6,7 +6,9 @@ import { InfoProductComponent } from './fernanpop/pages/products/info-product/in
 import { ErrorComponent } from './fernanpop/pages/error/error.component';
 import { SearchProductComponent } from './fernanpop/pages/products/search-product/search-product.component';
 import { UserProductsComponent } from './fernanpop/pages/products/user-products/user-products.component';
-import { authGuard } from './guards/auth.guard';
+import { NotLoggedGuard } from './guards/not-logged.guard';
+import { LoggedGuard } from './guards/logged.guard';
+import { CreateProductComponent } from './fernanpop/pages/products/create-product/create-product.component';
 
 export const routes: Routes = [
     {
@@ -35,17 +37,24 @@ export const routes: Routes = [
             },
             {
                 // Solamente accesible si no está logueado
-                canActivate: [authGuard],
+                canActivate: [NotLoggedGuard],
                 path: 'login',
                 title: 'login',
                 loadComponent: () => LoginComponent,
             },
             {
                 // Solamente accesible si no está logueado
-                canActivate: [authGuard],
+                canActivate: [NotLoggedGuard],
                 path: 'register',
                 title: 'register',
                 loadComponent: () => RegisterComponent,
+            },
+            {
+                // Solamente accesible si no está logueado
+                canActivate: [LoggedGuard],
+                path: 'create-product',
+                title: 'create-product',
+                loadComponent: () => CreateProductComponent,
             },
             {
                 path: 'error',
@@ -56,9 +65,9 @@ export const routes: Routes = [
                 path: '',
                 redirectTo: 'home',
                 pathMatch: 'full',
-            }            
+            }
         ]
-    }, 
+    },
     {
         path: '**',
         redirectTo: '/fernanpop',

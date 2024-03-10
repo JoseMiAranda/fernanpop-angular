@@ -66,9 +66,4 @@ export class LoginComponent implements OnInit {
     ).catch()
   }
 
-  onReset(): void {
-    this.submitted = false;
-    this.form.reset();
-  }
-
 }

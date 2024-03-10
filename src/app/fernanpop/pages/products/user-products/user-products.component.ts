@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ProductsResponse } from '../../../../interfaces/product.interface';
 import { Subscription } from 'rxjs';
 import { ProductsService } from '../../../../services/products.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { PaginatorModule } from 'primeng/paginator';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { AuthService } from '../../../../services/auth.service';
@@ -10,7 +10,7 @@ import { AuthService } from '../../../../services/auth.service';
 @Component({
   selector: 'app-user-products',
   standalone: true,
-  imports: [ListProductsComponent, PaginatorModule],
+  imports: [ListProductsComponent, PaginatorModule, RouterLink],
   templateUrl: './user-products.component.html',
   styleUrl: './user-products.component.css'
 })
@@ -28,10 +28,9 @@ export class UserProductsComponent {
       
       console.log(this.currentUser()!.accessToken);
 
-      // this.subscription.add(this.productsService.getUserProducts(this.currentUser()!.accessToken).subscribe((resp) => {
-      //   this.productsResponse = resp;
-      //   console.log(this.productsResponse);
-      // }));
+      this.subscription.add(this.productsService.getUserProducts(this.currentUser()!.accessToken).subscribe((resp) => {
+        this.productsResponse = resp;
+      }));
     }));
   }
   
@@ -42,8 +41,9 @@ export class UserProductsComponent {
   onPageChange(pageDetails: any) {
     let {page,...rest} = pageDetails;
     page++;
+    console.log(page);
     this.queryParams = {...this.queryParams, page};
-    this.router.navigate(['/fernanpop/products'], {
+    this.router.navigate(['/fernanpop/user/products'], {
       queryParams: {...this.queryParams}
     });
   }

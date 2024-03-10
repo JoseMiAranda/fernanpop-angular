@@ -23,11 +23,9 @@ export class SearchProductComponent implements OnDestroy {
   constructor(private productsService: ProductsService, private route: ActivatedRoute, private router: Router) { 
     this.subscription.add(this.route.queryParams.subscribe((params: Params) => {
       this.queryParams = params;
-      console.log(this.queryParams); 
   
       this.subscription.add(this.productsService.getProducts({...this.queryParams}).subscribe((resp) => {
         this.productsResponse = resp;
-        console.log(this.productsResponse);
       }));
     }));
   }
