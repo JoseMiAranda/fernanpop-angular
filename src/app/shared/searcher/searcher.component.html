@@ -1,4 +1,4 @@
-<div class='flex items-center gap-6 px-12  shadow-md justify-between h-20'>
+<div class='w-screen flex items-center gap-6 px-12  shadow-md justify-between h-20'>
     <a routerLink="">
         <h1 class="text-2xl font-bold text-emerald-700">
             {{ title }}
@@ -39,8 +39,14 @@
     </div>
 
     @if(user()) {
-    <p-splitButton label="{{user()!.email | ellipsis:10}}" [model]="items">
-    </p-splitButton>
+        <div class="hidden sm:block">
+            <p-splitButton label="{{user()!.email | ellipsis:10}}" [model]="items">
+            </p-splitButton>
+        </div>
+        <div class="block sm:hidden">
+            <p-splitButton icon="pi pi-user" [model]="items">
+            </p-splitButton>
+        </div>
     } @else {
     <a [routerLink]="['/fernanpop/login']" class="max-w-40 relative w-fit inline-flex items-center justify-center 
         text-sm font-medium text-gray-900 

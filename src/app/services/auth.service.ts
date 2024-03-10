@@ -28,6 +28,7 @@ export class AuthService {
   // LOGIN
   async login({email, password}: any) {
     return await signInWithEmailAndPassword(this.auth,email,password).then(async (resp: UserCredential) => {
+      console.log(resp)
       await this.credentialsToUser(resp, email, password);
       return true;
     }

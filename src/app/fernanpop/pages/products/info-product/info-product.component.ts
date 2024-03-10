@@ -4,7 +4,7 @@ import { ProductsService } from '../../../../services/products.service';
 import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AuthService } from '../../../../services/auth.service';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 
 @Component({

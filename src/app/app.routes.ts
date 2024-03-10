@@ -9,6 +9,7 @@ import { UserProductsComponent } from './fernanpop/pages/products/user-products/
 import { NotLoggedGuard } from './guards/not-logged.guard';
 import { LoggedGuard } from './guards/logged.guard';
 import { CreateProductComponent } from './fernanpop/pages/products/create-product/create-product.component';
+import { UpdateProductComponent } from './fernanpop/pages/products/update-product/update-product.component';
 
 export const routes: Routes = [
     {
@@ -55,6 +56,13 @@ export const routes: Routes = [
                 path: 'create-product',
                 title: 'create-product',
                 loadComponent: () => CreateProductComponent,
+            },
+            {
+                // Solamente accesible si no está logueado
+                canActivate: [LoggedGuard],
+                path: 'update-product/:id',
+                title: 'update-product',
+                loadComponent: () => UpdateProductComponent,
             },
             {
                 path: 'error',

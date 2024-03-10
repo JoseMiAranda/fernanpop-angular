@@ -1,23 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
+import { Product } from '../../../../interfaces/product.interface';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ProductsService } from '../../../../services/products.service';
 import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ProductsService } from '../../../../services/products.service';
-import { Product } from '../../../../interfaces/product.interface';
 
 @Component({
-  selector: 'app-create-product',
+  selector: 'app-update-product',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './create-product.component.html',
-  styleUrl: './create-product.component.css'
+  templateUrl: './update-product.component.html',
+  styleUrl: './update-product.component.css'
 })
-export class CreateProductComponent {
+export class UpdateProductComponent implements OnInit {
+  @Input('id') productId: string | undefined;
   public minLenght = 6;
   public maxLenght = 20;
   public maxDescLenght = 100;
   private currentUser = this.authService.currentUser;
+  public product = signal<Product | undefined>(undefined);
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
@@ -31,6 +33,26 @@ export class CreateProductComponent {
   constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    this.productsService.getProductById(this.productId!).subscribe((result: Product | null) => {
+      if (!result || result.sellerId !== this.currentUser()!.uid) {
+        // Redirección a error con mensaje
+        this.router.navigate(['fernanpop/error/'], {
+          state: {
+            message: 'Parece que el producto no se encuentra'
+          }
+        });
+      } else {
+        this.product.set(result);
+        // Cargamos en el formulario los datos del producto
+        this.form.patchValue({
+          title: this.product()!.title,
+          price: this.product()!.price,
+          img: this.product()!.img,
+          desc: this.product()!.desc
+        });
+      }
+    });
+
     this.form = this.formBuilder.group(
       {
         title:  [
@@ -80,23 +102,22 @@ export class CreateProductComponent {
     }
 
     const {title, price, img, desc} = this.form.value;
-    
-    const newProduct: Product = {
-      id: '',
+
+    const updatedProduct: Product = {
+      id: this.product()!.id,
       title: title,
       price: price,
       desc: desc,
       img: img,
-      sellerId: ''
+      sellerId: this.product()!.sellerId
     }
-    
-    // Obtener titulo del form
-    this.productsService.addProduct(this.currentUser()!.accessToken, newProduct).subscribe((result: Product | null) => {
+
+    this.productsService.updateProduct(this.currentUser()!.accessToken, updatedProduct).subscribe((result: Product | null) => {
       if (!result) {
         // Redirección a error con mensaje
         this.router.navigate(['fernanpop/error/'], {
           state: {
-            message: 'Parece que no se puede crear el producto'
+            message: 'Parece que no se puede modificar el producto'
           }
         });
       } else {
