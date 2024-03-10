@@ -117,11 +117,27 @@ export class UpdateProductComponent implements OnInit {
         // Redirección a error con mensaje
         this.router.navigate(['fernanpop/error/'], {
           state: {
-            message: 'Parece que no se puede modificar el producto'
+            message: 'Parece que no se pudo modificar el producto'
           }
         });
       } else {
         this.router.navigate(['/fernanpop/product', result.id]);
+      }
+    });
+  }
+
+  onDelete(): void {
+    console.log('delete')
+    this.productsService.deleteProduct(this.currentUser()!.accessToken, this.product()!.id).subscribe((result: Product | null) => {
+      if (!result) {
+        // Redirección a error con mensaje
+        this.router.navigate(['fernanpop/error/'], {
+          state: {
+            message: 'Parece que no se pudo borrar el producto'
+          }
+        });
+      } else {
+        this.router.navigate(['']);
       }
     });
   }

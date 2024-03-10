@@ -1,80 +1,89 @@
 @if(product()) {
-	<div class="flex flex-col h-full items-center justify-center bg-slate-100">
-		<div class="p-12 bg-white mx-auto rounded-2xl w-full sm:max-w-[500px] shadow-md">
-			<div class="mb-4">
-				<h3 class="font-semibold text-2xl text-gray-800">¡Actualiza!</h3>
-				<p class="text-gray-500">Rellene el formulario con todos los datos.</p>
+<div class="flex flex-col h-full items-center justify-center bg-slate-100">
+	<div class="p-12 bg-white mx-auto rounded-2xl w-full sm:max-w-[500px] shadow-md">
+		<div class="mb-4">
+			<h3 class="font-semibold text-2xl text-gray-800">¡Actualiza!</h3>
+			<p class="text-gray-500">Rellene el formulario con todos los datos.</p>
+		</div>
+		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+			<div class="form-group space-y-2">
+				<label class="text-sm font-medium text-gray-700 tracking-wide">Título</label>
+				<input type="text" formControlName="title"
+					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['title'].errors }" />
+				@if (submitted && f['title'].errors) {
+				<div class="invalid-feedback">
+					@if (f['title'].errors['required']) {
+					<div class="text-red-500">Título requerido</div>
+					}@if (f['title'].errors['minlength']) {
+					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
+					} @if (f['title'].errors['maxlength']) {
+					<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
+					}
+				</div>
+				}
 			</div>
-			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Título</label>
-					<input type="text" formControlName="title"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['title'].errors }" />
-					@if (submitted && f['title'].errors) {
-					<div class="invalid-feedback">
-						@if (f['title'].errors['required']) {
-						<div class="text-red-500">Título requerido</div>
-						}@if (f['title'].errors['minlength']) {
-						<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
-						} @if (f['title'].errors['maxlength']) {
-						<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
-						}
-					</div>
+			<div class="form-group space-y-2">
+				<label class="text-sm font-medium text-gray-700 tracking-wide">Precio</label>
+				<input type="number" formControlName="price"
+					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['price'].errors }" />
+				@if (submitted && f['price'].errors) {
+				<div class="invalid-feedback">
+					@if (f['price'].errors['required']) {
+					<div class="text-red-500">Título requerido</div>
 					}
 				</div>
-				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Precio</label>
-					<input type="number" formControlName="price"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['price'].errors }" />
-					@if (submitted && f['price'].errors) {
-					<div class="invalid-feedback">
-						@if (f['price'].errors['required']) {
-						<div class="text-red-500">Título requerido</div>
-						}
-					</div>
+				}
+			</div>
+			<div class="form-group space-y-2">
+				<label class="text-sm font-medium text-gray-700 tracking-wide">Imagen</label>
+				<input type="text" formControlName="img"
+					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['img'].errors }" />
+				@if (submitted && f['img'].errors) {
+				<div class="invalid-feedback">
+					@if (f['img'].errors['required']) {
+					<div class="text-red-500">Imagen requerida</div>
 					}
 				</div>
-				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Imagen</label>
-					<input type="text" formControlName="img"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['img'].errors }" />
-					@if (submitted && f['img'].errors) {
-					<div class="invalid-feedback">
-						@if (f['img'].errors['required']) {
-						<div class="text-red-500">Imagen requerida</div>
-						}
-					</div>
+				}
+			</div>
+			<div class="form-group space-y-2">
+				<label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
+				<input type="text" formControlName="desc"
+					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['desc'].errors }" />
+				@if (submitted && f['desc'].errors) {
+				<div class="invalid-feedback">
+					@if (f['desc'].errors['required']) {
+					<div class="text-red-500">Correo electrónico requerido</div>
+					} @if (f['desc'].errors['minlength']) {
+					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
+					} @if (f['desc'].errors['maxlength']) {
+					<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
 					}
 				</div>
-				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
-					<input type="text" formControlName="desc"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['desc'].errors }" />
-					@if (submitted && f['desc'].errors) {
-					<div class="invalid-feedback">
-						@if (f['desc'].errors['required']) {
-						<div class="text-red-500">Correo electrónico requerido</div>
-						} @if (f['desc'].errors['minlength']) {
-						<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
-						} @if (f['desc'].errors['maxlength']) {
-						<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
-						}
-					</div>
-					}
-				</div>
-				<div>
-					<button type="submit"
-						class="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
-						Crear producto
-					</button>
+				}
+			</div>
+			<div>
+				<button type="submit"
+					class="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
+					Crear producto
+				</button>
 
-					<!-- <p-button  icon="pi pi-times" label="Delete" styleClass="p-button-danger"></p-button> -->
-				</div>
-			</form>
+			</div>
+		</form>
+		<div class="flex justify-center pt-8">
+			<button (click)="onDelete()" class="max-w-40 relative w-fit inline-flex items-center justify-center 
+		text-sm font-medium text-gray-900 
+		rounded-lg bg-red-700 hover:bg-red-600 hover:shadow-sm hover:shadow-red-600
+	  dark:text-white">
+				<span class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
+					<h1>Eliminar</h1>
+				</span>
+			</button>
 		</div>
 	</div>
-} 
+</div>
+}

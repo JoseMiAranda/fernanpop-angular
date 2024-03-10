@@ -96,7 +96,7 @@ export class CreateProductComponent {
         // Redirección a error con mensaje
         this.router.navigate(['fernanpop/error/'], {
           state: {
-            message: 'Parece que no se puede crear el producto'
+            message: 'Parece que no se pudo crear el producto'
           }
         });
       } else {

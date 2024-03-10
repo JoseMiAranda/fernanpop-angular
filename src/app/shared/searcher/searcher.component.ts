@@ -7,16 +7,16 @@ import { AuthService } from '../../services/auth.service';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { EllipsisPipe } from '../../fernanpop/pipes/ellipsis.pipe';
+import { TitleComponent } from '../title/title.component';
 
 @Component({
   selector: 'app-searcher',
   standalone: true,
-  imports: [CommonModule, ButtonModule, RouterLink, SplitButtonModule, EllipsisPipe],
+  imports: [CommonModule, ButtonModule, RouterLink, SplitButtonModule, EllipsisPipe, TitleComponent],
   templateUrl: './searcher.component.html',
   styles: ``
 })
 export class SearcherComponent {
-  public title = 'Fernanpop'
   private cont = -1;
   private products: string[] = ['nintendo', 'polystation', 'odoo premium', 'un café', 'como programar en Angular', 'una mazana', 'peluche Flutter Dash'];
   darkMode = signal<boolean>(JSON.parse(localStorage.getItem('dark_mode') ?? 'false'));
