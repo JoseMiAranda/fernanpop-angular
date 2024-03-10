@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Auth, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from '@angular/fire/auth';
 import { User } from '../interfaces/user.interface';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +10,8 @@ export class AuthService {
 
   currentUser = signal<User | undefined>(undefined);
 
-  constructor(private auth: Auth) { }
+  constructor(private auth: Auth) {
+  }
 
   // LOGIN
   async register({email, password}: any) {
