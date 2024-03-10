@@ -5,7 +5,8 @@ import { RegisterComponent } from './fernanpop/pages/auth/register/register.comp
 import { InfoProductComponent } from './fernanpop/pages/products/info-product/info-product.component';
 import { ErrorComponent } from './fernanpop/pages/error/error.component';
 import { SearchProductComponent } from './fernanpop/pages/products/search-product/search-product.component';
-import { loggedUserGuard } from './guards/logged-user.guard';
+import { UserProductsComponent } from './fernanpop/pages/products/user-products/user-products.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -28,13 +29,20 @@ export const routes: Routes = [
                 loadComponent: () => SearchProductComponent,
             },
             {
-                canActivate: [loggedUserGuard],
+                path: 'user/products',
+                title: 'user-products',
+                loadComponent: () => UserProductsComponent,
+            },
+            {
+                // Solamente accesible si no está logueado
+                canActivate: [authGuard],
                 path: 'login',
                 title: 'login',
                 loadComponent: () => LoginComponent,
             },
             {
-                canActivate: [loggedUserGuard],
+                // Solamente accesible si no está logueado
+                canActivate: [authGuard],
                 path: 'register',
                 title: 'register',
                 loadComponent: () => RegisterComponent,

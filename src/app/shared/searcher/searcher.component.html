@@ -1,4 +1,4 @@
-<div class='flex items-center gap-6 px-6  shadow-md justify-between h-20'>
+<div class='flex items-center gap-6 px-12  shadow-md justify-between h-20'>
     <a routerLink="">
         <h1 class="text-2xl font-bold text-emerald-700">
             {{ title }}
@@ -39,7 +39,7 @@
     </div>
 
     @if(user()) {
-    <p-splitButton label="{{user()!.email}}" [model]="items">
+    <p-splitButton label="{{user()!.email | ellipsis:10}}" [model]="items">
     </p-splitButton>
     } @else {
     <a [routerLink]="['/fernanpop/login']" class="max-w-40 relative w-fit inline-flex items-center justify-center 
@@ -53,12 +53,4 @@
     </a>
     }
 
-    <!-- <button (click)="changeTheme()"> -->
-    <button>
-        @if(!darkMode()) {
-        <i class="pi pi-moon text-black text-2xl hover:animate-jump"></i>
-        } @else {
-        <i class="pi pi-sun text-2xl hover:animate-jump"></i>
-        }
-    </button>
 </div>

@@ -15,7 +15,7 @@ import { PaginatorModule } from 'primeng/paginator';
 })
 export class SearchProductComponent implements OnDestroy {
 
-  public productsResponse?: ProductsResponse | null;
+  public productsResponse: ProductsResponse | undefined | null = undefined;
   private subscription: Subscription = new Subscription();
 
   queryParams: any = {};

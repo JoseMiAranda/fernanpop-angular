@@ -1,1 +1,58 @@
-<p>register works!</p>
+<div class="flex flex-col h-full items-center justify-center bg-slate-100">
+	<div class="p-12 bg-white mx-auto rounded-2xl w-full sm:max-w-[500px] shadow-md">
+		<div class="mb-4">
+			<h3 class="font-semibold text-2xl text-gray-800">¡Conozca Fernanpop!</h3>
+			<p class="text-gray-500">Crea una cuenta para comprar y vender productos.</p>
+		</div>
+		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+			<div class="form-group space-y-2">
+				<label class="text-sm font-medium text-gray-700 tracking-wide">Correo electrónico</label>
+				<input type="text" formControlName="email"
+					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+				@if (submitted && f['email'].errors) {
+				<div class="invalid-feedback">
+					@if (f['email'].errors['required']) {
+					<div class="text-red-500">Correo electrónico requerido</div>
+					} @if (f['email'].errors['email']) {
+					<div class="text-red-500">Correo electrónico válido</div>
+					}
+				</div>
+				}
+			</div>
+			<div class="form-group space-y-2">
+				<label class="text-sm font-medium text-gray-700 tracking-wide">Contraseña</label>
+				<input type="password" formControlName="password"
+					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
+				@if (submitted && f['password'].errors) {
+				<div class="invalid-feedback">
+					@if (f['password'].errors['required']) {
+					<div class="text-red-500">Contraseña requerida</div>
+					} @if (f['password'].errors['minlength']) {
+					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
+					} @if (f['password'].errors['maxlength']) {
+					<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
+					}
+				</div>
+				}
+			</div>
+			<div>
+				<button type="submit"
+					class="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
+					Registrase
+				</button>
+			</div>
+			<div class="flex justify-center">
+				<p>¿Ya tienes una cuenta?</p>
+				<a [routerLink]="['/fernanpop/login']"
+					class="text-green-400  hover:text-green-500">Inicia sesión</a>
+			</div>
+		</form>
+		<div class="pt-5 text-center text-gray-400 text-xs">
+			<span>
+				Copyright © 2024-2025
+			</span>
+		</div>
+	</div>
+</div>

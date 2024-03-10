@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Product, ProductsResponse } from '../interfaces/product.interface';
@@ -14,6 +14,16 @@ export class ProductsService {
 
   getProducts({page = 1, q = '', minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER}): Observable<ProductsResponse | null> {
     return this.http.get<ProductsResponse | null>(this.baseUrl + `/products/filter?page=${page}&q=${q}`).pipe(
+      catchError(error => {
+        console.error(error);
+        return of(null);
+      })
+      );
+  }
+
+  getUserProducts(apiToken: string): Observable<ProductsResponse | null> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${apiToken}`);
+    return this.http.get<ProductsResponse | null>(this.baseUrl + `/seller/products`, { headers: headers }).pipe(
       catchError(error => {
         console.error(error);
         return of(null);

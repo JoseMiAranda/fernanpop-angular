@@ -3,11 +3,14 @@ import { Product } from '../../../../interfaces/product.interface';
 import { ProductsService } from '../../../../services/products.service';
 import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
+import { AuthService } from '../../../../services/auth.service';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [SkeletonModule],
+  imports: [CommonModule, CurrentCurrencyPipe, SkeletonModule],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
@@ -16,11 +19,11 @@ export class InfoProductComponent implements OnInit {
   @Input('id') productId: string | undefined;
 
   public product?: Product | null;
+  public currentUser = this.authService.currentUser;
 
-  constructor(private productService: ProductsService, private router: Router) { }
+  constructor(private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    console.log(this.productId);
     this.productService.getProductById(this.productId!).subscribe((result: Product | null) => {
       if (!result) {
         // Redirección a error con mensaje
@@ -33,6 +36,10 @@ export class InfoProductComponent implements OnInit {
         this.product = result;
       }
     });
+  }
+
+  onClick() {
+    console.log(this.authService.currentUser());
   }
 
 }

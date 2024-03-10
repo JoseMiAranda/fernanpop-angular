@@ -20,6 +20,7 @@ export class AuthService {
       await this.credentialsToUser(resp, email, password);
       return true;
     }).catch((err) => {
+      console.log(err);
       return false;
     });
   }
@@ -31,11 +32,12 @@ export class AuthService {
       return true;
     }
     ).catch((err) => {
+      console.log(err);
       return false;
     });
   }
 
-  async credentialsToUser(resp: UserCredential, email: string, password: string) {
+  private async credentialsToUser(resp: UserCredential, email: string, password: string) {
     const user: User = {
       uid: resp.user.uid,
       email: resp.user.email!,
@@ -62,14 +64,15 @@ export class AuthService {
     ));
   }
 
-  private obtainUser() {
+  async obtainUser() {
     let user = localStorage.getItem('fernanpopUser');
     if(user) {
       let {email, password} = JSON.parse(user);
       email = decrypt(email);
       password = decrypt(password);
-      this.login({email, password});
+      return this.login({email, password}).then(() => true).catch((err) => false);
     }
+    return false;
   }
 
   private deleteUser() {

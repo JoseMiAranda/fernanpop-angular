@@ -6,11 +6,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
+import { EllipsisPipe } from '../../fernanpop/pipes/ellipsis.pipe';
 
 @Component({
   selector: 'app-searcher',
   standalone: true,
-  imports: [CommonModule, ButtonModule, RouterLink, SplitButtonModule],
+  imports: [CommonModule, ButtonModule, RouterLink, SplitButtonModule, EllipsisPipe],
   templateUrl: './searcher.component.html',
   styles: ``
 })
@@ -32,10 +33,19 @@ export class SearcherComponent {
     this.items = [
       {
         label: 'Productos',
+        icon: "pi pi-box",
         command: () => {
-          console.log('hola');
+          router.navigate(['fernanpop/user/products'])
         }
       },
+      {
+        label: 'Cerrar sesión',
+        icon: "pi pi-sign-out",
+        command: () => {
+          authService.logout();
+          router.navigate(['fernanpop']);
+        }
+      }
     ]
     interval(4000).subscribe(() => this.animate.set(!this.animate()));
 

@@ -2,11 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Product } from '../../../interfaces/product.interface';
 import { RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
+import { CommonModule } from '@angular/common';
+import { CurrentCurrencyPipe } from '../../pipes/current-currency.pipe';
 
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [RouterLink, SkeletonModule],
+  imports: [CommonModule, RouterLink, SkeletonModule, CurrentCurrencyPipe],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })
