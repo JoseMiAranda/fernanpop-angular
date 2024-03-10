@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Auth, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from '@angular/fire/auth';
 import { User } from '../interfaces/user.interface';
-
+import { decrypt, encrypt } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +11,23 @@ export class AuthService {
   currentUser = signal<User | undefined>(undefined);
 
   constructor(private auth: Auth) {
-  }
-
-  // LOGIN
-  async register({email, password}: any) {
-    return await createUserWithEmailAndPassword(this.auth,email,password);
+    this.obtainUser();
   }
 
   // REGISTER
+  async register({email, password}: any) {
+    return await createUserWithEmailAndPassword(this.auth,email,password).then(async (resp: UserCredential) => {
+      await this.credentialsToUser(resp, email, password);
+      return true;
+    }).catch((err) => {
+      return false;
+    });
+  }
+
+  // LOGIN
   async login({email, password}: any) {
     return await signInWithEmailAndPassword(this.auth,email,password).then(async (resp: UserCredential) => {
-      // Obtenemos lo que nos interesa del UserCredential
-      const user: User = {
-        uid: resp.user.uid,
-        email: resp.user.email!,
-        accessToken: await resp.user.getIdToken()
-      }
-      this.currentUser.set(user);
-      console.log(this.currentUser());
+      await this.credentialsToUser(resp, email, password);
       return true;
     }
     ).catch((err) => {
@@ -36,9 +35,45 @@ export class AuthService {
     });
   }
 
+  async credentialsToUser(resp: UserCredential, email: string, password: string) {
+    const user: User = {
+      uid: resp.user.uid,
+      email: resp.user.email!,
+      accessToken: await resp.user.getIdToken()
+    }
+    this.saveUser(email,password);
+    this.currentUser.set(user);
+  }
+
   // LOGOUT
   logout() {
-    return signOut(this.auth);
+    this.currentUser.set(undefined);
+    this.deleteUser();
+  }
+
+  // LOCALSTORAGE METHODS
+  private saveUser(email: string,password: string) {
+    localStorage.setItem('fernanpopUser', 
+    JSON.stringify(
+      {
+        email: encrypt(email), 
+        password: encrypt(password)
+      }
+    ));
+  }
+
+  private obtainUser() {
+    let user = localStorage.getItem('fernanpopUser');
+    if(user) {
+      let {email, password} = JSON.parse(user);
+      email = decrypt(email);
+      password = decrypt(password);
+      this.login({email, password});
+    }
+  }
+
+  private deleteUser() {
+    localStorage.removeItem('fernanpopUser');
   }
 
 }
