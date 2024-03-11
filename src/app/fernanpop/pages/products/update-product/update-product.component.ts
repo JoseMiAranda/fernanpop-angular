@@ -138,10 +138,10 @@ export class UpdateProductComponent implements OnInit {
       message: '¿Estás seguro de borrar el producto?',
       header: 'Confirmación de eliminación',
       icon: 'pi pi-info-circle',
-      acceptButtonStyleClass:"p-button-danger p-button-text ml-5",
-      rejectButtonStyleClass:"p-button-text p-button-text",
-      acceptIcon:"none",
-      rejectIcon:"none",
+      acceptButtonStyleClass: "p-button-danger p-button-text ml-5",
+      rejectButtonStyleClass: "p-button-text p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
       acceptLabel: "Eliminar",
       rejectLabel: "Cancelar",
       reject: () => {
@@ -149,15 +149,15 @@ export class UpdateProductComponent implements OnInit {
       accept: () => {
         this.productsService.deleteProduct(this.currentUser()!.accessToken, this.product()!.id).subscribe((result: Product | null) => {
           if (result) {
-          } else {
             this.router.navigate(['']);
+          } else {
+            // Redirección a error con mensaje
+            this.router.navigate(['fernanpop/error/'], {
+              state: {
+                message: 'Parece que no se pudo borrar el producto'
+              }
+            });
           }
-          // Redirección a error con mensaje
-          this.router.navigate(['fernanpop/error/'], {
-            state: {
-              message: 'Parece que no se pudo borrar el producto'
-            }
-          });
         });
       }
     });
