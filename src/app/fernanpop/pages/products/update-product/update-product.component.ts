@@ -5,13 +5,17 @@ import { ProductsService } from '../../../../services/products.service';
 import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ConfirmDialogModule, ButtonModule],
   templateUrl: './update-product.component.html',
-  styleUrl: './update-product.component.css'
+  styleUrl: './update-product.component.css',
+  providers: [ConfirmationService, MessageService]
 })
 export class UpdateProductComponent implements OnInit {
   @Input('id') productId: string | undefined;
@@ -30,7 +34,9 @@ export class UpdateProductComponent implements OnInit {
 
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private authService: AuthService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private productsService: ProductsService,
+    private confirmationService: ConfirmationService, private messageService: MessageService,
+    private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.productsService.getProductById(this.productId!).subscribe((result: Product | null) => {
@@ -55,7 +61,7 @@ export class UpdateProductComponent implements OnInit {
 
     this.form = this.formBuilder.group(
       {
-        title:  [
+        title: [
           null,
           [
             Validators.required,
@@ -95,13 +101,13 @@ export class UpdateProductComponent implements OnInit {
   onSubmit(): void {
     console.log('submit');
     this.submitted = true;
-    
+
     console.log(this.form.invalid)
     if (this.form.invalid) {
       return;
     }
 
-    const {title, price, img, desc} = this.form.value;
+    const { title, price, img, desc } = this.form.value;
 
     const updatedProduct: Product = {
       id: this.product()!.id,
@@ -126,18 +132,33 @@ export class UpdateProductComponent implements OnInit {
     });
   }
 
-  onDelete(): void {
-    console.log('delete')
-    this.productsService.deleteProduct(this.currentUser()!.accessToken, this.product()!.id).subscribe((result: Product | null) => {
-      if (!result) {
-        // Redirección a error con mensaje
-        this.router.navigate(['fernanpop/error/'], {
-          state: {
-            message: 'Parece que no se pudo borrar el producto'
+  onDelete(event: Event): void {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: '¿Estás seguro de borrar el producto?',
+      header: 'Confirmación de eliminación',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass:"p-button-danger p-button-text ml-5",
+      rejectButtonStyleClass:"p-button-text p-button-text",
+      acceptIcon:"none",
+      rejectIcon:"none",
+      acceptLabel: "Eliminar",
+      rejectLabel: "Cancelar",
+      reject: () => {
+      },
+      accept: () => {
+        this.productsService.deleteProduct(this.currentUser()!.accessToken, this.product()!.id).subscribe((result: Product | null) => {
+          if (result) {
+          } else {
+            this.router.navigate(['']);
           }
+          // Redirección a error con mensaje
+          this.router.navigate(['fernanpop/error/'], {
+            state: {
+              message: 'Parece que no se pudo borrar el producto'
+            }
+          });
         });
-      } else {
-        this.router.navigate(['']);
       }
     });
   }

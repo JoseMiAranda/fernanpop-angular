@@ -75,7 +75,8 @@
 			</div>
 		</form>
 		<div class="flex justify-center pt-8">
-			<button (click)="onDelete()" class="max-w-40 relative w-fit inline-flex items-center justify-center 
+			<p-confirmDialog></p-confirmDialog>
+			<button (click)="onDelete($event)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
 		text-sm font-medium text-gray-900 
 		rounded-lg bg-red-700 hover:bg-red-600 hover:shadow-sm hover:shadow-red-600
 	  dark:text-white">
