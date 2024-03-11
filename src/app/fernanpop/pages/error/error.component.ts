@@ -1,14 +1,20 @@
-import { Component, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AnimationItem } from 'lottie-web';
+import { LottieDirective, AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-error',
   standalone: true,
-  imports: [],
+  imports: [LottieDirective],
   templateUrl: './error.component.html',
   styleUrl: './error.component.css'
 })
 export class ErrorComponent {
+
+  options: AnimationOptions = {
+    path: '/assets/loties/explorer.json',
+  };
 
   message: string = 'Parece que ha habido un error';
 
@@ -19,6 +25,10 @@ export class ErrorComponent {
     if (state) {
       this.message = state.message;
     } 
+  }
+
+  animationCreated(animationItem: AnimationItem): void {
+    console.log(animationItem);
   }
  
 }

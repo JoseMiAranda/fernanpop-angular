@@ -20,6 +20,8 @@
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
     "crypto-js": "^4.2.0",
+    "lottie-web": "^5.12.2",
+    "ngx-lottie": "^11.0.1",
     "primeicons": "^6.0.1",
     "primeng": "^17.8.0",
     "rxjs": "~7.8.0",

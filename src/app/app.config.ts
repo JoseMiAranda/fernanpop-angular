@@ -10,6 +10,9 @@ import {provideAnimationsAsync} from "@angular/platform-browser/animations/async
 
 import * as firebaseCredentials from '../../firebase.json';
 
+import { provideLottieOptions } from 'ngx-lottie';
+import player from 'lottie-web';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     // Control de rutas y sus parámteros
@@ -18,6 +21,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     // Para perimitir las animaciones
     provideAnimationsAsync(),
+    // Para las animaciones de Netlify
+    provideLottieOptions({
+      player: () => player,
+    }),
     // Obtenemos el auth de Firebase
     importProvidersFrom(provideFirebaseApp(() => initializeApp(firebaseCredentials))), importProvidersFrom(provideAuth(() => getAuth())
   )]
