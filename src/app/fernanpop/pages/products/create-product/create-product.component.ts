@@ -15,8 +15,8 @@ import { Product } from '../../../../interfaces/product.interface';
 })
 export class CreateProductComponent {
   public minLenght = 6;
-  public maxLenght = 20;
-  public maxDescLenght = 100;
+  public maxLenght = 50;
+  public maxDescLenght = 300;
   private currentUser = this.authService.currentUser;
 
   form: FormGroup = new FormGroup({

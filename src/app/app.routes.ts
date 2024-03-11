@@ -32,6 +32,8 @@ export const routes: Routes = [
                 loadComponent: () => SearchProductComponent,
             },
             {
+                // Solamente accesible está logueado
+                canActivate: [LoggedGuard],
                 path: 'user/products',
                 title: 'user-products',
                 loadComponent: () => UserProductsComponent,

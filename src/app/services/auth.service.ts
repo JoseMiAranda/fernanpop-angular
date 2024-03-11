@@ -11,7 +11,7 @@ export class AuthService {
   currentUser = signal<User | undefined>(undefined);
 
   constructor(private auth: Auth) {
-    this.obtainUser();
+    this.obtainUserStorage();
   }
 
   // REGISTER
@@ -28,7 +28,6 @@ export class AuthService {
   // LOGIN
   async login({email, password}: any) {
     return await signInWithEmailAndPassword(this.auth,email,password).then(async (resp: UserCredential) => {
-      console.log(resp)
       await this.credentialsToUser(resp, email, password);
       return true;
     }
@@ -41,10 +40,13 @@ export class AuthService {
   private async credentialsToUser(resp: UserCredential, email: string, password: string) {
     const user: User = {
       uid: resp.user.uid,
-      email: resp.user.email!,
+      email: email,
       accessToken: await resp.user.getIdToken()
     }
-    this.saveUser(email,password);
+    // Asignamos una fecha de expiracion inferior a una hora
+    let currentDate = new Date();
+    let expirationUid = new Date(currentDate.getTime() + 58 * 60000);
+    this.saveUser(user, password, expirationUid);
     this.currentUser.set(user);
   }
 
@@ -55,23 +57,47 @@ export class AuthService {
   }
 
   // LOCALSTORAGE METHODS
-  private saveUser(email: string,password: string) {
+  private saveUser(user: User, password: string, expirationUid: Date) {
     localStorage.setItem('fernanpopUser', 
     JSON.stringify(
       {
-        email: encrypt(email), 
-        password: encrypt(password)
+        email: encrypt(user.email), 
+        uid: encrypt(user.uid),
+        password: encrypt(password),
+        accessToken: encrypt(user.accessToken),
+        expirationUid: encrypt(expirationUid.toDateString())
       }
     ));
   }
 
-  async obtainUser() {
+  async obtainUserStorage() {
     let user = localStorage.getItem('fernanpopUser');
+    console.log(user);
+    // Validamos que se ha guarda datos del usuario
     if(user) {
-      let {email, password} = JSON.parse(user);
-      email = decrypt(email);
-      password = decrypt(password);
-      return this.login({email, password}).then(() => true).catch((err) => false);
+      // Validamos que cada campo no este vacio
+      let {email, password, uid, accessToken, expirationUid} = JSON.parse(user);
+      if(email && password && uid && accessToken && expirationUid) {
+        // Desecriptamos el usuario
+        uid = decrypt(uid);
+        email = decrypt(email);
+        password = decrypt(password);
+        accessToken = decrypt(accessToken);
+        expirationUid = new Date(decrypt(expirationUid));
+        console.log(expirationUid);
+        // Comprobamos que el token no esté expirado
+        if(expirationUid > new Date()) {
+          return this.login({email, password}).then(() => true).catch(() => false);
+        } else {
+          const user: User = {
+            uid: uid,
+            email: email,
+            accessToken: accessToken
+          }
+          this.currentUser.set(user);
+          return true;
+        }
+      } 
     }
     return false;
   }

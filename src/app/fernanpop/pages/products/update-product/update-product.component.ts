@@ -16,8 +16,8 @@ import { CommonModule } from '@angular/common';
 export class UpdateProductComponent implements OnInit {
   @Input('id') productId: string | undefined;
   public minLenght = 6;
-  public maxLenght = 20;
-  public maxDescLenght = 100;
+  public maxLenght = 50;
+  public maxDescLenght = 300;
   private currentUser = this.authService.currentUser;
   public product = signal<Product | undefined>(undefined);
 

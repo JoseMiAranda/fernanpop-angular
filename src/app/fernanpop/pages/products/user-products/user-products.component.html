@@ -1,7 +1,19 @@
 @if(productsResponse != null && productsResponse.products.length !== 0){
     <div class="flex flex-col h-full justify-between">
-    <app-list-products [listProducts]="productsResponse.products"></app-list-products>
-    <p-paginator (onPageChange)="onPageChange($event)" [first]="productsResponse.limit" [rows]="4" [totalRecords]="productsResponse.total"></p-paginator>
+        <div>
+            <div class="flex justify-end pt-8 pr-8">
+                <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
+                            text-sm font-medium text-gray-900 
+                            rounded-lg bg-teal-700
+                            dark:text-white">
+                    <a [routerLink]="['/fernanpop/create-product']" class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
+                        <h1>Agregar Producto</h1>
+                    </a>
+                </button>
+            </div>
+        <app-list-products [listProducts]="productsResponse.products"></app-list-products>
+        </div>
+        <p-paginator (onPageChange)="onPageChange($event)"  [rows]="productsResponse.limit" [totalRecords]="productsResponse.total"></p-paginator>
 </div>
 } @else {
 

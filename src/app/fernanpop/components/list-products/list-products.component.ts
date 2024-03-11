@@ -24,6 +24,6 @@ export class ListProductsComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.numbers = Array(20).fill(0).map((_, i) => i + 1);
+    this.numbers = Array(10).fill(0).map((_, i) => i + 1);
   }
 }
