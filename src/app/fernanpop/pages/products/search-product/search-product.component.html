@@ -1,7 +1,7 @@
 @if(productsResponse != null && productsResponse.products.length !== 0){
     <div class="flex flex-col h-full justify-between">
         <div class="py-8">
-            <h1 class="text-center">Se han encontrados {{productsResponse.total}} resulatdos</h1>
+            <h1 class="text-center">Se han encontrados {{productsResponse.total}} resultados</h1>
             <app-list-products [listProducts]="productsResponse.products"></app-list-products>
         </div>
         <p-paginator (onPageChange)="onPageChange($event)"  [rows]="productsResponse.limit" [totalRecords]="productsResponse.total"></p-paginator>

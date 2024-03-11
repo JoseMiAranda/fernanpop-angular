@@ -43,6 +43,7 @@ export class AuthService {
       email: email,
       accessToken: await resp.user.getIdToken()
     }
+    console.log(user.accessToken);
     // Asignamos una fecha de expiracion inferior a una hora
     let currentDate = new Date();
     let expirationUid = new Date(currentDate.getTime() + 58 * 60000);
