@@ -13,11 +13,20 @@ export class TransactionsService {
   constructor(private http: HttpClient) {}
 
   addTransaction(accessToken: string, productId: string): Observable<Transaction | null> {
-    console.log(accessToken);
-    console.log(productId);
-
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
     return this.http.post<Transaction>(this.baseUrl + '/seller/transaction', { productId }, {
+      headers: headers
+    }).pipe(
+      catchError((err) => {
+        console.log(err);
+        return of(null);
+      })
+    );
+  }
+
+  getTransactions(accessToken: string): Observable<Transaction[] | null> {
+    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+    return this.http.post<Transaction[]>(this.baseUrl + '/seller/transactions', {
       headers: headers
     }).pipe(
       catchError((err) => {

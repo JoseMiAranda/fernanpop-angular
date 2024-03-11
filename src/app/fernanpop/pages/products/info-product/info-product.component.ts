@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '../../../../interfaces/transaction.interface';
-import { transition } from '@angular/animations';
 
 @Component({
   selector: 'app-info-product',
@@ -42,34 +41,29 @@ export class InfoProductComponent implements OnInit {
   }
 
   onClick() {
-    this.transactionsService.addTransaction(this.currentUser()!.accessToken, this.productId!)
+    
+    // Si no hay usuario logueado
+    if(!this.authService.currentUser()) {
+      this.router.navigate(['/fernanpop/login']);
+    } 
+    // Si el usuario es el propietario
+    else if(this.authService.currentUser()!.uid == this.product!.sellerId) {
+      this.router.navigate(['/fernanpop/update-product', this.productId]);
+    }   
+    // El usuario es otro y quiere comprar
+    else {
+      this.transactionsService.addTransaction(this.currentUser()!.accessToken, this.productId!)
       .subscribe((result: Transaction | null) => {
         if(result) {
           console.log('Transacción realizada');
         } else {
-          console.log('Transacción fallida');
+          this.router.navigate(['fernanpop/error/'], {
+            state: {
+              message: 'Parece que no se puede comprar el producto'
+            }
+          });
         }
       });
-    // // Si no hay usuario logueado
-    // if(!this.authService.currentUser()) {
-    //   this.router.navigate(['/fernanpop/login']);
-    // } 
-    // // Si el usuario es el propietario
-    // else if(this.authService.currentUser()!.uid == this.product!.sellerId) {
-    //   console.log(this.authService.currentUser()!.uid == this.product!.sellerId)
-    // }   
-    // // El usuario es otro y quiere comprar
-    // else {
-    //   this.transactionsService.addTransaction(this.currentUser()!.accessToken, this.productId!)
-    //   .subscribe((result: Transaction | null) => {
-    //     if(result) {
-    //       this.router.navigate(['/fernanpop/update-product/', "transaccion exitosa"]);
-    //     } else {
-    //       this.router.navigate(['/fernanpop/update-product/', "transaccion fallida"]);
-    //     }
-    //   });
-    // }
+    }
   }
-  
-
 }
