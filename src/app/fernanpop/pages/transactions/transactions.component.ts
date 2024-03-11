@@ -7,15 +7,19 @@ import { Router, RouterLink } from '@angular/router';
 import { TransactionsService } from '../../../services/transactions.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { CurrentCurrencyPipe } from '../../pipes/current-currency.pipe';
+import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { StatusPipe } from '../../../pipes/status.pipe';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, TableModule, CurrentCurrencyPipe, RouterLink, ButtonModule],
+  imports: [CommonModule, TableModule, CurrentCurrencyPipe, ConfirmDialogModule, RouterLink, ButtonModule, StatusPipe],
   templateUrl: './transactions.component.html',
-  styleUrl: './transactions.component.css'
+  styleUrl: './transactions.component.css',
+  providers: [ConfirmationService, MessageService]
 })
 export class TransactionsComponent implements OnInit {
   public transactions: any[] = [];
@@ -24,7 +28,9 @@ export class TransactionsComponent implements OnInit {
 
   queryParams: any = {};
   
-  constructor(private transactionsService: TransactionsService,  private productsService: ProductsService, private authService: AuthService, private router: Router) { 
+  constructor(private transactionsService: TransactionsService,  private productsService: ProductsService,
+    private confirmationService: ConfirmationService,
+    private authService: AuthService, private router: Router) { 
   }
 
   ngOnInit(): void {
@@ -57,6 +63,28 @@ export class TransactionsComponent implements OnInit {
     this.queryParams = {...this.queryParams, page};
     this.router.navigate(['/fernanpop/user/products'], {
       queryParams: {...this.queryParams}
+    });
+  }
+
+  onAccept(event: Event): void {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      header: '¿Estás seguro de confirmar?',
+      message: 'Asegúrate de que el producto esté en buenas condiciones antes de aceptar',
+      icon: 'pi pi-info-triangle',
+      acceptButtonStyleClass: "p-button-success p-button-text ml-5",
+      rejectButtonStyleClass: "p-button-text p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      acceptLabel: "Estoy seguro",
+      rejectLabel: "Cancelar",
+      reject: () => {
+        // No hacemos nada
+      },
+      accept: () => {
+        // Borramos el producto
+        console.log("confirmamos");
+      }
     });
   }
 }

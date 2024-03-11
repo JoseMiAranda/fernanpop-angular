@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
+import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '../../../../interfaces/transaction.interface';
 

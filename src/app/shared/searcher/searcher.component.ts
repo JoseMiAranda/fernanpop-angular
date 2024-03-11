@@ -6,7 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
-import { EllipsisPipe } from '../../fernanpop/pipes/ellipsis.pipe';
+import { EllipsisPipe } from '../../pipes/ellipsis.pipe';
 import { TitleComponent } from '../title/title.component';
 
 @Component({

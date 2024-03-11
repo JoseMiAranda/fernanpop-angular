@@ -35,7 +35,7 @@ export class UpdateProductComponent implements OnInit {
   submitted = false;
 
   constructor(private formBuilder: FormBuilder, private productsService: ProductsService,
-    private confirmationService: ConfirmationService, private messageService: MessageService,
+    private confirmationService: ConfirmationService, 
     private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
