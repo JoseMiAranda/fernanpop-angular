@@ -8,11 +8,12 @@ import { TransactionsService } from '../../../services/transactions.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../pipes/current-currency.pipe';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, TableModule, CurrentCurrencyPipe, RouterLink],
+  imports: [CommonModule, TableModule, CurrentCurrencyPipe, RouterLink, ButtonModule],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css'
 })
