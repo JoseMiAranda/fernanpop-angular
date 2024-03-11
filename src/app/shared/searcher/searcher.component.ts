@@ -39,6 +39,13 @@ export class SearcherComponent {
         }
       },
       {
+        label: 'Transacciones',
+        icon: "pi pi-truck",
+        command: () => {
+          router.navigate(['fernanpop/user/transactions'])
+        }
+      },
+      {
         label: 'Cerrar sesión',
         icon: "pi pi-sign-out",
         command: () => {
@@ -75,16 +82,3 @@ export class SearcherComponent {
 
 
 }
-
-
-
-
-// @HostBinding('class.dark') get mode() {
-//   console.log('od');
-//   return this.darkMode();
-// }
-
-// changeTheme() {
-//   this.darkMode.set(!this.darkMode());
-//   localStorage.setItem('dark_mode', `${this.darkMode()}`);
-// }

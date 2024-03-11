@@ -10,6 +10,7 @@ import { NotLoggedGuard } from './guards/not-logged.guard';
 import { LoggedGuard } from './guards/logged.guard';
 import { CreateProductComponent } from './fernanpop/pages/products/create-product/create-product.component';
 import { UpdateProductComponent } from './fernanpop/pages/products/update-product/update-product.component';
+import { TransactionsComponent } from './fernanpop/pages/transactions/transactions.component';
 
 export const routes: Routes = [
     {
@@ -65,6 +66,13 @@ export const routes: Routes = [
                 path: 'update-product/:id',
                 title: 'update-product',
                 loadComponent: () => UpdateProductComponent,
+            },
+            {
+                // Solamente accesible si no está logueado
+                canActivate: [LoggedGuard],
+                path: 'user/transactions',
+                title: 'transactions',
+                loadComponent: () => TransactionsComponent,
             },
             {
                 path: 'error',
