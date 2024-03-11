@@ -1,1 +1,36 @@
-<p>transactions works!</p>
+@if(transactions.length > 0){
+    <p-table [value]="transactions" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Precio</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-transaction>
+            <tr>
+                <td class="underline hover:text-teal-500"><a [routerLink]="['/fernanpop/product', transaction.productId]">{{transaction.title | titlecase}}</a></td>
+                <td><img [src]="transaction.img" [alt]="transaction.title" width="100" class="shadow-4" /></td>
+                <td>{{transaction.price | monetary}}</td>
+                <td>{{transaction.status}}</td>
+                <td>
+                    @if(transaction.sellerId == currentUser()!.uid) {
+                        Cancelar
+                    } @else {
+                        Aceptar
+                    }
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+} @else { <div class="flex flex-col h-full">
+
+    <div class="flex flex-col  items-center justify-center flex-grow">
+        <p class="text-2xl">No hay transacciones</p>
+    </div>
+
+    </div>
+
+    }

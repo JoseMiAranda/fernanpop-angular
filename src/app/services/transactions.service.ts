@@ -26,7 +26,7 @@ export class TransactionsService {
 
   getTransactions(accessToken: string): Observable<Transaction[] | null> {
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-    return this.http.post<Transaction[]>(this.baseUrl + '/seller/transactions', {
+    return this.http.get<Transaction[]>(this.baseUrl + '/seller/transactions', {
       headers: headers
     }).pipe(
       catchError((err) => {
