@@ -145,8 +145,10 @@ export class UpdateProductComponent implements OnInit {
       acceptLabel: "Eliminar",
       rejectLabel: "Cancelar",
       reject: () => {
+        // No hacemos nada
       },
       accept: () => {
+        // Borramos el producto
         this.productsService.deleteProduct(this.currentUser()!.accessToken, this.product()!.id).subscribe((result: Product | null) => {
           if (result) {
             this.router.navigate(['']);

@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Transaction } from '../interfaces/transaction.interface';
+import { Observable, catchError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +12,19 @@ export class TransactionsService {
 
   constructor(private http: HttpClient) {}
 
-  // addProduct(accessToken: string, newTransaction: Transaction): Observable<Transaction | null> {
-  //   const { title, desc, price, img } = newProduct;
-  //   const productData = { title, desc, price, img };
-  //   const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-  //   return this.http.post<Product>(this.baseUrl + '/seller/product', productData, {
-  //     headers: headers
-  //   }).pipe(
-  //     catchError((err) => {
-  //       console.log(err);
-  //       return of(null);
-  //     })
-  //   );
-  // }
+  addTransaction(accessToken: string, productId: string): Observable<Transaction | null> {
+    console.log(accessToken);
+    console.log(productId);
+
+    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+    return this.http.post<Transaction>(this.baseUrl + '/seller/transaction', { productId }, {
+      headers: headers
+    }).pipe(
+      catchError((err) => {
+        console.log(err);
+        return of(null);
+      })
+    );
+  }
 
 }
