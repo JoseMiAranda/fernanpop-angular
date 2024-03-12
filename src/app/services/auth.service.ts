@@ -87,7 +87,7 @@ export class AuthService {
         expirationUid = new Date(decrypt(expirationUid));
         console.log(expirationUid);
         // Comprobamos que el token no esté expirado
-        if(expirationUid > new Date()) {
+        if(expirationUid < new Date().getDate()) {
           return this.login({email, password}).then(() => true).catch(() => false);
         } else {
           const user: User = {

@@ -5,11 +5,12 @@
             <th>Nombre</th>
             <th>Imagen</th>
             <th>Precio</th>
-            <th>Status</th>
+            <th>Estado</th>
+            <th>Últ. Actualización</th>
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-transaction>
+    <ng-template pTemplate="body" let-transaction> 
         <tr>
             <td class="underline hover:text-teal-500"><a
                     [routerLink]="['/fernanpop/product', transaction.productId]">{{transaction.title | titlecase}}</a>
@@ -17,9 +18,9 @@
             <td><img [src]="transaction.img" [alt]="transaction.title" width="100" class="shadow-4" /></td>
             <td>{{transaction.price | monetary}}</td>
             <td>{{transaction.status |status }}</td>
+            <td>{{ transaction.updateDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
             <td>
                 <p-confirmDialog></p-confirmDialog>
-
                 @if(transaction.status != 'canceled' || transaction.status != 'received' ) {
                 @if(transaction.sellerId == currentUser()!.uid) {
                 <button class="max-w-40 relative w-fit inline-flex items-center justify-center 

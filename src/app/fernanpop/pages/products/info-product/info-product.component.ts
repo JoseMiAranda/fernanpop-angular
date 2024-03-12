@@ -55,7 +55,7 @@ export class InfoProductComponent implements OnInit {
       this.transactionsService.addTransaction(this.currentUser()!.accessToken, this.productId!)
       .subscribe((result: Transaction | null) => {
         if(result) {
-          console.log('Transacción realizada');
+          this.router.navigate(['/fernanpop/user/transactions']);
         } else {
           this.router.navigate(['fernanpop/error/'], {
             state: {
