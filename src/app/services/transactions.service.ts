@@ -2,14 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Transaction } from '../interfaces/transaction.interface';
 import { Observable, catchError, of } from 'rxjs';
-import { StatusTransaction } from '../interfaces/product.interface';
+import * as env from '../../../environments.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionsService {
 
-  private baseUrl: string = 'http://localhost:3000';
+  private baseUrl: string = env['BASE_URL'];
 
   constructor(private http: HttpClient) {}
 
