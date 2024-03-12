@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
+import { AuthError } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ import { AuthService } from '../../../../services/auth.service';
 export class RegisterComponent {
   public minLenght = 6;
   public maxLenght = 20;
+  public errorRegister?: string;
 
   form: FormGroup = new FormGroup({
     email: new FormControl(null),
@@ -55,7 +57,13 @@ export class RegisterComponent {
 
     this.authService.register(this.form.value).then(
       () => {this.router.navigate(['fernanpop']);}
-    ).catch()
+    ).catch((err) => {
+      console.log(err);
+      let authError = err as AuthError;
+      if(authError.code == 'auth/email-already-in-use') {
+        this.errorRegister = 'Email ya utilizado. Por favor escoja otro';
+      }
+    })
   }
   
 }

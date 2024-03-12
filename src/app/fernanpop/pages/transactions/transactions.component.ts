@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StatusPipe } from '../../../pipes/status.pipe';
+import { StatusTransaction } from '../../../interfaces/product.interface';
 
 @Component({
   selector: 'app-transactions',
@@ -66,7 +67,7 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
-  onAccept(event: Event): void {
+  onAccept(event: Event, transaction: Transaction): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       header: '¿Estás seguro de confirmar?',
@@ -82,8 +83,28 @@ export class TransactionsComponent implements OnInit {
         // No hacemos nada
       },
       accept: () => {
-        // Borramos el producto
-        console.log("confirmamos");
+        console.log('a');
+        // Creamos una copia de la transacción y que esté confirmada
+        const confirmedTransaction = {...transaction};
+        confirmedTransaction.status = StatusTransaction.RECEIVED;
+        this.transactionsService.updateTransaction(this.currentUser()!.accessToken, confirmedTransaction)
+        .subscribe((resp) => {
+          if(resp) {
+            console.log(resp);
+            // Actualizamos la lista
+            this.transactions.forEach((transactionIndexed) => {
+              if(transactionIndexed.id == resp.id) {
+                transactionIndexed = resp;
+              }
+            });
+          } else {
+            this.router.navigate(['fernanpop/error/'], {
+              state: {
+                message: 'Parece que no se puede confirmar'
+              }
+            });
+          }
+        });
       }
     });
   }

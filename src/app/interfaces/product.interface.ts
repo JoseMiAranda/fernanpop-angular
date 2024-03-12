@@ -13,3 +13,9 @@ export interface Product {
     desc: string;
     sellerId: string;
 }
+
+export enum StatusTransaction {
+    IN_PROCESS = 'in-process',
+    RECEIVED = 'received',
+    CANCELED = 'canceled',
+}

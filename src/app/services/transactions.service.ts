@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Transaction } from '../interfaces/transaction.interface';
 import { Observable, catchError, of } from 'rxjs';
+import { StatusTransaction } from '../interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,20 @@ export class TransactionsService {
   getTransactions(accessToken: string): Observable<Transaction[] | null> {
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
     return this.http.get<Transaction[]>(this.baseUrl + '/seller/transactions', {
+      headers: headers
+    }).pipe(
+      catchError((err) => {
+        console.log(err);
+        return of(null);
+      })
+    );
+  }
+
+  updateTransaction(accessToken: string, updatedTransaction: Transaction): Observable<Transaction | null> {
+    const { status } = updatedTransaction;
+    const transactionData = { status };
+    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+    return this.http.patch<Transaction>(this.baseUrl + `/seller/transaction/${updatedTransaction.id}`,transactionData, {
       headers: headers
     }).pipe(
       catchError((err) => {

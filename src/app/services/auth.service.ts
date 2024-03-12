@@ -17,11 +17,11 @@ export class AuthService {
   // REGISTER
   async register({email, password}: any) {
     return await createUserWithEmailAndPassword(this.auth,email,password).then(async (resp: UserCredential) => {
-      await this.credentialsToUser(resp, email, password);
-      return true;
+      const user = await this.credentialsToUser(resp, email, password);
+      return user;
     }).catch((err) => {
       console.log(err);
-      return false;
+      return err;
     });
   }
 
@@ -73,7 +73,6 @@ export class AuthService {
 
   async obtainUserStorage() {
     let user = localStorage.getItem('fernanpopUser');
-    console.log(user);
     // Validamos que se ha guarda datos del usuario
     if(user) {
       // Validamos que cada campo no este vacio
@@ -85,7 +84,6 @@ export class AuthService {
         password = decrypt(password);
         accessToken = decrypt(accessToken);
         expirationUid = new Date(decrypt(expirationUid));
-        console.log(expirationUid);
         // Comprobamos que el token no esté expirado
         if(expirationUid < new Date().getDate()) {
           return this.login({email, password}).then(() => true).catch(() => false);
