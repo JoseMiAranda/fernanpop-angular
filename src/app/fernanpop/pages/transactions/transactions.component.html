@@ -1,5 +1,5 @@
-@if(transactions.length > 0){
-<p-table [value]="transactions" [tableStyle]="{'min-width': '60rem'}">
+@if(transactions().length > 0){
+<p-table [value]="transactions()" [tableStyle]="{'min-width': '60rem'}">
     <ng-template pTemplate="header">
         <tr>
             <th>Nombre</th>

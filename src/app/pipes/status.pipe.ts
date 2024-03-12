@@ -8,7 +8,7 @@ export class StatusPipe implements PipeTransform {
 
   transform(value: string): any {
     if(value == 'in-process') return "En progreso";
-    if(value == 'confirm') return "Confirmado";
+    if(value == 'received') return "Recibido";
     return 'Cancelado';
 }
 
