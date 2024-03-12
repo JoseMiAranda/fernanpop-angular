@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { AuthError } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,8 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   
+  public errorRegister = signal<string | undefined>(undefined);
+
   public minLenght = 6;
   public maxLenght = 20;
 
@@ -62,12 +65,23 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.form.value).then(
-      () => {
-        // Usuario logueado
-        this.router.navigate(['fernanpop']);
+      (resp) => {
+        if (!resp) {
+          // Usuario registrado
+          this.router.navigate(['fernanpop']);
+        } else {
+          // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)
+          let authError = resp as AuthError;
+          console.log(authError);
+          if (authError.code === 'auth/user-not-found') {
+            this.errorRegister.set('Email o contraseña incorrecta');
+          } else if(authError.code == 'auth/wrong-password') {
+            this.errorRegister.set('Email o contraseña incorrecta');
+          } else {
+            this.errorRegister.set('Actualmente no podemos loguear usuarios');
+          }
+        }
       }
-    ).catch(
-
     );
   }
 

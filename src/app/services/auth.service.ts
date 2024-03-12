@@ -28,12 +28,12 @@ export class AuthService {
   // LOGIN
   async login({email, password}: any) {
     return await signInWithEmailAndPassword(this.auth,email,password).then(async (resp: UserCredential) => {
-      await this.credentialsToUser(resp, email, password);
-      return true;
+      const user = await this.credentialsToUser(resp, email, password);
+      return user;
     }
     ).catch((err) => {
       console.log(err);
-      return false;
+      return err;
     });
   }
 

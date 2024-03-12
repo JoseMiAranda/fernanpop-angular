@@ -4,7 +4,6 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModu
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { AuthError } from '@angular/fire/auth';
-import { User } from '../../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-register',
@@ -58,10 +57,11 @@ export class RegisterComponent {
 
     this.authService.register(this.form.value).then(
       (resp) => {
-        if (resp["uid"]) {
-          // Usuario logueado
+        if (!resp) {
+          // Usuario registrado
           this.router.navigate(['fernanpop']);
         } else {
+          // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)
           let authError = resp as AuthError;
           console.log(authError);
           if (authError.code === 'auth/email-already-in-use') {
