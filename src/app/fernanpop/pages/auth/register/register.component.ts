@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { AuthError } from '@angular/fire/auth';
+import { User } from '../../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,7 @@ import { AuthError } from '@angular/fire/auth';
 export class RegisterComponent {
   public minLenght = 6;
   public maxLenght = 20;
-  public errorRegister?: string;
+  public errorRegister = signal<string | undefined>(undefined);
 
   form: FormGroup = new FormGroup({
     email: new FormControl(null),
@@ -24,7 +25,7 @@ export class RegisterComponent {
 
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
@@ -56,14 +57,21 @@ export class RegisterComponent {
     }
 
     this.authService.register(this.form.value).then(
-      () => {this.router.navigate(['fernanpop']);}
-    ).catch((err) => {
-      console.log(err);
-      let authError = err as AuthError;
-      if(authError.code == 'auth/email-already-in-use') {
-        this.errorRegister = 'Email ya utilizado. Por favor escoja otro';
+      (resp) => {
+        if (resp["uid"]) {
+          // Usuario logueado
+          this.router.navigate(['fernanpop']);
+        } else {
+          let authError = resp as AuthError;
+          console.log(authError);
+          if (authError.code === 'auth/email-already-in-use') {
+            this.errorRegister.set('Email ya utilizado. Por favor escoja otro');
+          } else {
+            this.errorRegister.set('Actualmente no podemos registrar usuarios');
+          }
+        }
       }
-    })
+    );
   }
-  
+
 }

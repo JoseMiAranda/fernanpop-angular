@@ -37,8 +37,8 @@
 				</div>
 				}
 			</div>
-			@if(errorRegister) {
-				<div class="text-red-500 text-center">{{errorRegister}}</div>
+			@if(errorRegister()) {
+				<div class="text-red-500 text-center">{{errorRegister()}}</div>
 			}
 			<div>
 				<button type="submit"

@@ -62,8 +62,13 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.form.value).then(
-      () => {this.router.navigate(['fernanpop']);}
-    ).catch()
+      () => {
+        // Usuario logueado
+        this.router.navigate(['fernanpop']);
+      }
+    ).catch(
+
+    );
   }
 
 }
