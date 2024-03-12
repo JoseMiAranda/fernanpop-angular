@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class StatusPipe implements PipeTransform {
 
   transform(value: string): any {
-    if(value == 'in-process') return "En progreso";
-    if(value == 'received') return "Recibido";
+    if (value == 'in-process') return "En progreso";
+    if (value == 'received') return "Recibido";
     return 'Cancelado';
-}
+  }
 
 }

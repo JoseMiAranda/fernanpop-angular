@@ -13,11 +13,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StatusPipe } from '../../../pipes/status.pipe';
 import { StatusTransaction } from '../../../interfaces/product.interface';
+import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, TableModule, CurrentCurrencyPipe, ConfirmDialogModule, RouterLink, ButtonModule, StatusPipe, DatePipe],
+  imports: [CommonModule, TableModule, CurrentCurrencyPipe, ConfirmDialogModule, RouterLink, ButtonModule, StatusPipe, DatePipe, ColorStatusPipe],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
   providers: [ConfirmationService, MessageService]

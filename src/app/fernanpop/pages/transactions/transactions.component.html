@@ -5,6 +5,7 @@
             <th>Nombre</th>
             <th>Imagen</th>
             <th>Precio</th>
+            <th>Proveedor</th>
             <th>Estado</th>
             <th>Últ. Actualización</th>
             <th></th>
@@ -17,7 +18,14 @@
             </td>
             <td><img [src]="transaction.img" [alt]="transaction.title" width="100" class="shadow-4 aspect-[4/3]" /></td>
             <td>{{transaction.price | monetary}}</td>
-            <td>{{transaction.status |status }}</td>
+            <td>
+                @if(transaction.sellerId == currentUser()!.uid) {
+                    Usted
+                } @else {
+                    Otro
+                }
+            </td>
+            <td class="{{transaction.status | colorStatus}}">{{transaction.status |status }}</td>
             <td>{{ transaction.updateDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
             <td>
                 <p-confirmDialog></p-confirmDialog>
