@@ -15,7 +15,7 @@ export class ProductsService {
 
   // SELECT
   getProducts({page = 1, q = '', minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER}): Observable<ProductsResponse | null> {
-    return this.http.get<ProductsResponse>(this.baseUrl + `/products/filter?page=${page}&q=${q}`).pipe(
+    return this.http.get<ProductsResponse>(this.baseUrl + `/products?page=${page}&q=${q}`).pipe(
       catchError(error => {
         console.error(error);
         return of(null);
