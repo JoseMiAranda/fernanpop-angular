@@ -12,7 +12,7 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, ConfirmDialogModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
   providers: [ConfirmationService, MessageService]

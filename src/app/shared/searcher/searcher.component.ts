@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostBinding, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { interval } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';

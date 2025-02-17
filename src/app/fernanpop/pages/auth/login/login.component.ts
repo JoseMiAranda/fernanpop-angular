@@ -20,7 +20,7 @@ import { AuthError } from '@angular/fire/auth';
   styles: ``
 })
 export class LoginComponent implements OnInit {
-  
+
   public errorRegister = signal<string | undefined>(undefined);
 
   public minLenght = 6;
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
@@ -57,32 +57,34 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('submit');
     this.submitted = true;
 
     if (this.form.invalid) {
       return;
     }
 
-    this.authService.login(this.form.value).then(
-      (resp) => {
-        if (!resp) {
-          // Usuario registrado
-          this.router.navigate(['fernanpop']);
-        } else {
-          // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)
-          let authError = resp as AuthError;
-          console.log(authError);
-          if (authError.code === 'auth/user-not-found') {
+    const { email, password } = this.form.value;
+
+    this.authService.loginWithEmailAndPassword(email, password).subscribe({
+      next:() => {
+        this.router.navigate(['fernanpop']);
+      },
+      error: (err) => {
+        const authError = err as AuthError;
+        // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)
+        switch (authError.code) {
+          case 'auth/user-not-found':
             this.errorRegister.set('Email o contraseña incorrecta');
-          } else if(authError.code == 'auth/wrong-password') {
+            break;
+          case 'auth/wrong-password':
             this.errorRegister.set('Email o contraseña incorrecta');
-          } else {
+            break;
+          default:
             this.errorRegister.set('Actualmente no podemos loguear usuarios');
-          }
+            break;
         }
       }
-    );
+    });
   }
 
 }
