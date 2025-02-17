@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ProductsService } from '../../../../services/products.service';
-import { ProductsResponse } from '../../../../interfaces/product.interface';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { Subscription } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
+import { ProductsResponse } from '../../../../interfaces/products-response';
 
 @Component({
   selector: 'app-search-product',

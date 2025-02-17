@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductsService } from '../../../services/products.service';
-import { Observable, Subscription } from 'rxjs';
-import { ProductsResponse } from '../../../interfaces/product.interface';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ListProductsComponent } from '../../components/list-products/list-products.component';
+import { ProductsResponse } from '../../../interfaces/products-response';
 
 @Component({
   selector: 'app-home',

@@ -1,21 +1,16 @@
-export interface ProductsResponse {
-    page: number;
-    limit: number;
-    total: number;
-    products: Product[]
+export enum ProductStatus {
+    RESERVED = 'reserved',
+    SELLED = 'selled',
 }
 
 export interface Product {
     id: string;
+    sellerId: string;
     title: string;
+    desc: string;
     price: number;
     img: string;
-    desc: string;
-    sellerId: string;
-}
-
-export enum StatusTransaction {
-    IN_PROCESS = 'in-process',
-    RECEIVED = 'received',
-    CANCELED = 'canceled',
+    createdAt: Date;
+    updatedAt: Date;
+    status: ProductStatus;
 }

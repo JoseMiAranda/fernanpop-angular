@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { ProductsResponse } from '../../../../interfaces/product.interface';
 import { Subscription } from 'rxjs';
 import { ProductsService } from '../../../../services/products.service';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { PaginatorModule } from 'primeng/paginator';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { AuthService } from '../../../../services/auth.service';
+import { ProductsResponse } from '../../../../interfaces/products-response';
 
 @Component({
   selector: 'app-user-products',
