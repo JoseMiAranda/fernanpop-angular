@@ -37,18 +37,18 @@ export class TransactionsComponent implements OnInit {
   ngOnInit(): void {
     // Agregamos todas las subscripciones
     const transSub = this.transactionsService.getTransactions(this.currentUser()!.accessToken).subscribe((respTransactions) => {
-      if (respTransactions) {
-        console.log(respTransactions);
-        respTransactions.forEach((respTransaction) => {
-          const prodSub = this.productsService.getProductById(respTransaction.productId).subscribe((respProduct) => {
-            if (respProduct) {
-              const { title, img, price, ...rest } = respProduct;
-              this.transactions.set([...this.transactions(), { ...respTransaction, title, img, price }]);
-            }
-          });
-          this.subscription.add(prodSub);
-        });
-      }
+      // if (respTransactions) {
+      //   console.log(respTransactions);
+      //   respTransactions.forEach((respTransaction) => {
+      //     const prodSub = this.productsService.getProductById(respTransaction.productId).subscribe((respProduct) => {
+      //       if (respProduct) {
+      //         const { title, img, price, ...rest } = respProduct;
+      //         this.transactions.set([...this.transactions(), { ...respTransaction, title, img, price }]);
+      //       }
+      //     });
+      //     this.subscription.add(prodSub);
+      //   });
+      // }
     });
     this.subscription.add(transSub);
   }

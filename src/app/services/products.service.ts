@@ -38,12 +38,14 @@ export class ProductsService {
     );
   }
 
-  getProductById(id: string): Observable<Product | null> {
+  getProductById(id: string): Observable<CustomResponse> {
     return this.http.get<Product>(this.baseUrl + '/products/' + id)
       .pipe(
+        map((response: Product) => {
+          return new SuccessResponse(response);
+        }),
         catchError((err) => {
-          console.log(err);
-          return of(null);
+          return of(new ErrorResponse(getErrorMessage(err)));
         }));
   }
 

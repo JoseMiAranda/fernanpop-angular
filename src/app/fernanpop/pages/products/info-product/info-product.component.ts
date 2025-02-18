@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Product } from '../../../../interfaces/product.interface';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
 import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -9,6 +8,8 @@ import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '../../../../interfaces/transaction.interface';
 import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../../interfaces/state.interface';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 
 @Component({
   selector: 'app-info-product',
@@ -21,23 +22,22 @@ export class InfoProductComponent implements OnInit {
 
   @Input('id') productId: string | undefined;
 
-  public product?: Product | null;
+  public productState = signal<State>(new LoadingState());
+  
   public currentUser = this.authService.currentUser;
 
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.productService.getProductById(this.productId!).subscribe((result: Product | null) => {
-      if (!result) {
-        // Redirección a error con mensaje
-        this.router.navigate(['fernanpop/error/'], {
-          state: {
-            message: 'Parece que el producto no se encuentra'
-          }
-        });
-      } else {
-        this.product = result;
-      }
+     this.productService.getProductById(this.productId!).subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          console.log(response.data);
+          this.productState.set(new SuccessState(response.data));
+        } else if (response instanceof ErrorResponse) {
+          this.productState.set(new ErrorState(response.error));
+        }
+      },
     });
   }
 

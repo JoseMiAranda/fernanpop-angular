@@ -39,25 +39,25 @@ export class UpdateProductComponent implements OnInit {
     private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.productsService.getProductById(this.productId!).subscribe((result: Product | null) => {
-      if (!result || result.sellerId !== this.currentUser()!.uid) {
-        // Redirección a error con mensaje
-        this.router.navigate(['fernanpop/error/'], {
-          state: {
-            message: 'Parece que el producto no se encuentra'
-          }
-        });
-      } else {
-        this.product.set(result);
-        // Cargamos en el formulario los datos del producto
-        this.form.patchValue({
-          title: this.product()!.title,
-          price: this.product()!.price,
-          img: this.product()!.img,
-          desc: this.product()!.desc
-        });
-      }
-    });
+    // this.productsService.getProductById(this.productId!).subscribe((result: Product | null) => {
+    //   if (!result || result.sellerId !== this.currentUser()!.uid) {
+    //     // Redirección a error con mensaje
+    //     this.router.navigate(['fernanpop/error/'], {
+    //       state: {
+    //         message: 'Parece que el producto no se encuentra'
+    //       }
+    //     });
+    //   } else {
+    //     this.product.set(result);
+    //     // Cargamos en el formulario los datos del producto
+    //     this.form.patchValue({
+    //       title: this.product()!.title,
+    //       price: this.product()!.price,
+    //       img: this.product()!.img,
+    //       desc: this.product()!.desc
+    //     });
+    //   }
+    // });
 
     this.form = this.formBuilder.group(
       {
