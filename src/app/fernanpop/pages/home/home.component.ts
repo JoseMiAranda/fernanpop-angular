@@ -33,7 +33,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.productsService.getProducts({}).subscribe({
         next: (response: CustomResponse) => {
           if (response instanceof SuccessResponse) {
-            console.log(response.data);
             this.productsState.set(new SuccessState(response.data));
           } else if (response instanceof ErrorResponse) {
             this.productsState.set(new ErrorState(response.error));
