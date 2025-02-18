@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
-import { User } from '@angular/fire/auth';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
