@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../services/products.service';
 import { Subscription } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ListProductsComponent } from '../../components/list-products/list-products.component';
-import { ProductsResponse } from '../../../interfaces/products-response';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../interfaces/state.interface';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,8 @@ import { ProductsResponse } from '../../../interfaces/products-response';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  public productsResponse?: ProductsResponse | null;
+  public productsState = signal<State>(new LoadingState());
+
   private subscription: Subscription = new Subscription();
 
   constructor(private productsService: ProductsService, private router: Router) {}
@@ -27,7 +29,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(): void {
-    this.subscription.add(this.productsService.getProducts({}).subscribe((resp) => this.productsResponse = resp));
+    this.subscription.add(
+      this.productsService.getProducts({}).subscribe({
+        next: (response: CustomResponse) => {
+          if (response instanceof SuccessResponse) {
+            console.log(response.data);
+            this.productsState.set(new SuccessState(response.data));
+          } else if (response instanceof ErrorResponse) {
+            this.productsState.set(new ErrorState(response.error));
+          }
+        },
+      })
+    );
   }
   
   ngOnDestroy(): void {

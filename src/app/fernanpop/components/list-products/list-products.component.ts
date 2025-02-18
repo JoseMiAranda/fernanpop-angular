@@ -18,7 +18,7 @@ export class ListProductsComponent implements OnInit {
  
   user = this.authService.currentUser;
   
-  @Input() listProducts: Product[] | undefined;
+  @Input() listProducts: Product[] = [];
 
   constructor(private authService: AuthService) {}
 

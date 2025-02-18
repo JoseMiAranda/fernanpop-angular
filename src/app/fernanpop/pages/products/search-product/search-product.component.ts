@@ -25,7 +25,7 @@ export class SearchProductComponent implements OnDestroy {
       this.queryParams = params;
   
       this.subscription.add(this.productsService.getProducts({...this.queryParams}).subscribe((resp) => {
-        this.productsResponse = resp;
+        // this.productsResponse = resp;
       }));
     }));
   }
