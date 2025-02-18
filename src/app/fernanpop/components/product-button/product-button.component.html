@@ -1,0 +1,12 @@
+<button 
+    (click)="onClick()"  
+    [disabled]="isDisabled"
+    [class.bg-teal-700]="!isDisabled"
+    [class.hover:bg-teal-600]="!isDisabled"
+    [class.hover:shadow-sm]="!isDisabled"
+    [class.hover:shadow-teal-600]="!isDisabled"
+    [class.bg-gray-400]="isDisabled"
+    [class.cursor-not-allowed]="isDisabled"
+    class="w-fit inline-flex items-center justify-center text-sm font-medium text-gray-900 rounded-lg dark:text-white">
+    <h1 class="px-2 py-2 text-white">{{ title }}</h1>
+</button>
