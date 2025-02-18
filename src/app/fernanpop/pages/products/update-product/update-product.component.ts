@@ -111,11 +111,14 @@ export class UpdateProductComponent implements OnInit {
 
     const updatedProduct: Product = {
       id: this.product()!.id,
+      sellerId: this.product()!.sellerId,
       title: title,
       price: price,
       desc: desc,
       img: img,
-      sellerId: this.product()!.sellerId
+      status: this.product()!.status,
+      createdAt: this.product()!.createdAt,
+      updatedAt: this.product()!.updatedAt
     }
 
     this.productsService.updateProduct(this.currentUser()!.accessToken, updatedProduct).subscribe((result: Product | null) => {

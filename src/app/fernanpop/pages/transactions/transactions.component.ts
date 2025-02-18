@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { Transaction } from '../../../interfaces/transaction.interface';
+import { StatusTransaction, Transaction } from '../../../interfaces/transaction.interface';
 import { Subscription } from 'rxjs';
 import { ProductsService } from '../../../services/products.service';
 import { AuthService } from '../../../services/auth.service';
@@ -12,7 +12,6 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StatusPipe } from '../../../pipes/status.pipe';
-import { StatusTransaction } from '../../../interfaces/product.interface';
 import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
 
 @Component({

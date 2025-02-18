@@ -1,6 +1,7 @@
 export enum ProductStatus {
+    INITIAL = 'initial',
     RESERVED = 'reserved',
-    SELLED = 'selled',
+    SOLD = 'sold',
 }
 
 export interface Product {

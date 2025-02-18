@@ -4,7 +4,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../../../../services/products.service';
-import { Product } from '../../../../interfaces/product.interface';
+import { Product, ProductStatus } from '../../../../interfaces/product.interface';
 
 @Component({
   selector: 'app-create-product',
@@ -83,11 +83,14 @@ export class CreateProductComponent {
     
     const newProduct: Product = {
       id: '',
+      sellerId: '',
       title: title,
       price: price,
       desc: desc,
       img: img,
-      sellerId: ''
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      status: ProductStatus.INITIAL,
     }
     
     // Obtener titulo del form
