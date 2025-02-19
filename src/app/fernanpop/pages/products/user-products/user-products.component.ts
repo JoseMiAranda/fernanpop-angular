@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { AuthService } from '../../../../services/auth.service';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
-import { ErrorState, LoadingState, State, SuccessState } from '../../../../interfaces/state.interface';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 

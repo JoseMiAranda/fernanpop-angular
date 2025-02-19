@@ -7,7 +7,7 @@ import { ProductsService } from '../../../../services/products.service';
 import { Product, ProductStatus } from '../../../../interfaces/product.interface';
 import { Subscription } from 'rxjs';
 import { CustomResponse, SuccessResponse } from '../../../../interfaces/response-interface';
-import { InitialState, LoadingState, State } from '../../../../interfaces/state.interface';
+import { InitialState, LoadingState, State } from '../../../../states/state.interface';
 import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
 
 @Component({

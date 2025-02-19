@@ -13,7 +13,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StatusPipe } from '../../../pipes/status.pipe';
 import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
-import { ErrorState, LoadingState, State, SuccessState } from '../../../interfaces/state.interface';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 
 @Component({

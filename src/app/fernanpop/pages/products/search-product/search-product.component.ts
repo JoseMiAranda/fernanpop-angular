@@ -4,7 +4,7 @@ import { ProductsService } from '../../../../services/products.service';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { Subscription } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
-import { ErrorState, LoadingState, State, SuccessState } from '../../../../interfaces/state.interface';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { CommonModule } from '@angular/common';
 

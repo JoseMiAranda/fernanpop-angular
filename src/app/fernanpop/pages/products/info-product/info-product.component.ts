@@ -8,7 +8,7 @@ import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '../../../../interfaces/transaction.interface';
 import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
-import { ErrorState, LoadingState, State, SuccessState } from '../../../../interfaces/state.interface';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
 

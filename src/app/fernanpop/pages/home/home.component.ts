@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ListProductsComponent } from '../../components/list-products/list-products.component';
-import { ErrorState, LoadingState, State, SuccessState } from '../../../interfaces/state.interface';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 
 @Component({
