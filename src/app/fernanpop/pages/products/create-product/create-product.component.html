@@ -56,7 +56,7 @@
 				@if (submitted && f['desc'].errors) {
 				<div class="invalid-feedback">
 					@if (f['desc'].errors['required']) {
-					<div class="text-red-500">Correo electrónico requerido</div>
+					<div class="text-red-500">Descripción requerida</div>
 					} @if (f['desc'].errors['minlength']) {
 					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
 					} @if (f['desc'].errors['maxlength']) {
@@ -65,11 +65,12 @@
 				</div>
 				}
 			</div>
-			<div>
-				<button type="submit"
-					class="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
-					Crear producto
-				</button>
+			<div class="flex justify-center">
+				<app-product-button *ngIf="productState().type === 'initial'; else loading" [title]="'Crear producto'"
+					[isDisabled]="submitted" [submit]="true" (action)="onSubmit()"></app-product-button>
+				<ng-template #loading>
+					<app-product-button [title]="'Creando producto...'" [isDisabled]="true"></app-product-button>
+				</ng-template>
 			</div>
 		</form>
 	</div>

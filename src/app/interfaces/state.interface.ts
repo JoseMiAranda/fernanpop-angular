@@ -4,6 +4,10 @@ export abstract class State {
     abstract readonly data?: any;
 }
 
+export class InitialState implements State {
+    readonly type = 'initial';
+}
+
 export class LoadingState implements State {
     readonly type = 'loading';
 }

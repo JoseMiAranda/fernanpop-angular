@@ -54,16 +54,18 @@ export class ProductsService {
   }
 
   // CREATE
-  addProduct(accessToken: string, newProduct: Product): Observable<Product | null> {
+  addProduct(accessToken: string, newProduct: Product): Observable<CustomResponse> {
     const { title, desc, price, img } = newProduct;
     const productData = { title, desc, price, img };
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-    return this.http.post<Product>(this.baseUrl + '/seller/product', productData, {
+    return this.http.post<Product>(this.baseUrl + '/products', productData, {
       headers: headers
     }).pipe(
+      map((response: Product) => {
+        return new SuccessResponse(response);
+      }),
       catchError((err) => {
-        console.log(err);
-        return of(null);
+        return of(new ErrorResponse(getErrorMessage(err)));
       })
     );
   }

@@ -1,6 +1,7 @@
 <button 
     (click)="onClick()"  
     [disabled]="isDisabled"
+    [attr.type]="submit ? 'submit' : 'button'"
     [class.bg-teal-700]="!isDisabled"
     [class.hover:bg-teal-600]="!isDisabled"
     [class.hover:shadow-sm]="!isDisabled"

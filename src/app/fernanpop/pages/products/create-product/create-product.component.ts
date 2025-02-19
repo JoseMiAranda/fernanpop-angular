@@ -1,23 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../../../../services/products.service';
 import { Product, ProductStatus } from '../../../../interfaces/product.interface';
+import { Subscription } from 'rxjs';
+import { CustomResponse, SuccessResponse } from '../../../../interfaces/response-interface';
+import { InitialState, LoadingState, State } from '../../../../interfaces/state.interface';
+import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ProductButtonComponent],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.css'
 })
-export class CreateProductComponent {
+export class CreateProductComponent implements OnInit, OnDestroy {
   public minLenght = 6;
   public maxLenght = 50;
   public maxDescLenght = 300;
   private currentUser = this.authService.currentUser;
+  private createProductSubscription: Subscription = new Subscription();
+  public productState = signal<State>(new InitialState());
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
@@ -65,19 +71,23 @@ export class CreateProductComponent {
     );
   }
 
+  ngOnDestroy(): void {
+    this.createProductSubscription.unsubscribe();
+  }
+
   // Obtenemos un campo del formulario
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
 
   onSubmit(): void {
-    console.log('submit');
     this.submitted = true;
     
-    console.log(this.form.invalid)
     if (this.form.invalid) {
       return;
     }
+
+    this.productState.set(new LoadingState());
 
     const {title, price, img, desc} = this.form.value;
     
@@ -94,17 +104,21 @@ export class CreateProductComponent {
     }
     
     // Obtener titulo del form
-    this.productsService.addProduct(this.currentUser()!.accessToken, newProduct).subscribe((result: Product | null) => {
-      if (!result) {
-        // Redirección a error con mensaje
-        this.router.navigate(['fernanpop/error/'], {
-          state: {
-            message: 'Parece que no se pudo crear el producto'
-          }
-        });
-      } else {
-        this.router.navigate(['/fernanpop/product', result.id]);
-      }
-    });
+    // this.createProductSubscription = this.productsService.addProduct(this.currentUser()!.accessToken, newProduct)
+    //   .subscribe({
+    //     next: (result: CustomResponse) => {
+    //       if(result instanceof SuccessResponse) {
+    //         const { id } = result.data;
+    //         this.router.navigate(['/fernanpop/product', id]);
+    //         return;
+    //       }
+    //       // Redirección a error con mensaje
+    //       this.router.navigate(['fernanpop/error/'], {
+    //         state: {
+    //           message: 'Parece que no se pudo crear el producto'
+    //         }
+    //       });
+    //     },
+    //   });
   }
 }

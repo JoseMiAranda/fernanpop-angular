@@ -10,6 +10,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ProductButtonComponent {
   @Input() title!: string; 
   @Input() isDisabled = false;
+  @Input() submit = false;
   @Output() action = new EventEmitter<void>();
 
   onClick() {
