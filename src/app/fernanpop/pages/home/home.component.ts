@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public productsState = signal<State>(new LoadingState());
 
-  private subscription: Subscription = new Subscription();
+  private getProductsSubscription: Subscription = new Subscription();
 
   constructor(private productsService: ProductsService, private router: Router) {}
 
@@ -29,20 +29,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(): void {
-    this.subscription.add(
-      this.productsService.getProducts({}).subscribe({
-        next: (response: CustomResponse) => {
-          if (response instanceof SuccessResponse) {
-            this.productsState.set(new SuccessState(response.data));
-          } else if (response instanceof ErrorResponse) {
-            this.productsState.set(new ErrorState(response.error));
-          }
-        },
-      })
-    );
+    this.getProductsSubscription = this.productsService.getProducts({}).subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.productsState.set(new SuccessState(response.data));
+        } else if (response instanceof ErrorResponse) {
+          this.productsState.set(new ErrorState(response.error));
+        }
+      },
+    });
   }
   
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.getProductsSubscription.unsubscribe();
   }
 }

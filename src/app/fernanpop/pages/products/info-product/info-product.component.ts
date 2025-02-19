@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
 import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -10,6 +10,7 @@ import { Transaction } from '../../../../interfaces/transaction.interface';
 import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../../interfaces/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-info-product',
@@ -18,18 +19,19 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../inte
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
-export class InfoProductComponent implements OnInit {
+export class InfoProductComponent implements OnInit, OnDestroy {
 
   @Input('id') productId: string | undefined;
 
   public productState = signal<State>(new LoadingState());
-  
+  private getProductsByIdSubscription: Subscription = new Subscription();
+
   public currentUser = this.authService.currentUser;
 
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-     this.productService.getProductById(this.productId!).subscribe({
+    this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           console.log(response.data);
@@ -39,6 +41,10 @@ export class InfoProductComponent implements OnInit {
         }
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.getProductsByIdSubscription.unsubscribe();
   }
 
   buy() {

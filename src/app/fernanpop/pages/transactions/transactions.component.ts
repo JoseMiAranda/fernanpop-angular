@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { StatusTransaction, Transaction } from '../../../interfaces/transaction.interface';
 import { Subscription } from 'rxjs';
 import { ProductsService } from '../../../services/products.service';
@@ -24,9 +24,10 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfa
   styleUrl: './transactions.component.css',
   providers: [ConfirmationService, MessageService]
 })
-export class TransactionsComponent implements OnInit {
+export class TransactionsComponent implements OnInit, OnDestroy {
   public transactionsState = signal<State>(new LoadingState());
   currentUser = this.authService.currentUser;
+  private getTransactionsSubscription: Subscription = new Subscription();
 
   queryParams: any = {};
 
@@ -37,7 +38,7 @@ export class TransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     // Agregamos todas las subscripciones
-    this.transactionsService.getTransactions(this.currentUser()!.accessToken).subscribe({
+    this.getTransactionsSubscription =  this.transactionsService.getTransactions(this.currentUser()!.accessToken).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.transactionsState.set(new SuccessState(response.data));
@@ -46,6 +47,10 @@ export class TransactionsComponent implements OnInit {
         }
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.getTransactionsSubscription.unsubscribe();
   }
 
   onPageChange(pageDetails: any) {
