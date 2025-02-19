@@ -11,12 +11,12 @@ import { ButtonModule } from 'primeng/button';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
-import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
+import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, ProductButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
   providers: [ConfirmationService, MessageService]

@@ -8,12 +8,12 @@ import { Product, ProductStatus } from '../../../../interfaces/product.interface
 import { Subscription } from 'rxjs';
 import { CustomResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { InitialState, LoadingState, State } from '../../../../states/state.interface';
-import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
+import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, ProductButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, GreenButtonComponent],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.css'
 })

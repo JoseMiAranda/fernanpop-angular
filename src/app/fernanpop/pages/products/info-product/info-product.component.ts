@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '../../../../interfaces/transaction.interface';
-import { ProductButtonComponent } from '../../../components/product-button/product-button.component';
+import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, SkeletonModule, ProductButtonComponent],
+  imports: [CommonModule, CurrentCurrencyPipe, SkeletonModule, GreenButtonComponent],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })

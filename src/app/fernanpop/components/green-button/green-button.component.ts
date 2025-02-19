@@ -4,10 +4,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'app-product-button',
   standalone: true,
   imports: [],
-  templateUrl: './product-button.component.html',
-  styleUrl: './product-button.component.css'
+  templateUrl: './green-button.component.html',
+  styleUrl: './green-button.component.css'
 })
-export class ProductButtonComponent {
+export class GreenButtonComponent {
   @Input() title!: string; 
   @Input() isDisabled = false;
   @Input() submit = false;
