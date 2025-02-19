@@ -1,68 +1,68 @@
-@if(transactions().length > 0){
-<p-table [value]="transactions()" [tableStyle]="{'min-width': '60rem'}">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Nombre</th>
-            <th>Imagen</th>
-            <th>Precio</th>
-            <th>Proveedor</th>
-            <th>Estado</th>
-            <th>Últ. Actualización</th>
-            <th></th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-transaction> 
-        <tr>
-            <td class="underline hover:text-teal-500"><a
-                    [routerLink]="['/fernanpop/product', transaction.productId]">{{transaction.title | titlecase}}</a>
-            </td>
-            <td><img [src]="transaction.img" [alt]="transaction.title" width="100" class="shadow-4 aspect-[4/3]" /></td>
-            <td>{{transaction.price | monetary}}</td>
-            <td>
-                @if(transaction.sellerId == currentUser()!.uid) {
-                    Usted
-                } @else {
-                    Otro
-                }
-            </td>
-            <td class="{{transaction.status | colorStatus}}">{{transaction.status |status }}</td>
-            <td>{{ transaction.updateDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-            <td>
-                <p-confirmDialog></p-confirmDialog>
-                @if(transaction.status != 'canceled' && transaction.status != 'received' ) {
-                @if(transaction.sellerId == currentUser()!.uid) {
-                <button (click)="onCancel($event, transaction)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
-            text-sm font-medium text-gray-900 
-            rounded-lg bg-red-700 hover:bg-red-600 hover:shadow-sm hover:shadow-red-600
-          dark:text-white">
-                    <span class="w-full flex gap-3 items-center truncate relative px-2 py-2 text-white">
-                        <i class="pi pi-trash"></i>
-                        <h1 class="hidden sm:inline-block">Cancelar Enterga</h1>
-                    </span>
-                </button>
-                } @if(transaction.sellerId != currentUser()!.uid) {
-                <button (click)="onAccept($event, transaction)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
-            text-sm font-medium text-gray-900 
-            rounded-lg bg-teal-700 hover:bg-teal-600 hover:shadow-sm hover:shadow-teal-600
-          dark:text-white">
-                    <span class="w-full flex gap-3 items-center truncate relative px-2 py-2 text-white">
-                        <i class="pi pi-check"></i>
-                        <h1 class="hidden sm:inline-block">Confirmar Pedido</h1>
-                    </span>
-                </button>
-                }
-                }
-
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
-} @else { <div class="flex flex-col h-full">
-
-    <div class="flex flex-col  items-center justify-center flex-grow">
-        <p class="text-2xl">No hay transacciones</p>
-    </div>
-
+<div *ngIf="transactionsState().type === 'loading'" class="w-full h-full flex justify-center items-center">
+    <p>Cargando transacciones...</p>
 </div>
+<div *ngIf="transactionsState().type === 'success'">
+    <p-table [value]="transactionsState().data" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Precio</th>
+                <th>Proveedor</th>
+                <th>Estado</th>
+                <th>Últ. Actualización</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-transaction>
+            <tr>
+                <td class="underline hover:text-teal-500"><a
+                        [routerLink]="['/fernanpop/product', transaction.productId]">{{transaction.title |
+                        titlecase}}</a>
+                </td>
+                <td><img [src]="transaction.img" [alt]="transaction.title" width="100" class="shadow-4 aspect-[4/3]" />
+                </td>
+                <td>{{transaction.price | monetary}}</td>
+                <td>
+                    @if(transaction.sellerId == currentUser()!.uid) {
+                    Usted
+                    } @else {
+                    Otro
+                    }
+                </td>
+                <td class="{{transaction.status | colorStatus}}">{{transaction.status |status }}</td>
+                <td>{{ transaction.updateDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td>
+                    <p-confirmDialog></p-confirmDialog>
+                    @if(transaction.status != 'canceled' && transaction.status != 'received' ) {
+                    @if(transaction.sellerId == currentUser()!.uid) {
+                    <button (click)="onCancel($event, transaction)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
+                text-sm font-medium text-gray-900 
+                rounded-lg bg-red-700 hover:bg-red-600 hover:shadow-sm hover:shadow-red-600
+              dark:text-white">
+                        <span class="w-full flex gap-3 items-center truncate relative px-2 py-2 text-white">
+                            <i class="pi pi-trash"></i>
+                            <h1 class="hidden sm:inline-block">Cancelar Enterga</h1>
+                        </span>
+                    </button>
+                    } @if(transaction.sellerId != currentUser()!.uid) {
+                    <button (click)="onAccept($event, transaction)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
+                text-sm font-medium text-gray-900 
+                rounded-lg bg-teal-700 hover:bg-teal-600 hover:shadow-sm hover:shadow-teal-600
+              dark:text-white">
+                        <span class="w-full flex gap-3 items-center truncate relative px-2 py-2 text-white">
+                            <i class="pi pi-check"></i>
+                            <h1 class="hidden sm:inline-block">Confirmar Pedido</h1>
+                        </span>
+                    </button>
+                    }
+                    }
 
-}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<div *ngIf="transactionsState().type === 'error'" class="w-full h-full flex justify-center items-center">
+    <p>Error: {{ transactionsState().error }}</p>
+</div>
