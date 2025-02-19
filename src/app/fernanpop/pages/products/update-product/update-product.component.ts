@@ -12,11 +12,12 @@ import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../
 import { Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
+import { RedButtonComponent } from '../../../components/red-button/red-button.component';
 
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent, RedButtonComponent],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
   providers: [ConfirmationService, MessageService]

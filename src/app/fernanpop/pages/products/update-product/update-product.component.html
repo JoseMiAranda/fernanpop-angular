@@ -84,17 +84,8 @@
 			</form>
 			<div class="flex justify-center pt-8">
 				<p-confirmDialog></p-confirmDialog>
-				<button (click)="onDelete($event)" [disabled]="isLoading" [class.bg-red-700]="!isLoading"
-					[class.hover:bg-red-600]="!isLoading" [class.hover:shadow-sm]="!isLoading"
-					[class.hover:shadow-ref-600]="!isLoading" [class.bg-gray-400]="isLoading"
-					[class.cursor-not-allowed]="isLoading" class="max-w-40 relative w-fit inline-flex items-center justify-center 
-			text-sm font-medium text-gray-900 
-			rounded-lg ">
-					<span class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
-						<h1 *ngIf="deleteProductState().type === 'initial'">Eliminar</h1>
-						<h1 *ngIf="deleteProductState().type === 'loading'">Eliminando...</h1>
-					</span>
-				</button>
+				<!-- TODO -->
+				<!-- <app-red-button (action)="onDelete($event)" [isDisabled]="isLoading"></app-red-button> -->
 			</div>
 		</div>
 	</ng-template>
