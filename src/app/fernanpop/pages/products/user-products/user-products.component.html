@@ -1,40 +1,27 @@
-@if(productsResponse != null && productsResponse.products.length !== 0){
-    <div class="flex flex-col h-full justify-between">
-        <div>
-            <div class="flex min-w-full justify-end items-center pt-8 pr-8">
-                <div class="flex flex-grow justify-center">
-                    <h1 class="text-center">Se han encontrados {{productsResponse.total}} resultados</h1>
-                </div>
-                <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
-                            text-sm font-medium text-gray-900 
-                            rounded-lg bg-teal-700
-                            dark:text-white">
-                    <a [routerLink]="['/fernanpop/create-product']" class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
-                        <h1>Agregar Producto</h1>
-                    </a>
-                </button>
+<div *ngIf="productState().type === 'loding'" class="">
+    <p>Cargando productos...</p>
+</div>
+
+<div *ngIf="productState().type === 'success'" class="flex flex-col h-full justify-between">
+    <div>
+        <div class="flex min-w-full justify-end items-center pt-8 pr-8">
+            <div class="flex flex-grow justify-center">
+                <h1 class="text-center">Se han encontrados {{productState().data.length}} resultados</h1>
             </div>
-        <app-list-products [listProducts]="productsResponse.products"></app-list-products>
+            <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
+                        text-sm font-medium text-gray-900 
+                        rounded-lg bg-teal-700
+                        dark:text-white">
+                <a [routerLink]="['/fernanpop/create-product']"
+                    class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
+                    <h1>Agregar Producto</h1>
+                </a>
+            </button>
         </div>
-        <p-paginator (onPageChange)="onPageChange($event)"  [rows]="productsResponse.limit" [totalRecords]="productsResponse.total"></p-paginator>
-</div>
-} @else {
-
-<div class="flex flex-col h-full">
-    <div class="flex justify-end p-8">
-        <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
-                    text-sm font-medium text-gray-900 
-                    rounded-lg bg-teal-700
-                    dark:text-white">
-            <a [routerLink]="['/fernanpop/create-product']" class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
-                <h1>Agregar Producto</h1>
-            </a>
-        </button>
+        <app-list-products [listProducts]="productState().data"></app-list-products>
     </div>
-    <div class="flex flex-col  items-center justify-center flex-grow">
-        <p class="text-2xl">No hay productos</p>
-    </div>
-
 </div>
 
-}
+<div *ngIf="productState().type === 'error'">
+    <p>Error: {{ productState().error }}</p>
+</div>

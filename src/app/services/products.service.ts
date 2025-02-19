@@ -28,12 +28,16 @@ export class ProductsService {
     );
   }
 
-  getUserProducts(accessToken: string): Observable<ProductsResponse | null> {
+  getUserProducts(accessToken: string): Observable<CustomResponse> {
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-    return this.http.get<ProductsResponse>(this.baseUrl + `/seller/products`, { headers: headers }).pipe(
-      catchError(error => {
-        console.error(error);
-        return of(null);
+    return this.http.get<Product[]>(this.baseUrl + '/products/seller', {
+      headers: headers
+    }).pipe(
+      map((transactions: Product[]) => {
+        return new SuccessResponse(transactions);
+      }),
+      catchError((err) => {
+        return of(new ErrorResponse(getErrorMessage(err)));
       })
     );
   }
