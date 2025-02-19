@@ -1,9 +1,3 @@
-@if(listProducts.length === 0) {
-<div class="w-full h-full flex justify-center items-center">
-    <p>No hay productos disponibles</p>
-</div>
-}
-@else {
 <div class="grid grid-cols-products p-8 gap-8">
     @for(product of listProducts; track product.id) {
     <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -38,4 +32,3 @@
     </div>
     }
 </div>
-}

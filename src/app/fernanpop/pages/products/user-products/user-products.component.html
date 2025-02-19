@@ -3,23 +3,31 @@
 </div>
 
 <div *ngIf="productState().type === 'success'" class="flex flex-col h-full justify-between">
-    <div>
-        <div class="flex min-w-full justify-end items-center pt-8 pr-8">
-            <div class="flex flex-grow justify-center">
-                <h1 class="text-center">Se han encontrados {{productState().data.length}} resultados</h1>
-            </div>
-            <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
+    <div class="flex min-w-full justify-end items-center pt-8 pr-8">
+        <div class="flex flex-grow justify-center">
+            <h1 class="text-center">Se han encontrados {{productState().data.length}} resultados</h1>
+        </div>
+        <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
                         text-sm font-medium text-gray-900 
                         rounded-lg bg-teal-700
                         dark:text-white">
-                <a [routerLink]="['/fernanpop/create-product']"
-                    class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
-                    <h1>Agregar Producto</h1>
-                </a>
-            </button>
-        </div>
+            <a [routerLink]="['/fernanpop/create-product']"
+                class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
+                <h1>Agregar Producto</h1>
+            </a>
+        </button>
+    </div>
+
+    <div *ngIf="productState().data.length > 0; else no_context">
         <app-list-products [listProducts]="productState().data"></app-list-products>
     </div>
+    
+    <ng-template #no_context>
+        <div class="flex flex-col h-full justify-center items-center">
+            <p>No hay productos disponibles</p>
+        </div>
+    </ng-template>
+
 </div>
 
 <div *ngIf="productState().type === 'error'">
