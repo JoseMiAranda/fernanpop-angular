@@ -55,8 +55,8 @@ export class ProductsService {
 
   // CREATE
   addProduct(accessToken: string, newProduct: Product): Observable<CustomResponse> {
-    const { title, desc, price, img } = newProduct;
-    const productData = { title, desc, price, img };
+    const { title, desc, price, images } = newProduct;
+    const productData = { title, desc, price, images };
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
     return this.http.post<Product>(this.baseUrl + '/products', productData, {
       headers: headers
@@ -72,8 +72,8 @@ export class ProductsService {
 
   // UPDATE
   updateProduct(accessToken: string, updatedProduct: Product): Observable<Product | null> {
-    const { title, desc, price, img } = updatedProduct;
-    const productData = { title, desc, price, img };
+    const { title, desc, price, images } = updatedProduct;
+    const productData = { title, desc, price, images };
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
     return this.http.patch<Product>(this.baseUrl + `/seller/product/${updatedProduct.id}`, productData, {
       headers: headers

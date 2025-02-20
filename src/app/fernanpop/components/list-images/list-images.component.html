@@ -1,0 +1,7 @@
+<ul class="flex flex-col space-y-2 w-full">
+    @for (image of images; track image) {
+        <li class="flex justify-center">
+            <img class="w-16 h-16 rounded-full" src="{{image}}" alt="Product Image">
+        </li>
+    }
+</ul>

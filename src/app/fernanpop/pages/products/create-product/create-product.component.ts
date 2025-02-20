@@ -97,7 +97,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       title: title,
       price: price,
       desc: desc,
-      img: img,
+      images: [img],
       createdAt: new Date(),
       updatedAt: new Date(),
       status: ProductStatus.INITIAL,

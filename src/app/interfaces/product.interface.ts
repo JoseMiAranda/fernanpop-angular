@@ -10,7 +10,7 @@ export interface Product {
     title: string;
     desc: string;
     price: number;
-    img: string;
+    images: string[];
     createdAt: Date;
     updatedAt: Date;
     status: ProductStatus;

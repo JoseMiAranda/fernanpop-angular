@@ -13,11 +13,12 @@ import { Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { RedButtonComponent } from '../../../components/red-button/red-button.component';
+import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent, RedButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent, RedButtonComponent, ListImagesComponent],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
   providers: [ConfirmationService, MessageService]
@@ -136,7 +137,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       title: title,
       price: price,
       desc: desc,
-      img: img,
+      images: [img],
       status: status,
       createdAt: createdAt,
       updatedAt: new Date()
