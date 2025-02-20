@@ -11,9 +11,9 @@ export class RedButtonComponent {
   @Input() title!: string; 
   @Input() isDisabled = false;
   @Input() submit = false;
-  @Output() action = new EventEmitter<void>();
+  @Output() action = new EventEmitter<Event | void>();
 
-  onClick() {
-    this.action.emit();
+  onClick(event: Event) {
+    this.action.emit(event);
   }
 }

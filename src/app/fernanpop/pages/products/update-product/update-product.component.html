@@ -72,20 +72,19 @@
 					}
 				</div>
 				<div class="flex justify-center">
-					<app-product-button
-						*ngIf="updateProductState().type === 'initial' && deleteProductState().type === 'initial'"
-						[title]="'Actualizar producto'" [submit]="true"></app-product-button>
+					<app-product-button *ngIf="updateProductState().type === 'initial'" [title]="'Actualizar producto'"
+						[submit]="!isLoading" [isDisabled]="isLoading"></app-product-button>
 					<app-product-button *ngIf="updateProductState().type === 'loading'"
 						[title]="'Actualizando producto...'" [isDisabled]="true"></app-product-button>
-					<app-product-button
-						*ngIf="updateProductState().type === 'initial' && deleteProductState().type === 'loading'"
-						[title]="'Actualizar producto'" [isDisabled]="true"></app-product-button>
 				</div>
 			</form>
 			<div class="flex justify-center pt-8">
 				<p-confirmDialog></p-confirmDialog>
-				<!-- TODO -->
-				<!-- <app-red-button (action)="onDelete($event)" [isDisabled]="isLoading"></app-red-button> -->
+				<app-red-button
+					*ngIf="deleteProductState().type === 'initial'"
+					[title]="'Eliminar'" (action)="onDelete($event!)" [isDisabled]="isLoading"></app-red-button>
+				<app-red-button *ngIf="deleteProductState().type === 'loading'" [title]="'Eliminando...'"
+					(action)="onDelete($event!)" [isDisabled]="true"></app-red-button>
 			</div>
 		</div>
 	</ng-template>

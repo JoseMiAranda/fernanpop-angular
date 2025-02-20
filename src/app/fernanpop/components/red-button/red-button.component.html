@@ -1,5 +1,5 @@
 <button 
-    (click)="onClick()"  
+    (click)="onClick($event)" 
     [disabled]="isDisabled"
     [attr.type]="submit ? 'submit' : 'button'"
     [class.bg-red-700]="!isDisabled"
