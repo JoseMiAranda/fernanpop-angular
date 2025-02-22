@@ -1,0 +1,23 @@
+<div class="flex items-center justify-center w-full">
+    <label for="file-upload"
+        class="flex flex-col items-center justify-center w-full h-52 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+        id="drop-zone">
+        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 16V4a2 2 0 012-2h6a2 2 0 012 2v12m-6 4l-4-4m0 0l4-4m-4 4h12"></path>
+            </svg>
+            <p class="mb-2 text-sm text-gray-500" id="lbl-selected-files">
+                <span class="font-semibold">Click aquí </span> o arrastra los archivos
+            </p>
+            <p class="text-xs text-gray-500">
+                SVG, PNG, JPG or GIF (max. 800x400px)
+            </p>
+        </div>
+
+        <!-- class="hidden" -->
+        <!-- accept only images -->
+        <input id="file-upload" name="imageFiles" type="file" accept="image/*" multiple class="hidden" />
+    </label>
+</div>

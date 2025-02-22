@@ -14,12 +14,12 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../inte
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { RedButtonComponent } from '../../../components/red-button/red-button.component';
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
-import { state } from '@angular/animations';
+import { ImageDropComponent } from "../../../components/image-drop/image-drop.component";
 
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent, RedButtonComponent, ListImagesComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent, RedButtonComponent, ListImagesComponent, ImageDropComponent],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
   providers: [ConfirmationService, MessageService]

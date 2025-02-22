@@ -60,11 +60,12 @@
 				</div>
 				<div class="space-y-2">
 					<label class="text-sm font-medium text-gray-700 tracking-wide">Imágenes</label>
+					<app-image-drop></app-image-drop>
 					<div class="form-group space-y-2">
 						<app-list-images *ngIf="productState().data.images.length > 0; else noimages"
 							(deleteImage)="deleteImage($event)" [images]="productState().data.images"></app-list-images>
 						<ng-template #noimages>
-							<p class="text-gray-500">No hay imágenes</p>
+							<p class="text-gray-500">No hay imágenes guardadas</p>
 						</ng-template>
 						<input type="hidden" formControlName="img" value="{{productState().data.images}}" />
 						<div class="invalid-feedback">
