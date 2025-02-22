@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-image-drop',
@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './image-drop.component.css'
 })
 export class ImageDropComponent implements OnInit {
+  @Output() onDrop = new EventEmitter<FileList>();
+  
   ngOnInit(): void {
     const lblSelectedFiles = document.querySelector(
       "#lbl-selected-files"
@@ -25,11 +27,11 @@ export class ImageDropComponent implements OnInit {
 
     const highlight = (e: DragEvent) => {
       dropZone.classList.remove('border-gray-300');
-      dropZone.classList.add('border-blue-500', 'bg-blue-50');
+      dropZone.classList.add('border-green-500', 'bg-green-50');
     };
 
     const unHighlight = (e: DragEvent) => {
-      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+      dropZone.classList.remove('border-green-500', 'bg-green-50');
       dropZone.classList.add('border-gray-300');
     };
 
@@ -49,6 +51,7 @@ export class ImageDropComponent implements OnInit {
       }
 
       lblSelectedFiles.innerHTML = `<strong>${validFiles.length} archivos seleccionados</strong>`
+      this.onDrop.emit(files);
     };
 
     (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach(

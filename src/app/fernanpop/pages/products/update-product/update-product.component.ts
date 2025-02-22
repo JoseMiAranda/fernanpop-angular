@@ -31,6 +31,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public maxDescLenght = 300;
   private currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
+  public imagesSignal = signal<FileList>(new DataTransfer().files);
   public updateProductState = signal<State>(new InitialState());
   public deleteProductState = signal<State>(new InitialState());
   private getProductsByIdSubscription: Subscription = new Subscription();
@@ -89,12 +90,6 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
             Validators.required,
           ]
         ],
-        // img: [
-        //   null,
-        //   [
-        //     Validators.required,
-        //   ]
-        // ],
         desc: [
           null,
           [
@@ -123,10 +118,16 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.productState.set(new SuccessState({ ...this.productState().data, images: images }));
   }
 
+  onDrop(files: FileList) {
+    console.log(files);
+    this.imagesSignal.set(files);
+  }
+
   onSubmit(): void {
     this.submitted = true;
+    const existImage = this.productState().data.images.length > 0 || this.imagesSignal().length > 0;
 
-    const valid = this.form.valid && this.productState().data.images.length > 0;
+    const valid = this.form.valid && existImage;
 
     if (!valid) {
       return;
@@ -135,6 +136,11 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.updateProductState.set(new LoadingState());
 
+    // Añadir imágenes
+    const images = this.imagesSignal();
+
+
+    // Actualizar producto
     const { title, price, img, desc } = this.form.value;
 
     const { id, sellerId, status, createdAt } = this.productState().data;

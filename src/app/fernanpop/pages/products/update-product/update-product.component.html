@@ -108,7 +108,7 @@
               <label class="text-sm font-medium text-gray-700 tracking-wide"
                 >Imágenes</label
               >
-              <app-image-drop></app-image-drop>
+              <app-image-drop (onDrop)="onDrop($event)"></app-image-drop>
               <label class="text-sm font-medium text-gray-700 tracking-wide"
                 >Guardadas:</label
               >
@@ -121,16 +121,9 @@
                 <ng-template #noimages>
                   <p class="text-gray-500">No hay imágenes guardadas</p>
                 </ng-template>
-                <input
-                  type="hidden"
-                  formControlName="img"
-                  value="{{ productState().data.images }}"
-                />
-                <div class="invalid-feedback">
-                  @if (submitted && productState().data.images.length <= 0) {
-                  <div class="text-red-500">Imagen requerida</div>
-                  }
-                </div>
+                @if (submitted && productState().data.images.length <= 0) {
+					<div class="text-red-500">Imagen requerida</div>
+				}
               </div>
             </div>
           </div>
