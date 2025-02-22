@@ -14,6 +14,7 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../inte
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { RedButtonComponent } from '../../../components/red-button/red-button.component';
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-update-product',
@@ -88,12 +89,12 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
             Validators.required,
           ]
         ],
-        img: [
-          null,
-          [
-            Validators.required,
-          ]
-        ],
+        // img: [
+        //   null,
+        //   [
+        //     Validators.required,
+        //   ]
+        // ],
         desc: [
           null,
           [
@@ -117,10 +118,17 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
+  deleteImage(image: string) {
+    const images = this.productState().data.images.filter((i: string) => i !== image);
+    this.productState.set(new SuccessState({ ...this.productState().data, images: images }));
+  }
+
   onSubmit(): void {
     this.submitted = true;
 
-    if (this.form.invalid) {
+    const valid = this.form.valid && this.productState().data.images.length > 0;
+
+    if (!valid) {
       return;
     }
 

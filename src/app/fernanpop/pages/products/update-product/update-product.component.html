@@ -42,19 +42,6 @@
 					}
 				</div>
 				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Imagen</label>
-					<input type="text" formControlName="img"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['img'].errors }" />
-					@if (submitted && f['img'].errors) {
-					<div class="invalid-feedback">
-						@if (f['img'].errors['required']) {
-						<div class="text-red-500">Imagen requerida</div>
-						}
-					</div>
-					}
-				</div>
-				<div class="form-group space-y-2">
 					<label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
 					<input type="text" formControlName="desc"
 						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
@@ -71,6 +58,35 @@
 					</div>
 					}
 				</div>
+				<div class="space-y-2">
+					<label class="text-sm font-medium text-gray-700 tracking-wide">Imágenes</label>
+					<div class="form-group space-y-2">
+						<app-list-images *ngIf="productState().data.images.length > 0; else noimages"
+							(deleteImage)="deleteImage($event)" [images]="productState().data.images"></app-list-images>
+						<ng-template #noimages>
+							<p class="text-gray-500">No hay imágenes</p>
+						</ng-template>
+						<input type="hidden" formControlName="img" value="{{productState().data.images}}" />
+						<div class="invalid-feedback">
+							@if (submitted && productState().data.images.length <= 0) {
+							<div class="text-red-500">Imagen requerida</div>
+							}
+						</div>
+					</div>
+				</div>
+				<!-- <div class="form-group space-y-2">
+					<label class="text-sm font-medium text-gray-700 tracking-wide">Imagen</label>
+					<input type="text" formControlName="img"
+						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+						[ngClass]="{ 'is-invalid': submitted && f['img'].errors }" />
+					@if (submitted && f['img'].errors) {
+					<div class="invalid-feedback">
+						@if (f['img'].errors['required']) {
+						<div class="text-red-500">Imagen requerida</div>
+						}
+					</div>
+					}
+				</div> -->
 				<div class="flex justify-center">
 					<app-product-button *ngIf="updateProductState().type === 'initial'" [title]="'Actualizar producto'"
 						[submit]="!isLoading" [isDisabled]="isLoading"></app-product-button>
@@ -80,9 +96,8 @@
 			</form>
 			<div class="flex justify-center pt-8">
 				<p-confirmDialog></p-confirmDialog>
-				<app-red-button
-					*ngIf="deleteProductState().type === 'initial'"
-					[title]="'Eliminar'" (action)="onDelete($event!)" [isDisabled]="isLoading"></app-red-button>
+				<app-red-button *ngIf="deleteProductState().type === 'initial'" [title]="'Eliminar'"
+					(action)="onDelete($event!)" [isDisabled]="isLoading"></app-red-button>
 				<app-red-button *ngIf="deleteProductState().type === 'loading'" [title]="'Eliminando...'"
 					(action)="onDelete($event!)" [isDisabled]="true"></app-red-button>
 			</div>

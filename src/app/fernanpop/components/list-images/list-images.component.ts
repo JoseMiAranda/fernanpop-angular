@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RedButtonComponent } from '../red-button/red-button.component';
 
 @Component({
   selector: 'app-list-images',
@@ -9,5 +10,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ListImagesComponent {
   @Input() images: string[] = [];
-  @Output() onClick = new EventEmitter<string>();
+  @Output() deleteImage = new EventEmitter<any>();
+
+  onClick(image: string) {
+    this.deleteImage.emit(image);
+  }
 }
