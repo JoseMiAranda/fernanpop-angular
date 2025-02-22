@@ -4,47 +4,28 @@
   </div>
 
   <ng-template #success>
-    <div
-      class="p-12 bg-white mx-auto rounded-2xl w-full sm:max-w-[1000px] shadow-md"
-    >
+    <div class="p-12 bg-white mx-auto rounded-2xl w-full sm:max-w-[1000px] shadow-md">
       <div class="mb-4">
-		<div class="flex justify-between">
-			<h3 class="font-semibold text-2xl text-gray-800">¡Actualiza!</h3>
-			<div>
-				<p-confirmDialog></p-confirmDialog>
-				<app-red-button
-				  *ngIf="deleteProductState().type === 'initial'"
-				  [title]="'Eliminar'"
-				  (action)="onDelete($event!)"
-				  [isDisabled]="isLoading"
-				></app-red-button>
-				<app-red-button
-				  *ngIf="deleteProductState().type === 'loading'"
-				  [title]="'Eliminando...'"
-				  (action)="onDelete($event!)"
-				  [isDisabled]="true"
-				></app-red-button>
-			  </div>
-		</div>
+        <div class="flex justify-between">
+          <h3 class="font-semibold text-2xl text-gray-800">¡Actualiza!</h3>
+          <div>
+            <p-confirmDialog></p-confirmDialog>
+            <app-red-button *ngIf="deleteProductState().type === 'initial'" [title]="'Eliminar'"
+              (action)="onDelete($event!)" [isDisabled]="isLoading"></app-red-button>
+            <app-red-button *ngIf="deleteProductState().type === 'loading'" [title]="'Eliminando...'"
+              (action)="onDelete($event!)" [isDisabled]="true"></app-red-button>
+          </div>
+        </div>
         <p class="text-gray-500">Rellene el formulario con todos los datos.</p>
       </div>
-      <form
-        [formGroup]="form"
-        (ngSubmit)="onSubmit()"
-        class="flex flex-col space-y-4"
-      >
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="col-span-1">
             <div class="form-group space-y-2">
-              <label class="text-sm font-medium text-gray-700 tracking-wide"
-                >Título</label
-              >
-              <input
-                type="text"
-                formControlName="title"
+              <label class="text-sm font-medium text-gray-700 tracking-wide">Título</label>
+              <input type="text" formControlName="title"
                 class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-                [ngClass]="{ 'is-invalid': submitted && f['title'].errors }"
-              />
+                [ngClass]="{ 'is-invalid': submitted && f['title'].errors }" />
               @if (submitted && f['title'].errors) {
               <div class="invalid-feedback">
                 @if (f['title'].errors['required']) {
@@ -60,15 +41,10 @@
               }
             </div>
             <div class="form-group space-y-2">
-              <label class="text-sm font-medium text-gray-700 tracking-wide"
-                >Precio</label
-              >
-              <input
-                type="number"
-                formControlName="price"
+              <label class="text-sm font-medium text-gray-700 tracking-wide">Precio</label>
+              <input type="number" formControlName="price"
                 class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-                [ngClass]="{ 'is-invalid': submitted && f['price'].errors }"
-              />
+                [ngClass]="{ 'is-invalid': submitted && f['price'].errors }" />
               @if (submitted && f['price'].errors) {
               <div class="invalid-feedback">
                 @if (f['price'].errors['required']) {
@@ -78,15 +54,10 @@
               }
             </div>
             <div class="form-group space-y-2">
-              <label class="text-sm font-medium text-gray-700 tracking-wide"
-                >Descripción</label
-              >
-              <input
-                type="text"
-                formControlName="desc"
+              <label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
+              <input type="text" formControlName="desc"
                 class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-                [ngClass]="{ 'is-invalid': submitted && f['desc'].errors }"
-              />
+                [ngClass]="{ 'is-invalid': submitted && f['desc'].errors }" />
               @if (submitted && f['desc'].errors) {
               <div class="invalid-feedback">
                 @if (f['desc'].errors['required']) {
@@ -105,42 +76,28 @@
 
           <div class="col-span-1">
             <div class="flex flex-col space-y-2">
-              <label class="text-sm font-medium text-gray-700 tracking-wide"
-                >Imágenes</label
-              >
+              <label class="text-sm font-medium text-gray-700 tracking-wide">Imágenes</label>
               <app-image-drop (onDrop)="onDrop($event)"></app-image-drop>
-              <label class="text-sm font-medium text-gray-700 tracking-wide"
-                >Guardadas:</label
-              >
+              <label class="text-sm font-medium text-gray-700 tracking-wide">Guardadas:</label>
               <div class="form-group space-y-2">
-                <app-list-images
-                  *ngIf="productState().data.images.length > 0; else noimages"
-                  (deleteImage)="deleteImage($event)"
-                  [images]="productState().data.images"
-                ></app-list-images>
+                <app-list-images *ngIf="productState().data.images.length > 0; else noimages"
+                  (deleteImage)="deleteImage($event)" [images]="productState().data.images"></app-list-images>
                 <ng-template #noimages>
                   <p class="text-gray-500">No hay imágenes guardadas</p>
                 </ng-template>
-                @if (submitted && productState().data.images.length <= 0) {
-					<div class="text-red-500">Imagen requerida</div>
-				}
+                @if (submitted && !existImage) {
+                <div class="text-red-500">Imagen requerida</div>
+                }
               </div>
             </div>
           </div>
         </div>
         <div class="flex justify-center space-x-6">
           <div class="flex justify-center">
-            <app-product-button
-              *ngIf="updateProductState().type === 'initial'"
-              [title]="'Actualizar producto'"
-              [submit]="!isLoading"
-              [isDisabled]="isLoading"
-            ></app-product-button>
-            <app-product-button
-              *ngIf="updateProductState().type === 'loading'"
-              [title]="'Actualizando producto...'"
-              [isDisabled]="true"
-            ></app-product-button>
+            <app-product-button *ngIf="updateProductState().type === 'initial'" [title]="'Actualizar producto'"
+              [submit]="!isLoading" [isDisabled]="isLoading"></app-product-button>
+            <app-product-button *ngIf="updateProductState().type === 'loading'" [title]="'Actualizando producto...'"
+              [isDisabled]="true"></app-product-button>
           </div>
         </div>
       </form>

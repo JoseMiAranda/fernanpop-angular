@@ -39,6 +39,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   private deleteProductSubscription: Subscription = new Subscription();
   public submitted = false;
   public isLoading = false;
+  public existImage = false;
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
@@ -119,15 +120,14 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   }
 
   onDrop(files: FileList) {
-    console.log(files);
     this.imagesSignal.set(files);
   }
 
   onSubmit(): void {
     this.submitted = true;
-    const existImage = this.productState().data.images.length > 0 || this.imagesSignal().length > 0;
+    this.existImage = this.productState().data.images.length > 0 || this.imagesSignal().length > 0;
 
-    const valid = this.form.valid && existImage;
+    const valid = this.form.valid && this.existImage;
 
     if (!valid) {
       return;
