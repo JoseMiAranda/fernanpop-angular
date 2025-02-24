@@ -88,13 +88,14 @@ export class ProductsService {
   }
 
   // DELETE
-  // TODO
-  deleteProduct(accessToken: string, id: string) {
+  deleteProduct(accessToken: string, id: string): Observable<CustomResponse> {
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-    return this.http.delete<Product>(this.baseUrl + `/seller/product/${id}`, { headers: headers }).pipe(
+    return this.http.delete<Product>(this.baseUrl + `/products/${id}`, { headers: headers }).pipe(
+      map((response: Product) => {
+        return new SuccessResponse(response);
+      }),
       catchError((err) => {
-        console.log(err);
-        return of(null);
+        return of(new ErrorResponse(getErrorMessage(err)));
       })
     );
   }

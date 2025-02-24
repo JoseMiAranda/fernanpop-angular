@@ -221,20 +221,20 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       accept: () => {
         this.isLoading = true;
         this.deleteProductState.set(new LoadingState());
-        //!TODO
-        // Borramos el producto
-        // this.productsService.deleteProduct(this.currentUser()!.accessToken, this.productState()!.id).subscribe((result: Product | null) => {
-        //   if (result) {
-        //     this.router.navigate(['']);
-        //   } else {
-        //     // Redirección a error con mensaje
-        //     this.router.navigate(['fernanpop/error/'], {
-        //       state: {
-        //         message: 'Parece que no se pudo borrar el producto'
-        //       }
-        //     });
-        //   }
-        // });
+        this.deleteProductSubscription = this.productsService.deleteProduct(this.currentUser()!.accessToken, this.productState()!.data.id).subscribe({
+            next: (response: CustomResponse) => {
+              if (response instanceof SuccessResponse) {
+                this.router.navigate(['/fernanpop/user/products']);
+                return;
+              } 
+              this.router.navigate(['fernanpop/error/'], {
+                state: {
+                  message: 'Parece que no se pudo borrar el producto'
+                }
+              });
+            },
+          }
+        );
       }
     });
   }
