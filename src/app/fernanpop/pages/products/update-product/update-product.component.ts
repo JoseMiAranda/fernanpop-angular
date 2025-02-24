@@ -9,12 +9,13 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { RedButtonComponent } from '../../../components/red-button/red-button.component';
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 import { ImageDropComponent } from "../../../components/image-drop/image-drop.component";
+import { ImagesService } from '../../../../services/images.service';
 
 @Component({
   selector: 'app-update-product',
@@ -49,8 +50,8 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   });
 
 
-  constructor(private formBuilder: FormBuilder, private productsService: ProductsService,
-    private confirmationService: ConfirmationService, 
+  constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private imagesService: ImagesService,
+    private confirmationService: ConfirmationService,
     private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -123,56 +124,85 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.imagesSignal.set(files);
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    this.existImage = this.productState().data.images.length > 0 || this.imagesSignal().length > 0;
-
-    const valid = this.form.valid && this.existImage;
-
-    if (!valid) {
-      return;
-    }
-
-    this.isLoading = true;
-    this.updateProductState.set(new LoadingState());
-
-    // Añadir imágenes
+  async uploadImages(): Promise<void> {
     const images = this.imagesSignal();
-
-
-    // Actualizar producto
-    const { title, price, img, desc } = this.form.value;
-
-    const { id, sellerId, status, createdAt } = this.productState().data;
-
+  
+    if (images.length === 0) {
+      return Promise.resolve();
+    }
+  
+    const imageObservables = Array.from(images).map((image) => 
+      this.imagesService.upload(this.currentUser()!.accessToken, image)
+    );
+  
+    await forkJoin(imageObservables).toPromise().then((urls) => {
+      const newImages: string[] = [];
+      urls?.forEach((url) => {
+        if (url instanceof ErrorResponse) {
+          this.router.navigate(['fernanpop/error/'], {
+            state: {
+              message: 'Parece que no se pudo subir la imagen'
+            }
+          });
+          return;
+        } 
+        newImages.push((url as SuccessResponse).data);
+      });
+      const images = [...this.productState().data.images, ...newImages];
+      this.productState.set(new SuccessState({ ...this.productState().data, images: images }));
+    }).catch((error) => {
+      console.error('Error al subir imágenes:', error);
+    });
+  }
+  
+  updateProduct() {
+    const { title, price, desc } = this.form.value;
+    const { id, sellerId, images, status, createdAt } = this.productState().data;
+  
     const updatedProduct: Product = {
       id: id,
       sellerId: sellerId,
       title: title,
       price: price,
       desc: desc,
-      images: [img],
+      images: images,
       status: status,
       createdAt: createdAt,
       updatedAt: new Date()
     }
-
-    //!TODO
-    // this.updateProductSubscription = this.productsService.updateProduct(this.currentUser()!.accessToken, updatedProduct).subscribe({
-    //   next: (response: CustomResponse) => {
-    //     if (response instanceof SuccessResponse) {
-    //       this.router.navigate(['/fernanpop/product', response.data.id]);
-    //       return;
-    //     } 
-    //     this.router.navigate(['fernanpop/error/'], {
-    //       state: {
-    //         message: 'Parece que no se pudo modificar el producto'
-    //       }
-    //     });
-    //   },
-    // });
+  
+    this.updateProductSubscription = this.productsService.updateProduct(this.currentUser()!.accessToken, updatedProduct).subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.router.navigate(['/fernanpop/product', response.data.id]);
+          return;
+        } 
+        this.router.navigate(['fernanpop/error/'], {
+          state: {
+            message: 'Parece que no se pudo modificar el producto'
+          }
+        });
+      },
+    });
   }
-
+  
+  async onSubmit(): Promise<void> {
+    this.submitted = true;
+    this.existImage = this.productState().data.images.length > 0 || this.imagesSignal().length > 0;
+  
+    const valid = this.form.valid && this.existImage;
+  
+    if (!valid) {
+      return;
+    }
+  
+    this.isLoading = true;
+    this.updateProductState.set(new LoadingState());
+  
+    await this.uploadImages();
+    this.updateProduct();
+  }
+  
   onDelete(event: Event): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,

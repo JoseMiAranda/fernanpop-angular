@@ -18,15 +18,23 @@ export class ImagesService {
     // CREATE
     upload(accessToken: string, file: File): Observable<CustomResponse> {
         const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-        return this.http.post<Product>(this.baseUrl + '/images/upload',
-            {
-                file: file
-            },
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<{ 'secure_url': string }>(this.baseUrl + '/images/upload',
+            formData,
             {
                 headers: headers,
             }
         )
-        // TODO
+        .pipe(
+            map((response) => {
+                const secureUrl = response['secure_url']; 
+                return new SuccessResponse(secureUrl);
+            }),
+            catchError((err) => {
+                return of(new ErrorResponse(getErrorMessage(err)));
+            })
+        );
     }
 
 }

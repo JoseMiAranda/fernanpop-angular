@@ -71,21 +71,24 @@ export class ProductsService {
   }
 
   // UPDATE
-  updateProduct(accessToken: string, updatedProduct: Product): Observable<Product | null> {
-    const { title, desc, price, images } = updatedProduct;
-    const productData = { title, desc, price, images };
+  updateProduct(accessToken: string, updatedProduct: Product): Observable<CustomResponse> {
+    const { title, desc, price, images, status } = updatedProduct;
+    const productData = { title, desc, price, images, status };
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
-    return this.http.patch<Product>(this.baseUrl + `/seller/product/${updatedProduct.id}`, productData, {
+    return this.http.patch<Product>(this.baseUrl + `/products/${updatedProduct.id}`, productData, {
       headers: headers
     }).pipe(
+      map((response: Product) => {
+        return new SuccessResponse(response);
+      }),
       catchError((err) => {
-        console.log(err);
-        return of(null);
+        return of(new ErrorResponse(getErrorMessage(err)));
       })
     );
   }
 
   // DELETE
+  // TODO
   deleteProduct(accessToken: string, id: string) {
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
     return this.http.delete<Product>(this.baseUrl + `/seller/product/${id}`, { headers: headers }).pipe(
