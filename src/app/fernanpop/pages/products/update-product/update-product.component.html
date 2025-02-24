@@ -93,12 +93,10 @@
           </div>
         </div>
         <div class="flex justify-center space-x-6">
-          <div class="flex justify-center">
-            <app-product-button *ngIf="updateProductState().type === 'initial'" [title]="'Actualizar producto'"
-              [submit]="!isLoading" [isDisabled]="isLoading"></app-product-button>
-            <app-product-button *ngIf="updateProductState().type === 'loading'" [title]="'Actualizando producto...'"
-              [isDisabled]="true"></app-product-button>
-          </div>
+          <app-product-button *ngIf="updateProductState().type === 'initial'" [title]="'Actualizar producto'"
+            [submit]="!isLoading" [isDisabled]="isLoading"></app-product-button>
+          <app-product-button *ngIf="updateProductState().type === 'loading'" [title]="'Actualizando producto...'"
+            [isDisabled]="true"></app-product-button>
         </div>
       </form>
     </div>

@@ -1,5 +1,4 @@
 export enum ProductStatus {
-    INITIAL = 'initial',
     RESERVED = 'reserved',
     SOLD = 'sold',
 }
@@ -13,5 +12,5 @@ export interface Product {
     images: string[];
     createdAt: Date;
     updatedAt: Date;
-    status: ProductStatus;
+    status: ProductStatus[];
 }

@@ -54,7 +54,7 @@ export class ProductsService {
   }
 
   // CREATE
-  addProduct(accessToken: string, newProduct: Product): Observable<CustomResponse> {
+  createProduct(accessToken: string, newProduct: Product): Observable<CustomResponse> {
     const { title, desc, price, images } = newProduct;
     const productData = { title, desc, price, images };
     const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
