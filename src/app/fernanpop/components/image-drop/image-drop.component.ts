@@ -8,6 +8,12 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrl: './image-drop.component.css'
 })
 export class ImageDropComponent implements OnInit {
+  public validImages: string[] = [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+  ];
+
   @Output() onDrop = new EventEmitter<FileList>();
   
   ngOnInit(): void {
@@ -43,7 +49,8 @@ export class ImageDropComponent implements OnInit {
 
     const handleFiles = (files: FileList) => {
       const validFiles = Array.from(files).filter(
-        file => file.type.startsWith('image/')
+        file => file.type.startsWith('image/') 
+                && this.validImages.includes(file.type)
       );
 
       if (fileInput && validFiles.length > 0) {
