@@ -6,7 +6,15 @@
 
     <div *ngIf="productState().type === 'success'"
         class="w-full max-w-[700px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div class="p-8 rounded-t-lg aspect-[3/2] overflow-hidden">
+        <div class="relative m-8 rounded-t-lg aspect-[3/2] overflow-hidden">
+            @if(productState().data.status.includes('reserved')) {
+                <div class="absolute top-3 right-3 flex items-center justify-center bg-green-400 px-2 py-1 text-white rounded md:rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffff">
+                        <path  d="M5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3zm2-3.05l5-2.15l5 2.15V5H7zM7 5h10z"/>
+                    </svg>
+                    <h3 class="text-md md:text-lg">Reservado</h3>
+                </div>
+            }
             <img class="h-full w-full" src="{{productState().data.images[0]}}" alt="product image" />
         </div>
         <div class="px-5 pb-5">
@@ -29,8 +37,7 @@
             </div>
 
             <div class="flex flex-row justify-center pt-6">
-                @if(productState().data.status == 'sold') {
-                    <app-product-button [title]="'Comprar'" [isDisabled]="true"></app-product-button>
+                @if(productState().data.status == 'reserved') {
                 } @else if(productState().data.sellerId == currentUser()?.uid) {
                     <app-product-button [title]="'Modificar'" (action)="goToUpdate()" />
                 } @else {
