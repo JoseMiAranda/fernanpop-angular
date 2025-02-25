@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Product } from '../../../interfaces/product.interface';
+import { Product, ProductStatus } from '../../../interfaces/product.interface';
 import { RouterLink } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { CommonModule } from '@angular/common';
@@ -15,14 +15,17 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class ListProductsComponent implements OnInit {
   numbers: number[] = [];
- 
   user = this.authService.currentUser;
-  
+
   @Input() listProducts: Product[] = [];
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.numbers = Array(10).fill(0).map((_, i) => i + 1);
+  }
+
+  isReserved(product: Product): boolean {
+    return product.status.includes(ProductStatus.RESERVED);
   }
 }
