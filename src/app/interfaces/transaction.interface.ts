@@ -9,7 +9,10 @@ export interface Transaction {
     productId: string;
     sellerId: string;
     buyerId: string;
-    createdAt: string;
-    updatedAt: string;
+    title: string;
+    price: number;
+    image: string;
     status: StatusTransaction;
+    createdAt: Date;
+    updatedAt: Date;
 }
