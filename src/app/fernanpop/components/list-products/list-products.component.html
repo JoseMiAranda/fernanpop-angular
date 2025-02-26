@@ -25,7 +25,7 @@
                 <span class="text-xl font-bold text-gray-900 dark:text-white">
                     {{ product.price | monetary }}
                 </span>
-                @if(user() && user()!.uid == product.sellerId) {
+                @if(user() && user()!.uid == product.sellerId && !isReserved(product)) {
                 <a [routerLink]="['/fernanpop/update-product', product.id]" class="max-w-40 relative w-fit inline-flex items-center justify-center 
                         text-xs font-medium text-gray-900 
                         rounded-lg bg-teal-700 hover:bg-teal-600 hover:shadow-sm hover:shadow-teal-600
