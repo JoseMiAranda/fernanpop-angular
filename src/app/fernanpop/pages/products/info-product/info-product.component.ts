@@ -52,16 +52,18 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.transactionsService.addTransaction(this.productId!)
-      .subscribe((result: Transaction | null) => {
-        if (result) {
-          this.router.navigate(['/fernanpop/user/transactions']);
-        } else {
-          this.router.navigate(['fernanpop/error/'], {
-            state: {
-              message: 'Parece que no se puede comprar el producto'
-            }
-          });
+    this.transactionsService.createTransaction(this.productId!)
+      .subscribe({
+        next: (result: CustomResponse) => {
+          if (result instanceof SuccessResponse) {
+            this.router.navigate(['/fernanpop/user/transactions']);
+          } else if (result instanceof ErrorResponse) {
+            this.router.navigate(['fernanpop/error/'], {
+              state: {
+                message: 'Parece que no se puede comprar el producto'
+              }
+            });
+          }
         }
       });
   }

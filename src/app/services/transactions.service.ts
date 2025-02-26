@@ -17,14 +17,17 @@ export class TransactionsService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  addTransaction(productId: string): Observable<Transaction | null> {
+  createTransaction(productId: string): Observable<CustomResponse> {
     const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.post<Transaction>(this.baseUrl + '/seller/transaction', { productId }, {
+    return this.http.post<Transaction>(this.baseUrl + `/transactions/${productId}`, {}, {
       headers: headers
     }).pipe(
+      map((transaction: Transaction) => {
+        return new SuccessResponse(transaction);
+      }),
       catchError((err) => {
         console.log(err);
-        return of(null);
+        return of(new ErrorResponse(getErrorMessage(err)));
       })
     );
   }

@@ -20,7 +20,7 @@
                         [routerLink]="['/fernanpop/product', transaction.productId]">{{transaction.title |
                         titlecase}}</a>
                 </td>
-                <td><img [src]="transaction.img" [alt]="transaction.title" width="100" class="shadow-4 aspect-[4/3]" />
+                <td><img [src]="transaction.image" [alt]="transaction.title" width="100" class="shadow-4 aspect-[4/3]" />
                 </td>
                 <td>{{transaction.price | monetary}}</td>
                 <td>
