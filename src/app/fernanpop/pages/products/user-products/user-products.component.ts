@@ -17,13 +17,12 @@ import { Subscription } from 'rxjs';
 })
 export class UserProductsComponent implements OnInit, OnDestroy {
   public productState = signal<State>(new LoadingState());
-  private currentUser = this.authService.currentUser;
   private getUserProductsSubscription: Subscription = new Subscription();
 
-  constructor(private productsService: ProductsService, private authService: AuthService) {}
+  constructor(private productsService: ProductsService) {}
   
   ngOnInit(): void {
-    this.getUserProductsSubscription = this.productsService.getUserProducts(this.currentUser()!.accessToken).subscribe({
+    this.getUserProductsSubscription = this.productsService.getUserProducts().subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));

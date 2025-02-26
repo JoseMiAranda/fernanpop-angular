@@ -5,18 +5,20 @@ import { Observable, catchError, map, of } from 'rxjs';
 import * as env from '../../../environments.json';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
 import { getErrorMessage } from '../utils/utils';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionsService {
 
+  private currentUser = this.authService.currentUser; 
   private baseUrl: string = env['BASE_URL'];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
-  addTransaction(accessToken: string, productId: string): Observable<Transaction | null> {
-    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+  addTransaction(productId: string): Observable<Transaction | null> {
+    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
     return this.http.post<Transaction>(this.baseUrl + '/seller/transaction', { productId }, {
       headers: headers
     }).pipe(
@@ -27,8 +29,8 @@ export class TransactionsService {
     );
   }
 
-  getTransactions(accessToken: string): Observable<CustomResponse> {
-    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+  getTransactions(): Observable<CustomResponse> {
+    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
     return this.http.get<Transaction[]>(this.baseUrl + '/transactions', {
       headers: headers
     }).pipe(
@@ -41,10 +43,10 @@ export class TransactionsService {
     );
   }
 
-  updateTransaction(accessToken: string, updatedTransaction: Transaction): Observable<Transaction | null> {
+  updateTransaction(updatedTransaction: Transaction): Observable<Transaction | null> {
     const { status } = updatedTransaction;
     const transactionData = { status };
-    const headers = new HttpHeaders().set('authorization', `Bearer ${accessToken}`);
+    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
     return this.http.patch<Transaction>(this.baseUrl + `/seller/transaction/${updatedTransaction.id}`,transactionData, {
       headers: headers
     }).pipe(

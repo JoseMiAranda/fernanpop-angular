@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Product } from '../../../../interfaces/product.interface';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductsService } from '../../../../services/products.service';
-import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -30,7 +29,6 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public minLenght = 6;
   public maxLenght = 50;
   public maxDescLenght = 300;
-  private currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
   public imagesSignal = signal<FileList>(new DataTransfer().files);
   public updateProductState = signal<State>(new InitialState());
@@ -51,8 +49,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
 
   constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private imagesService: ImagesService,
-    private confirmationService: ConfirmationService,
-    private authService: AuthService, private router: Router) { }
+    private confirmationService: ConfirmationService, private router: Router) { }
 
   ngOnInit(): void {
     this.getProductsByIdSubscription = this.productsService.getProductById(this.productId!).subscribe({
@@ -132,7 +129,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     }
   
     const imageObservables = Array.from(images).map((image) => 
-      this.imagesService.upload(this.currentUser()!.accessToken, image)
+      this.imagesService.upload(image)
     );
   
     await forkJoin(imageObservables).toPromise().then((urls) => {
@@ -171,7 +168,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       updatedAt: new Date()
     }
   
-    this.updateProductSubscription = this.productsService.updateProduct(this.currentUser()!.accessToken, updatedProduct).subscribe({
+    this.updateProductSubscription = this.productsService.updateProduct(updatedProduct).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.router.navigate(['/fernanpop/product', response.data.id]);
@@ -221,7 +218,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       accept: () => {
         this.isLoading = true;
         this.deleteProductState.set(new LoadingState());
-        this.deleteProductSubscription = this.productsService.deleteProduct(this.currentUser()!.accessToken, this.productState()!.data.id).subscribe({
+        this.deleteProductSubscription = this.productsService.deleteProduct(this.productState()!.data.id).subscribe({
             next: (response: CustomResponse) => {
               if (response instanceof SuccessResponse) {
                 this.router.navigate(['/fernanpop/user/products']);

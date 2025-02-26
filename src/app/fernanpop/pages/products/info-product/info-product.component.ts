@@ -23,10 +23,9 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   @Input('id') productId: string | undefined;
 
+  public currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
   private getProductsByIdSubscription: Subscription = new Subscription();
-
-  public currentUser = this.authService.currentUser;
 
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
@@ -53,7 +52,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.transactionsService.addTransaction(this.currentUser()!.accessToken, this.productId!)
+    this.transactionsService.addTransaction(this.productId!)
       .subscribe((result: Transaction | null) => {
         if (result) {
           this.router.navigate(['/fernanpop/user/transactions']);

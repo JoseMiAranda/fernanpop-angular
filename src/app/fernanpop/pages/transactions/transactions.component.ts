@@ -26,19 +26,17 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfa
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   public transactionsState = signal<State>(new LoadingState());
-  currentUser = this.authService.currentUser;
+  public currentUser = this.authService.currentUser;
   private getTransactionsSubscription: Subscription = new Subscription();
 
   queryParams: any = {};
 
   constructor(private transactionsService: TransactionsService, private productsService: ProductsService,
-    private confirmationService: ConfirmationService,
-    private authService: AuthService, private router: Router) {
-  }
+    private authService: AuthService, private confirmationService: ConfirmationService, private router: Router) {}
 
   ngOnInit(): void {
     // Agregamos todas las subscripciones
-    this.getTransactionsSubscription =  this.transactionsService.getTransactions(this.currentUser()!.accessToken).subscribe({
+    this.getTransactionsSubscription =  this.transactionsService.getTransactions().subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.transactionsState.set(new SuccessState(response.data));

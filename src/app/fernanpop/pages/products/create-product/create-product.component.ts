@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../../../../services/products.service';
@@ -24,7 +23,6 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   public minLenght = 6;
   public maxLenght = 50;
   public maxDescLenght = 300;
-  private currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
   public imagesSignal = signal<FileList>(new DataTransfer().files);
   private urlsSignal = signal<string[]>([]); 
@@ -43,8 +41,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   });
 
 
-  constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private imagesService: ImagesService,
-    private authService: AuthService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private productsService: ProductsService, 
+    private imagesService: ImagesService, private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
@@ -96,7 +94,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     }
 
     const imageObservables = Array.from(images).map((image) =>
-      this.imagesService.upload(this.currentUser()!.accessToken, image)
+      this.imagesService.upload(image)
     );
 
     await forkJoin(imageObservables).toPromise().then((urls) => {
@@ -133,7 +131,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       status: [],
     }
 
-    this.createProductSubscription = this.productsService.createProduct(this.currentUser()!.accessToken, newProduct).subscribe({
+    this.createProductSubscription = this.productsService.createProduct(newProduct).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.router.navigate(['/fernanpop/product', response.data.id]);
