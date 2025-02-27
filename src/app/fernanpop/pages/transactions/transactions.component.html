@@ -24,14 +24,14 @@
                 </td>
                 <td>{{transaction.price | monetary}}</td>
                 <td>
-                    @if(transaction.sellerId == currentUser()!.uid) {
-                    Usted
+                    @if(transaction.sellerEmail == currentUser()!.email) {
+                    Tú
                     } @else {
-                    Otro
+                    {{transaction.sellerEmail}}
                     }
                 </td>
                 <td class="{{transaction.status | colorStatus}}">{{transaction.status |status }}</td>
-                <td>{{ transaction.updateDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td>{{ transaction.updatedAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
                 <td>
                     <p-confirmDialog></p-confirmDialog>
                     @if(transaction.status != 'canceled' && transaction.status != 'received' ) {
