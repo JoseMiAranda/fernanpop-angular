@@ -8,7 +8,7 @@ import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { Transaction } from '../../../../interfaces/transaction.interface';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
-import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
+import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
 
@@ -26,6 +26,8 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   public currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
   private getProductsByIdSubscription: Subscription = new Subscription();
+  public buyProductState = signal<State>(new InitialState());
+  private buyProductSubscription: Subscription = new Subscription();
 
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
@@ -33,7 +35,6 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
-          console.log(response.data);
           this.productState.set(new SuccessState(response.data));
         } else if (response instanceof ErrorResponse) {
           this.productState.set(new ErrorState(response.error));
@@ -44,15 +45,18 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.getProductsByIdSubscription.unsubscribe();
+    this.buyProductSubscription.unsubscribe();
   }
 
   buy() {
+    this.buyProductState.set(new LoadingState());
+
     if (!this.authService.currentUser()) {
       this.router.navigate(['/fernanpop/login']);
       return;
     }
 
-    this.transactionsService.createTransaction(this.productId!)
+    this.buyProductSubscription = this.transactionsService.createTransaction(this.productId!)
       .subscribe({
         next: (result: CustomResponse) => {
           if (result instanceof SuccessResponse) {

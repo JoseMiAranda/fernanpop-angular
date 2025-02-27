@@ -41,7 +41,11 @@
                 } @else if(productState().data.sellerId == currentUser()?.uid) {
                     <app-product-button [title]="'Modificar'" (action)="goToUpdate()" />
                 } @else {
-                    <app-product-button [title]="'Comprar'" (action)="buy()" />
+                    @if(buyProductState().type === 'initial') {
+                        <app-product-button [title]="'Comprar'" (action)="buy()" />
+                    } @else {
+                        <app-product-button [title]="'Comprando...'" [isDisabled]="true" />
+                    }
                 }
             </div>
 
