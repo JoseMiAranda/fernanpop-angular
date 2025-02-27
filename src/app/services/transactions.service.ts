@@ -61,4 +61,19 @@ export class TransactionsService {
     );
   }
 
+  acceptTransaction(transactionId: string): Observable<CustomResponse> {
+    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
+    return this.http.patch<Transaction>(this.baseUrl + `/transactions/${transactionId}/accept`, {}, {
+      headers: headers
+    }).pipe(
+      map((transaction: Transaction) => {
+        return new SuccessResponse(transaction);
+      }),
+      catchError((err) => {
+        console.log(err);
+        return of(new ErrorResponse(getErrorMessage(err)));
+      })
+    );
+  }
+
 }

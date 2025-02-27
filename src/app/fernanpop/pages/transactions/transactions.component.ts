@@ -61,47 +61,44 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAccept(event: Event, transaction: Transaction): void {
-    // this.confirmationService.confirm({
-    //   target: event.target as EventTarget,
-    //   header: '¿Estás seguro de confirmar?',
-    //   message: 'Asegúrate de que el producto esté en buenas condiciones antes de aceptar',
-    //   icon: 'pi pi-info-triangle',
-    //   acceptButtonStyleClass: "p-button-success p-button-text ml-5",
-    //   rejectButtonStyleClass: "p-button-text p-button-text",
-    //   acceptIcon: "none",
-    //   rejectIcon: "none",
-    //   acceptLabel: "Estoy seguro",
-    //   rejectLabel: "Cancelar",
-    //   reject: () => {
-    //     // No hacemos nada
-    //   },
-    //   accept: () => {
-    //     // Creamos una copia de la transacción y que esté confirmada
-    //     const confirmedTransaction = { ...transaction };
-    //     confirmedTransaction.status = StatusTransaction.RECEIVED;
-    //     this.transactionsService.updateTransaction(this.currentUser()!.accessToken, confirmedTransaction)
-    //       .subscribe((resp) => {
-    //         if (resp) {
-    //           console.log(resp);
-    //           // Actualizamos la lista
-    //           this.transactions.set(this.transactions().map(transactionIndexed => {
-    //             if (transactionIndexed.id == resp.id) {
-    //               return resp;
-    //             } else {
-    //               return transactionIndexed;
-    //             }
-    //           }));
-    //         } else {
-    //           this.router.navigate(['fernanpop/error/'], {
-    //             state: {
-    //               message: 'Parece que no se puede confirmar'
-    //             }
-    //           });
-    //         }
-    //       });
-    //   }
-    // });
+  onAccept(event: Event, transactionId: string): void {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      header: '¿Estás seguro de confirmar?',
+      message: 'Asegúrate de que el producto esté en buenas condiciones antes de aceptar',
+      icon: 'pi pi-info-triangle',
+      acceptButtonStyleClass: "p-button-success p-button-text ml-5",
+      rejectButtonStyleClass: "p-button-text p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      acceptLabel: "Estoy seguro",
+      rejectLabel: "Cancelar",
+      reject: () => {
+        // No hacemos nada
+      },
+      accept: () => {
+        this.transactionsService.acceptTransaction(transactionId)
+          .subscribe((resp) => {
+            if (resp instanceof SuccessResponse) {
+              const acceptedTransaction = resp.data as Transaction;
+              // Actualizamos la lista
+              const transactions = this.transactionsState().data.map((transaction: Transaction) => {
+                if (transaction.id === acceptedTransaction.id) {
+                  return acceptedTransaction;
+                }
+                return transaction;
+              });
+              this.transactionsState.set(new SuccessState(transactions));
+            } else {
+              this.router.navigate(['fernanpop/error/'], {
+                state: {
+                  message: 'Parece que no se pudo aceptar la transacción'
+                }
+              });
+            }
+          });
+      }
+    });
   }
 
 
