@@ -46,16 +46,17 @@ export class TransactionsService {
     );
   }
 
-  updateTransaction(updatedTransaction: Transaction): Observable<Transaction | null> {
-    const { status } = updatedTransaction;
-    const transactionData = { status };
+  cancelTransaction(transactionId: string): Observable<CustomResponse> {
     const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.patch<Transaction>(this.baseUrl + `/seller/transaction/${updatedTransaction.id}`,transactionData, {
+    return this.http.patch<Transaction>(this.baseUrl + `/transactions/${transactionId}/cancel`, {}, {
       headers: headers
     }).pipe(
+      map((transaction: Transaction) => {
+        return new SuccessResponse(transaction);
+      }),
       catchError((err) => {
         console.log(err);
-        return of(null);
+        return of(new ErrorResponse(getErrorMessage(err)));
       })
     );
   }

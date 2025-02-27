@@ -36,7 +36,7 @@
                     <p-confirmDialog></p-confirmDialog>
                     @if(transaction.status != 'canceled' && transaction.status != 'received' ) {
                     @if(transaction.sellerId == currentUser()!.uid) {
-                    <button (click)="onCancel($event, transaction)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
+                    <button (click)="onCancel($event, transaction.id)" class="max-w-40 relative w-fit inline-flex items-center justify-center 
                 text-sm font-medium text-gray-900 
                 rounded-lg bg-red-700 hover:bg-red-600 hover:shadow-sm hover:shadow-red-600
               dark:text-white">

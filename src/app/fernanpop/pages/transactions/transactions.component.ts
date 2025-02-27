@@ -105,47 +105,43 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
 
-  onCancel(event: Event, transaction: Transaction): void {
-    // this.confirmationService.confirm({
-    //   target: event.target as EventTarget,
-    //   header: '¿Estás seguro de cancelar?',
-    //   message: 'El comprador no podrá recibir el producto',
-    //   icon: 'pi pi-info-triangle',
-    //   acceptButtonStyleClass: "p-button-success p-button-text ml-5",
-    //   rejectButtonStyleClass: "p-button-text p-button-text",
-    //   acceptIcon: "none",
-    //   rejectIcon: "none",
-    //   acceptLabel: "Estoy seguro",
-    //   rejectLabel: "Cancelar",
-    //   reject: () => {
-    //     // No hacemos nada
-    //   },
-    //   accept: () => {
-    //     // Creamos una copia de la transacción y que esté confirmada
-    //     const confirmedTransaction = { ...transaction };
-    //     confirmedTransaction.status = StatusTransaction.CANCELED;
-    //     this.transactionsService.updateTransaction(this.currentUser()!.accessToken, confirmedTransaction)
-    //       .subscribe((resp) => {
-    //         if (resp) {
-    //           console.log(resp);
-    //           // Actualizamos la lista
-    //           this.transactions.set(this.transactions().map(transactionIndexed => {
-    //             if (transactionIndexed.id == resp.id) {
-    //               return resp;
-    //             } else {
-    //               return transactionIndexed;
-    //             }
-    //           }));
-    //           console.log(this.transactions());
-    //         } else {
-    //           this.router.navigate(['fernanpop/error/'], {
-    //             state: {
-    //               message: 'Parece que no se puede cancelar'
-    //             }
-    //           });
-    //         }
-    //       });
-    //   }
-    // });
+  onCancel(event: Event, transactionId: string): void {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      header: '¿Estás seguro de cancelar?',
+      message: 'El comprador no podrá recibir el producto',
+      icon: 'pi pi-info-triangle',
+      acceptButtonStyleClass: "p-button-success p-button-text ml-5",
+      rejectButtonStyleClass: "p-button-text p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      acceptLabel: "Estoy seguro",
+      rejectLabel: "Cancelar",
+      reject: () => {
+        // No hacemos nada
+      },
+      accept: () => {
+        this.transactionsService.cancelTransaction(transactionId)
+          .subscribe((resp) => {
+            if (resp instanceof SuccessResponse) {
+              const cancelledTransaction = resp.data as Transaction;
+              // Actualizamos la lista
+              const transactions = this.transactionsState().data.map((transaction: Transaction) => {
+                if (transaction.id === cancelledTransaction.id) {
+                  return cancelledTransaction;
+                }
+                return transaction;
+              });
+              this.transactionsState.set(new SuccessState(transactions));
+            } else {
+              this.router.navigate(['fernanpop/error/'], {
+                state: {
+                  message: 'Parece que no se pudo cancelar la transacción'
+                }
+              });
+            }
+          });
+      }
+    });
   }
 }
