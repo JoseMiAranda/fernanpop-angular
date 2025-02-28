@@ -1,20 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { interval } from 'rxjs';
-import { ButtonModule } from 'primeng/button';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { SplitButtonModule } from 'primeng/splitbutton';
-import { MenuItem } from 'primeng/api';
-import { EllipsisPipe } from '../../pipes/ellipsis.pipe';
-import { TitleComponent } from '../title/title.component';
 
 @Component({
   selector: 'app-searcher',
   standalone: true,
-  imports: [CommonModule, ButtonModule, RouterLink, SplitButtonModule, EllipsisPipe, TitleComponent],
+  imports: [CommonModule],
   templateUrl: './searcher.component.html',
-  styles: ``
+  styleUrl: './searcher.component.css'
 })
 export class SearcherComponent {
   private cont = -1;
@@ -25,35 +19,9 @@ export class SearcherComponent {
   product = signal<string>('un café');
   messageActivate = signal<boolean>(true);
   text = '';
-  user = this.authService.currentUser;
-  items: MenuItem[];
 
 
-  constructor(private router: Router, private authService: AuthService) {
-    this.items = [
-      {
-        label: 'Productos',
-        icon: "pi pi-box",
-        command: () => {
-          router.navigate(['fernanpop/user/products'])
-        }
-      },
-      {
-        label: 'Transacciones',
-        icon: "pi pi-truck",
-        command: () => {
-          router.navigate(['fernanpop/user/transactions'])
-        }
-      },
-      {
-        label: 'Cerrar sesión',
-        icon: "pi pi-sign-out",
-        command: () => {
-          authService.logout();
-          router.navigate(['fernanpop']);
-        }
-      }
-    ]
+  constructor(private router: Router) {
     interval(4000).subscribe(() => this.animate.set(!this.animate()));
 
     interval(8000).subscribe(() => {
@@ -72,13 +40,11 @@ export class SearcherComponent {
     this.text = value;
   }
 
-  onSubmit(value: string) {
+  onSubmit() {
     this.router.navigate(['/fernanpop/products'], {
       queryParams: {
         q: this.text
       }
     });
   }
-
-
 }
