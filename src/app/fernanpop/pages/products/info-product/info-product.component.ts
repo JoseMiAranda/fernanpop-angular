@@ -6,7 +6,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
-import { Transaction } from '../../../../interfaces/transaction.interface';
+import { GalleriaModule } from 'primeng/galleria';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, SkeletonModule, GreenButtonComponent],
+  imports: [CommonModule, GalleriaModule, CurrentCurrencyPipe, SkeletonModule, GreenButtonComponent],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
@@ -25,6 +25,8 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   public currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
+  images: any[] | undefined;
+  responsiveOptions: any[] | undefined;
   private getProductsByIdSubscription: Subscription = new Subscription();
   public buyProductState = signal<State>(new InitialState());
   private buyProductSubscription: Subscription = new Subscription();
@@ -32,10 +34,28 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.responsiveOptions = [
+      {
+        breakpoint: '1024px',
+        numVisible: 5
+      },
+      {
+        breakpoint: '768px',
+        numVisible: 3
+      },
+      {
+        breakpoint: '560px',
+        numVisible: 2
+      }
+    ];
     this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));
+          this.images = this.productState().data.images.map((img: string) => ({
+            itemImageSrc: img,
+            thumbnailImageSrc: img,
+          }));
         } else if (response instanceof ErrorResponse) {
           this.productState.set(new ErrorState(response.error));
         }
