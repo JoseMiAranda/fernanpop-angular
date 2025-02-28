@@ -1,50 +1,39 @@
-import { Component } from '@angular/core';
-import { ProductsResponse } from '../../../../interfaces/product.interface';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
-import { PaginatorModule } from 'primeng/paginator';
+import { RouterLink } from '@angular/router';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { AuthService } from '../../../../services/auth.service';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-products',
   standalone: true,
-  imports: [ListProductsComponent, PaginatorModule, RouterLink],
+  imports: [CommonModule, ListProductsComponent,RouterLink],
   templateUrl: './user-products.component.html',
   styleUrl: './user-products.component.css'
 })
-export class UserProductsComponent {
-  public productsResponse?: ProductsResponse | null;
-  private subscription: Subscription = new Subscription();
-  private currentUser = this.authService.currentUser;
+export class UserProductsComponent implements OnInit, OnDestroy {
+  public productState = signal<State>(new LoadingState());
+  private getUserProductsSubscription: Subscription = new Subscription();
 
-  queryParams: any = {};
+  constructor(private productsService: ProductsService) {}
   
-  constructor(private productsService: ProductsService, private authService: AuthService, private route: ActivatedRoute, private router: Router) { 
-    this.subscription.add(this.route.queryParams.subscribe((params: Params) => {
-      this.queryParams = params;
-      console.log(this.queryParams); 
-      
-      console.log(this.currentUser()!.accessToken);
-
-      this.subscription.add(this.productsService.getUserProducts(this.currentUser()!.accessToken).subscribe((resp) => {
-        this.productsResponse = resp;
-      }));
-    }));
+  ngOnInit(): void {
+    this.getUserProductsSubscription = this.productsService.getUserProducts().subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.productState.set(new SuccessState(response.data));
+        } else if (response instanceof ErrorResponse) {
+          this.productState.set(new ErrorState(response.error));
+        }
+      },
+    })
   }
-  
+
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  onPageChange(pageDetails: any) {
-    let {page,...rest} = pageDetails;
-    page++;
-    console.log(page);
-    this.queryParams = {...this.queryParams, page};
-    this.router.navigate(['/fernanpop/user/products'], {
-      queryParams: {...this.queryParams}
-    });
+    this.getUserProductsSubscription.unsubscribe();
   }
 }

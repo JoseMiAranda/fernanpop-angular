@@ -1,5 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { Transaction } from '../../../interfaces/transaction.interface';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { StatusTransaction, Transaction } from '../../../interfaces/transaction.interface';
 import { Subscription } from 'rxjs';
 import { ProductsService } from '../../../services/products.service';
 import { AuthService } from '../../../services/auth.service';
@@ -12,8 +12,9 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StatusPipe } from '../../../pipes/status.pipe';
-import { StatusTransaction } from '../../../interfaces/product.interface';
 import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 
 @Component({
   selector: 'app-transactions',
@@ -23,39 +24,31 @@ import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
   styleUrl: './transactions.component.css',
   providers: [ConfirmationService, MessageService]
 })
-export class TransactionsComponent implements OnInit {
-  public transactions = signal<any[]>([]);
-  private subscription: Subscription = new Subscription();
-  currentUser = this.authService.currentUser;
+export class TransactionsComponent implements OnInit, OnDestroy {
+  public transactionsState = signal<State>(new LoadingState());
+  public currentUser = this.authService.currentUser;
+  private getTransactionsSubscription: Subscription = new Subscription();
 
   queryParams: any = {};
 
   constructor(private transactionsService: TransactionsService, private productsService: ProductsService,
-    private confirmationService: ConfirmationService,
-    private authService: AuthService, private router: Router) {
-  }
+    private authService: AuthService, private confirmationService: ConfirmationService, private router: Router) {}
 
   ngOnInit(): void {
     // Agregamos todas las subscripciones
-    const transSub = this.transactionsService.getTransactions(this.currentUser()!.accessToken).subscribe((respTransactions) => {
-      if (respTransactions) {
-        console.log(respTransactions);
-        respTransactions.forEach((respTransaction) => {
-          const prodSub = this.productsService.getProductById(respTransaction.productId).subscribe((respProduct) => {
-            if (respProduct) {
-              const { title, img, price, ...rest } = respProduct;
-              this.transactions.set([...this.transactions(), { ...respTransaction, title, img, price }]);
-            }
-          });
-          this.subscription.add(prodSub);
-        });
-      }
+    this.getTransactionsSubscription =  this.transactionsService.getTransactions().subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.transactionsState.set(new SuccessState(response.data));
+        } else if (response instanceof ErrorResponse) {
+          this.transactionsState.set(new ErrorState(response.error));
+        }
+      },
     });
-    this.subscription.add(transSub);
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.getTransactionsSubscription.unsubscribe();
   }
 
   onPageChange(pageDetails: any) {
@@ -68,7 +61,7 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
-  onAccept(event: Event, transaction: Transaction): void {
+  onAccept(event: Event, transactionId: string): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       header: '¿Estás seguro de confirmar?',
@@ -84,25 +77,22 @@ export class TransactionsComponent implements OnInit {
         // No hacemos nada
       },
       accept: () => {
-        // Creamos una copia de la transacción y que esté confirmada
-        const confirmedTransaction = { ...transaction };
-        confirmedTransaction.status = StatusTransaction.RECEIVED;
-        this.transactionsService.updateTransaction(this.currentUser()!.accessToken, confirmedTransaction)
+        this.transactionsService.acceptTransaction(transactionId)
           .subscribe((resp) => {
-            if (resp) {
-              console.log(resp);
+            if (resp instanceof SuccessResponse) {
+              const acceptedTransaction = resp.data as Transaction;
               // Actualizamos la lista
-              this.transactions.set(this.transactions().map(transactionIndexed => {
-                if (transactionIndexed.id == resp.id) {
-                  return resp;
-                } else {
-                  return transactionIndexed;
+              const transactions = this.transactionsState().data.map((transaction: Transaction) => {
+                if (transaction.id === acceptedTransaction.id) {
+                  return acceptedTransaction;
                 }
-              }));
+                return transaction;
+              });
+              this.transactionsState.set(new SuccessState(transactions));
             } else {
               this.router.navigate(['fernanpop/error/'], {
                 state: {
-                  message: 'Parece que no se puede confirmar'
+                  message: 'Parece que no se pudo aceptar la transacción'
                 }
               });
             }
@@ -112,7 +102,7 @@ export class TransactionsComponent implements OnInit {
   }
 
 
-  onCancel(event: Event, transaction: Transaction): void {
+  onCancel(event: Event, transactionId: string): void {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       header: '¿Estás seguro de cancelar?',
@@ -128,26 +118,22 @@ export class TransactionsComponent implements OnInit {
         // No hacemos nada
       },
       accept: () => {
-        // Creamos una copia de la transacción y que esté confirmada
-        const confirmedTransaction = { ...transaction };
-        confirmedTransaction.status = StatusTransaction.CANCELED;
-        this.transactionsService.updateTransaction(this.currentUser()!.accessToken, confirmedTransaction)
+        this.transactionsService.cancelTransaction(transactionId)
           .subscribe((resp) => {
-            if (resp) {
-              console.log(resp);
+            if (resp instanceof SuccessResponse) {
+              const cancelledTransaction = resp.data as Transaction;
               // Actualizamos la lista
-              this.transactions.set(this.transactions().map(transactionIndexed => {
-                if (transactionIndexed.id == resp.id) {
-                  return resp;
-                } else {
-                  return transactionIndexed;
+              const transactions = this.transactionsState().data.map((transaction: Transaction) => {
+                if (transaction.id === cancelledTransaction.id) {
+                  return cancelledTransaction;
                 }
-              }));
-              console.log(this.transactions());
+                return transaction;
+              });
+              this.transactionsState.set(new SuccessState(transactions));
             } else {
               this.router.navigate(['fernanpop/error/'], {
                 state: {
-                  message: 'Parece que no se puede cancelar'
+                  message: 'Parece que no se pudo cancelar la transacción'
                 }
               });
             }

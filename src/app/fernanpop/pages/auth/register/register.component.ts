@@ -48,30 +48,28 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    console.log('submit');
     this.submitted = true;
 
     if (this.form.invalid) {
       return;
     }
 
-    this.authService.register(this.form.value).then(
-      (resp) => {
-        if (!resp) {
-          // Usuario registrado
-          this.router.navigate(['fernanpop']);
+    const { email, password } = this.form.value;
+
+    this.authService.registerWithEmailAndPassword(email, password).subscribe({
+      next: () => {
+        this.router.navigate(['fernanpop']);
+      },
+      error: (err) => {
+        // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)
+        let authError = err as AuthError;
+        console.log(authError);
+        if (authError.code === 'auth/email-already-in-use') {
+          this.errorRegister.set('Email ya utilizado. Por favor escoja otro');
         } else {
-          // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)
-          let authError = resp as AuthError;
-          console.log(authError);
-          if (authError.code === 'auth/email-already-in-use') {
-            this.errorRegister.set('Email ya utilizado. Por favor escoja otro');
-          } else {
-            this.errorRegister.set('Actualmente no podemos registrar usuarios');
-          }
+        this.errorRegister.set('Actualmente no podemos registrar usuarios');
         }
       }
-    );
+    });
   }
-
 }

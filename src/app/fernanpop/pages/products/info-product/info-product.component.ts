@@ -1,69 +1,99 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Product } from '../../../../interfaces/product.interface';
+import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
-import { Transaction } from '../../../../interfaces/transaction.interface';
+import { GalleriaModule } from 'primeng/galleria';
+import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
+import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, SkeletonModule, RouterLink],
+  imports: [CommonModule, GalleriaModule, CurrentCurrencyPipe, SkeletonModule, GreenButtonComponent],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
-export class InfoProductComponent implements OnInit {
+export class InfoProductComponent implements OnInit, OnDestroy {
 
   @Input('id') productId: string | undefined;
 
-  public product?: Product | null;
   public currentUser = this.authService.currentUser;
+  public productState = signal<State>(new LoadingState());
+  images: any[] | undefined;
+  responsiveOptions: any[] | undefined;
+  private getProductsByIdSubscription: Subscription = new Subscription();
+  public buyProductState = signal<State>(new InitialState());
+  private buyProductSubscription: Subscription = new Subscription();
 
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.productService.getProductById(this.productId!).subscribe((result: Product | null) => {
-      if (!result) {
-        // Redirección a error con mensaje
-        this.router.navigate(['fernanpop/error/'], {
-          state: {
-            message: 'Parece que el producto no se encuentra'
-          }
-        });
-      } else {
-        this.product = result;
+    this.responsiveOptions = [
+      {
+        breakpoint: '1024px',
+        numVisible: 5
+      },
+      {
+        breakpoint: '768px',
+        numVisible: 3
+      },
+      {
+        breakpoint: '560px',
+        numVisible: 2
       }
+    ];
+    this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.productState.set(new SuccessState(response.data));
+          this.images = this.productState().data.images.map((img: string) => ({
+            itemImageSrc: img,
+            thumbnailImageSrc: img,
+          }));
+        } else if (response instanceof ErrorResponse) {
+          this.productState.set(new ErrorState(response.error));
+        }
+      },
     });
   }
 
-  onClick() {
-    
-    // Si no hay usuario logueado
-    if(!this.authService.currentUser()) {
+  ngOnDestroy(): void {
+    this.getProductsByIdSubscription.unsubscribe();
+    this.buyProductSubscription.unsubscribe();
+  }
+
+  buy() {
+    this.buyProductState.set(new LoadingState());
+
+    if (!this.authService.currentUser()) {
       this.router.navigate(['/fernanpop/login']);
-    } 
-    // Si el usuario es el propietario
-    else if(this.authService.currentUser()!.uid == this.product!.sellerId) {
-      this.router.navigate(['/fernanpop/update-product', this.productId]);
-    }   
-    // El usuario es otro y quiere comprar
-    else {
-      this.transactionsService.addTransaction(this.currentUser()!.accessToken, this.productId!)
-      .subscribe((result: Transaction | null) => {
-        if(result) {
-          this.router.navigate(['/fernanpop/user/transactions']);
-        } else {
-          this.router.navigate(['fernanpop/error/'], {
-            state: {
-              message: 'Parece que no se puede comprar el producto'
-            }
-          });
+      return;
+    }
+
+    this.buyProductSubscription = this.transactionsService.createTransaction(this.productId!)
+      .subscribe({
+        next: (result: CustomResponse) => {
+          if (result instanceof SuccessResponse) {
+            this.router.navigate(['/fernanpop/user/transactions']);
+          } else if (result instanceof ErrorResponse) {
+            this.router.navigate(['fernanpop/error/'], {
+              state: {
+                message: 'Parece que no se puede comprar el producto'
+              }
+            });
+          }
         }
       });
-    }
   }
+
+  goToUpdate() {
+    this.router.navigate(['/fernanpop/update-product', this.productId]);
+  }
+
 }

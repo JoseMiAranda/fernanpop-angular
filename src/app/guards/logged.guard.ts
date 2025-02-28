@@ -1,11 +1,13 @@
 import { inject } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 
 export const LoggedGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
-  const authService = inject(AuthService);
-  const isLogged = await authService.obtainUserStorage();
+  const auth = inject(Auth);
+
+  const isLogged = !!auth.currentUser;
+
   if(isLogged) {
     return true;
   }

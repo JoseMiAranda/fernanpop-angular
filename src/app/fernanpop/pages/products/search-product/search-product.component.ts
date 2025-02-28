@@ -1,46 +1,56 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ProductsService } from '../../../../services/products.service';
-import { ProductsResponse } from '../../../../interfaces/product.interface';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { Subscription } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-search-product',
   standalone: true,
-  imports: [ListProductsComponent, PaginatorModule],
+  imports: [CommonModule, ListProductsComponent, PaginatorModule],
   templateUrl: './search-product.component.html',
   styleUrl: './search-product.component.css'
 })
-export class SearchProductComponent implements OnDestroy {
+export class SearchProductComponent implements OnInit, OnDestroy {
 
-  public productsResponse: ProductsResponse | undefined | null = undefined;
-  private subscription: Subscription = new Subscription();
+  public productsState = signal<State>(new LoadingState());
+  private queryParams: any = {};
+  private queryParamsSubscription: Subscription = new Subscription();
+  private productsSubscription: Subscription = new Subscription();
 
-  queryParams: any = {};
-  
-  constructor(private productsService: ProductsService, private route: ActivatedRoute, private router: Router) { 
-    this.subscription.add(this.route.queryParams.subscribe((params: Params) => {
+  constructor(private productsService: ProductsService, private route: ActivatedRoute, private router: Router) { }
+
+  ngOnInit(): void {
+    this.queryParamsSubscription = this.route.queryParams.subscribe((params: Params) => {
       this.queryParams = params;
-  
-      this.subscription.add(this.productsService.getProducts({...this.queryParams}).subscribe((resp) => {
-        this.productsResponse = resp;
-      }));
-    }));
+      this.productsSubscription = this.productsService.getProducts(this.queryParams).subscribe({
+        next: (response: CustomResponse) => {
+          console.log(response);
+          if (response instanceof SuccessResponse) {
+            this.productsState.set(new SuccessState(response.data));
+          } else if (response instanceof ErrorResponse) {
+            this.productsState.set(new ErrorState(response.error));
+          }
+        },
+      });
+    });
   }
-  
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.queryParamsSubscription.unsubscribe();
+    this.productsSubscription.unsubscribe();
   }
 
   onPageChange(pageDetails: any) {
-    let {page,...rest} = pageDetails;
+    let { page, ...rest } = pageDetails;
     page++;
-    this.queryParams = {...this.queryParams, page};
+    this.queryParams = { ...this.queryParams, page };
     this.router.navigate(['/fernanpop/products'], {
-      queryParams: {...this.queryParams}
+      queryParams: { ...this.queryParams }
     });
   }
 }

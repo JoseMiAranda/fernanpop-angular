@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../services/products.service';
-import { Observable, Subscription } from 'rxjs';
-import { ProductsResponse } from '../../../interfaces/product.interface';
-import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { CommonModule, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 import { ListProductsComponent } from '../../components/list-products/list-products.component';
+import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
+import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 
 @Component({
   selector: 'app-home',
@@ -15,8 +16,9 @@ import { ListProductsComponent } from '../../components/list-products/list-produ
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  public productsResponse?: ProductsResponse | null;
-  private subscription: Subscription = new Subscription();
+  public productsState = signal<State>(new LoadingState());
+
+  private getProductsSubscription: Subscription = new Subscription();
 
   constructor(private productsService: ProductsService, private router: Router) {}
 
@@ -27,10 +29,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(): void {
-    this.subscription.add(this.productsService.getProducts({}).subscribe((resp) => this.productsResponse = resp));
+    this.getProductsSubscription = this.productsService.getProducts({}).subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.productsState.set(new SuccessState(response.data));
+        } else if (response instanceof ErrorResponse) {
+          this.productsState.set(new ErrorState(response.error));
+        }
+      },
+    });
   }
   
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.getProductsSubscription.unsubscribe();
   }
 }

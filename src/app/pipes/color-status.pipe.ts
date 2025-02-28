@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ColorStatusPipe implements PipeTransform {
 
   transform(value: string): any {
-    if (value == 'in-process') return "";
-    if (value == 'received') return "text-teal-500";
-    return 'text-red-500';
+    if (value == 'in-process') return "bg-gray-500";
+    if (value == 'received') return "bg-teal-500";
+    return 'bg-red-500';
   }
 
 }
