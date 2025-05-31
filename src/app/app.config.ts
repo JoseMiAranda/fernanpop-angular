@@ -8,10 +8,17 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideHttpClient } from '@angular/common/http';
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 
-import * as firebaseCredentials from '../../firebase.json';
-
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
+
+export const firebaseCredentials = {
+  projectId: process.env['PROJECT_ID'] || '',
+  appId: process.env['APP_ID'] || '',
+  storageBucket: process.env['STORAGE_BUCKET'] || '',
+  apiKey: process.env['API_KEY'] || '',
+  authDomain: process.env['AUTH_DOMAIN'] || '',
+  messagingSenderId: process.env['MESSAGING_SENDER_ID'] || '',
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
