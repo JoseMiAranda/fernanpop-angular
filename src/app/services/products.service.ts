@@ -2,7 +2,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angul
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Product, } from '../interfaces/product.interface';
-import * as env from '../../../environments.json';
 import { ProductsResponse } from '../interfaces/products-response';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
 import { getErrorMessage } from '../utils/utils';
@@ -14,7 +13,7 @@ import { AuthService } from './auth.service';
 export class ProductsService {
 
   private currentUser = this.authService.currentUser; 
-  private baseUrl: string = env['BASE_URL'];
+  private baseUrl: string = process.env['BASE_URL'] ?? '';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 

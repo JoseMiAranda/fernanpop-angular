@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Transaction } from '../interfaces/transaction.interface';
 import { Observable, catchError, map, of } from 'rxjs';
-import * as env from '../../../environments.json';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
 import { getErrorMessage } from '../utils/utils';
 import { AuthService } from './auth.service';
@@ -13,7 +12,7 @@ import { AuthService } from './auth.service';
 export class TransactionsService {
 
   private currentUser = this.authService.currentUser; 
-  private baseUrl: string = env['BASE_URL'];
+  private baseUrl: string = process.env['BASE_URL'] ?? '';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
