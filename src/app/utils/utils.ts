@@ -1,14 +1,4 @@
-import CryptoJS from "crypto-js";
-import * as env from '../../../environments.json';
 import { HttpErrorResponse } from "@angular/common/http";
-
-export function encrypt(value: string) {
-    return CryptoJS.AES.encrypt(value, env['MY_SECRET_KEY']).toString();
-}
-
-export function decrypt(value: string) {
-return CryptoJS.AES.decrypt(value, env['MY_SECRET_KEY']).toString(CryptoJS.enc.Utf8);
-}
 
 export function getErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
