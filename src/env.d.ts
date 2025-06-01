@@ -2,13 +2,6 @@
 declare interface Env {
   readonly NODE_ENV: string;
   // Replace the following with your own environment variables.
-  readonly BASE_URL: string;
-  readonly PROJECT_ID: string;
-  readonly APP_ID: string;
-  readonly STORAGE_BUCKET: string;
-  readonly API_KEY: string;
-  readonly AUTH_DOMAIN: string;
-  readonly MESSAGING_SENDER_ID: string;
   // Example: NGX_VERSION: string;
   [key: string]: any;
 }

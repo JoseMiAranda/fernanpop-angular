@@ -27,7 +27,12 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "ngxEnv": {
+              "prefix": "NG_APP",
+              "unsecure": true,
+              "runtime": true
+            }
           },
           "configurations": {
             "production": {

@@ -11,13 +11,15 @@ import {provideAnimationsAsync} from "@angular/platform-browser/animations/async
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 
+console.log({...import.meta.env});
+
 export const firebaseCredentials = {
-  projectId: import.meta.env.PROJECT_ID,
-  appId: import.meta.env.APP_ID,
-  storageBucket: import.meta.env.STORAGE_BUCKET,
-  apiKey: import.meta.env.API_KEY,
-  authDomain: import.meta.env.AUTH_DOMAIN,
-  messagingSenderId: import.meta.env.MESSAGING_SENDER_ID,
+  projectId: import.meta.env.NG_APP_PROJECT_ID,
+  appId: import.meta.env.NG_APP_APP_ID,
+  storageBucket: import.meta.env.NG_APP_STORAGE_BUCKET,
+  apiKey: import.meta.env.NG_APP_API_KEY,
+  authDomain: import.meta.env.NG_APP_AUTH_DOMAIN,
+  messagingSenderId: import.meta.env.NG_APP_MESSAGING_SENDER_ID,
 }
 
 export const appConfig: ApplicationConfig = {

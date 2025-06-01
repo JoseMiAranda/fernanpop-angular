@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 export class ProductsService {
 
   private currentUser = this.authService.currentUser; 
-  private baseUrl: string = import.meta.env.BASE_URL;
+  private baseUrl: string = import.meta.env.NG_APP_BASE_URL;
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
