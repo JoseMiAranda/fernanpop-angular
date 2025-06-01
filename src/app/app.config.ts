@@ -11,8 +11,6 @@ import {provideAnimationsAsync} from "@angular/platform-browser/animations/async
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 
-console.log({...import.meta.env});
-
 export const firebaseCredentials = {
   projectId: import.meta.env.NG_APP_PROJECT_ID,
   appId: import.meta.env.NG_APP_APP_ID,
