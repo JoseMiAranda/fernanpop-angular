@@ -1,13 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
 import { Router } from '@angular/router';
-import { SkeletonModule } from 'primeng/skeleton';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
-import { GalleriaModule } from 'primeng/galleria';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
+import { ImageGalleryComponent } from '../../../components/image-gallery/image-gallery.component';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
@@ -15,7 +14,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, GalleriaModule, CurrentCurrencyPipe, SkeletonModule, GreenButtonComponent],
+  imports: [CommonModule, CurrentCurrencyPipe, GreenButtonComponent, ImageGalleryComponent],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
@@ -25,8 +24,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   public currentUser = this.authService.currentUser;
   public productState = signal<State>(new LoadingState());
-  images: any[] | undefined;
-  responsiveOptions: any[] | undefined;
+  images: string[] = [];
   private getProductsByIdSubscription: Subscription = new Subscription();
   public buyProductState = signal<State>(new InitialState());
   private buyProductSubscription: Subscription = new Subscription();
@@ -34,28 +32,11 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.responsiveOptions = [
-      {
-        breakpoint: '1024px',
-        numVisible: 5
-      },
-      {
-        breakpoint: '768px',
-        numVisible: 3
-      },
-      {
-        breakpoint: '560px',
-        numVisible: 2
-      }
-    ];
     this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));
-          this.images = this.productState().data.images.map((img: string) => ({
-            itemImageSrc: img,
-            thumbnailImageSrc: img,
-          }));
+          this.images = this.productState().data.images;
         } else if (response instanceof ErrorResponse) {
           this.productState.set(new ErrorState(response.error));
         }
