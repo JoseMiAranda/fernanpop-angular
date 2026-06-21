@@ -5,13 +5,10 @@ import { ProductsService } from '../../../services/products.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { TransactionsService } from '../../../services/transactions.service';
-import { TableModule } from 'primeng/table';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
-import { ButtonModule } from 'primeng/button';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { StatusPipe } from '../../../pipes/status.pipe';
+import { ConfirmDialogComponent } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
@@ -19,20 +16,26 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfa
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, TableModule, CurrentCurrencyPipe, ConfirmDialogModule, RouterLink, ButtonModule, StatusPipe, DatePipe, ColorStatusPipe],
+  imports: [CommonModule, CurrentCurrencyPipe, ConfirmDialogComponent, RouterLink, StatusPipe, DatePipe, ColorStatusPipe],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
-  providers: [ConfirmationService, MessageService]
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   public transactionsState = signal<State>(new LoadingState());
   public currentUser = this.authService.currentUser;
+  public confirmVisible = signal(false);
+  public confirmHeader = signal('');
+  public confirmMessage = signal('');
+  public confirmAcceptLabel = signal('Estoy seguro');
+  public confirmRejectLabel = signal('Cancelar');
+  public confirmAcceptVariant = signal<'teal' | 'success' | 'danger'>('teal');
   private getTransactionsSubscription: Subscription = new Subscription();
+  private pendingConfirmAction: (() => void) | null = null;
 
   queryParams: any = {};
 
   constructor(private transactionsService: TransactionsService, private productsService: ProductsService,
-    private authService: AuthService, private confirmationService: ConfirmationService, private router: Router) {}
+    private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     // Agregamos todas las subscripciones
@@ -61,27 +64,16 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAccept(event: Event, transactionId: string): void {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
+  onAccept(_event: Event, transactionId: string): void {
+    this.openConfirmDialog({
       header: '¿Estás seguro de confirmar?',
       message: 'Asegúrate de que el producto esté en buenas condiciones antes de aceptar',
-      icon: 'pi pi-info-triangle',
-      acceptButtonStyleClass: "p-button-success p-button-text ml-5",
-      rejectButtonStyleClass: "p-button-text p-button-text",
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: "Estoy seguro",
-      rejectLabel: "Cancelar",
-      reject: () => {
-        // No hacemos nada
-      },
-      accept: () => {
+      acceptVariant: 'teal',
+      onAccept: () => {
         this.transactionsService.acceptTransaction(transactionId)
           .subscribe((resp) => {
             if (resp instanceof SuccessResponse) {
               const acceptedTransaction = resp.data as Transaction;
-              // Actualizamos la lista
               const transactions = this.transactionsState().data.map((transaction: Transaction) => {
                 if (transaction.id === acceptedTransaction.id) {
                   return acceptedTransaction;
@@ -101,28 +93,16 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  onCancel(event: Event, transactionId: string): void {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
+  onCancel(_event: Event, transactionId: string): void {
+    this.openConfirmDialog({
       header: '¿Estás seguro de cancelar?',
       message: 'El comprador no podrá recibir el producto',
-      icon: 'pi pi-info-triangle',
-      acceptButtonStyleClass: "p-button-success p-button-text ml-5",
-      rejectButtonStyleClass: "p-button-text p-button-text",
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: "Estoy seguro",
-      rejectLabel: "Cancelar",
-      reject: () => {
-        // No hacemos nada
-      },
-      accept: () => {
+      acceptVariant: 'danger',
+      onAccept: () => {
         this.transactionsService.cancelTransaction(transactionId)
           .subscribe((resp) => {
             if (resp instanceof SuccessResponse) {
               const cancelledTransaction = resp.data as Transaction;
-              // Actualizamos la lista
               const transactions = this.transactionsState().data.map((transaction: Transaction) => {
                 if (transaction.id === cancelledTransaction.id) {
                   return cancelledTransaction;
@@ -140,5 +120,33 @@ export class TransactionsComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  onConfirmAccept(): void {
+    this.confirmVisible.set(false);
+    this.pendingConfirmAction?.();
+    this.pendingConfirmAction = null;
+  }
+
+  onConfirmReject(): void {
+    this.confirmVisible.set(false);
+    this.pendingConfirmAction = null;
+  }
+
+  private openConfirmDialog(options: {
+    header: string;
+    message: string;
+    acceptLabel?: string;
+    rejectLabel?: string;
+    acceptVariant?: 'teal' | 'success' | 'danger';
+    onAccept: () => void;
+  }): void {
+    this.confirmHeader.set(options.header);
+    this.confirmMessage.set(options.message);
+    this.confirmAcceptLabel.set(options.acceptLabel ?? 'Estoy seguro');
+    this.confirmRejectLabel.set(options.rejectLabel ?? 'Cancelar');
+    this.confirmAcceptVariant.set(options.acceptVariant ?? 'teal');
+    this.pendingConfirmAction = options.onAccept;
+    this.confirmVisible.set(true);
   }
 }

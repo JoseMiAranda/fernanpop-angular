@@ -3,7 +3,16 @@
 </div>
 
 <div *ngIf="transactionsState().type === 'success'">
-    <p-confirmDialog></p-confirmDialog>
+    <app-confirm-dialog
+        [visible]="confirmVisible()"
+        [header]="confirmHeader()"
+        [message]="confirmMessage()"
+        [acceptLabel]="confirmAcceptLabel()"
+        [rejectLabel]="confirmRejectLabel()"
+        [acceptVariant]="confirmAcceptVariant()"
+        (accept)="onConfirmAccept()"
+        (reject)="onConfirmReject()">
+    </app-confirm-dialog>
     <div class="w-full mb-8 overflow-x-scroll rounded-lg shadow-lg">
         <table class="w-full">
             <thead>

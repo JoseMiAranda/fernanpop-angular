@@ -9,7 +9,16 @@
         <div class="flex justify-between">
           <h3 class="font-semibold text-2xl text-gray-800">¡Actualiza!</h3>
           <div>
-            <p-confirmDialog></p-confirmDialog>
+            <app-confirm-dialog
+              [visible]="confirmVisible()"
+              header="Confirmación de eliminación"
+              message="¿Estás seguro de borrar el producto?"
+              acceptLabel="Eliminar"
+              rejectLabel="Cancelar"
+              acceptVariant="danger"
+              (accept)="onConfirmAccept()"
+              (reject)="onConfirmReject()">
+            </app-confirm-dialog>
             <app-red-button *ngIf="deleteProductState().type === 'initial'" [title]="'Eliminar'"
               (action)="onDelete($event!)" [isDisabled]="isLoading"></app-red-button>
             <app-red-button *ngIf="deleteProductState().type === 'loading'" [title]="'Eliminando...'"

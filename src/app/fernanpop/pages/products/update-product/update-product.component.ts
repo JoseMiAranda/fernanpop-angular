@@ -4,10 +4,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModu
 import { ProductsService } from '../../../../services/products.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
+import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
@@ -19,10 +17,9 @@ import { ImagesService } from '../../../../services/images.service';
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogModule, ButtonModule, GreenButtonComponent, RedButtonComponent, ListImagesComponent, ImageDropComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent, GreenButtonComponent, RedButtonComponent, ListImagesComponent, ImageDropComponent],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
-  providers: [ConfirmationService, MessageService]
 })
 export class UpdateProductComponent implements OnInit, OnDestroy {
   @Input('id') productId: string | undefined;
@@ -39,6 +36,8 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public submitted = false;
   public isLoading = false;
   public existImage = false;
+  public confirmVisible = signal(false);
+  private pendingConfirmAction: (() => void) | null = null;
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
@@ -49,7 +48,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
 
   constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private imagesService: ImagesService,
-    private confirmationService: ConfirmationService, private router: Router) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.getProductsByIdSubscription = this.productsService.getProductById(this.productId!).subscribe({
@@ -200,39 +199,35 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.updateProduct();
   }
   
-  onDelete(event: Event): void {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: '¿Estás seguro de borrar el producto?',
-      header: 'Confirmación de eliminación',
-      icon: 'pi pi-info-circle',
-      acceptButtonStyleClass: "p-button-danger p-button-text ml-5",
-      rejectButtonStyleClass: "p-button-text p-button-text",
-      acceptIcon: "none",
-      rejectIcon: "none",
-      acceptLabel: "Eliminar",
-      rejectLabel: "Cancelar",
-      reject: () => {
-        // No hacemos nada
-      },
-      accept: () => {
-        this.isLoading = true;
-        this.deleteProductState.set(new LoadingState());
-        this.deleteProductSubscription = this.productsService.deleteProduct(this.productState()!.data.id).subscribe({
-            next: (response: CustomResponse) => {
-              if (response instanceof SuccessResponse) {
-                this.router.navigate(['/fernanpop/user/products']);
-                return;
-              } 
-              this.router.navigate(['fernanpop/error/'], {
-                state: {
-                  message: 'Parece que no se pudo borrar el producto'
-                }
-              });
-            },
+  onDelete(_event: Event): void {
+    this.pendingConfirmAction = () => {
+      this.isLoading = true;
+      this.deleteProductState.set(new LoadingState());
+      this.deleteProductSubscription = this.productsService.deleteProduct(this.productState()!.data.id).subscribe({
+        next: (response: CustomResponse) => {
+          if (response instanceof SuccessResponse) {
+            this.router.navigate(['/fernanpop/user/products']);
+            return;
           }
-        );
-      }
-    });
+          this.router.navigate(['fernanpop/error/'], {
+            state: {
+              message: 'Parece que no se pudo borrar el producto'
+            }
+          });
+        },
+      });
+    };
+    this.confirmVisible.set(true);
+  }
+
+  onConfirmAccept(): void {
+    this.confirmVisible.set(false);
+    this.pendingConfirmAction?.();
+    this.pendingConfirmAction = null;
+  }
+
+  onConfirmReject(): void {
+    this.confirmVisible.set(false);
+    this.pendingConfirmAction = null;
   }
 }
