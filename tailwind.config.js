@@ -4,11 +4,7 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    extend: {
-      gridTemplateColumns: {
-        products: 'repeat(auto-fill, minmax(300px, 1fr))',
-      }
-    },
+    extend: {},
   },
   plugins: [
     require('tailwindcss-animated')
