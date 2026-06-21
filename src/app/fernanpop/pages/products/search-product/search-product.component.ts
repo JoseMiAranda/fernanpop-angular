@@ -3,17 +3,16 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ProductsService } from '../../../../services/products.service';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { Subscription } from 'rxjs';
-import { PaginatorModule } from 'primeng/paginator';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { CommonModule } from '@angular/common';
+import { PaginatorComponent } from '../../../components/paginator/paginator.component';
 
 @Component({
   selector: 'app-search-product',
   standalone: true,
-  imports: [CommonModule, ListProductsComponent, PaginatorModule],
+  imports: [CommonModule, ListProductsComponent, PaginatorComponent],
   templateUrl: './search-product.component.html',
-  styleUrl: './search-product.component.css'
 })
 export class SearchProductComponent implements OnInit, OnDestroy {
 
@@ -45,9 +44,7 @@ export class SearchProductComponent implements OnInit, OnDestroy {
     this.productsSubscription.unsubscribe();
   }
 
-  onPageChange(pageDetails: any) {
-    let { page, ...rest } = pageDetails;
-    page++;
+  onPageChange(page: number) {
     this.queryParams = { ...this.queryParams, page };
     this.router.navigate(['/fernanpop/products'], {
       queryParams: { ...this.queryParams }

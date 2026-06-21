@@ -8,7 +8,12 @@
             <h1 class="text-center">Se han encontrados {{productsState().data['total']}} resultados</h1>
             <app-list-products [listProducts]="productsState().data['products']"></app-list-products>
         </div>
-        <p-paginator (onPageChange)="onPageChange($event)"  [rows]="productsState().data['limit']" [totalRecords]="productsState().data['total']"></p-paginator>
+        <app-paginator
+            [page]="productsState().data['page']"
+            [limit]="productsState().data['limit']"
+            [total]="productsState().data['total']"
+            (pageChange)="onPageChange($event)">
+        </app-paginator>
     </div>
 </div>
 
