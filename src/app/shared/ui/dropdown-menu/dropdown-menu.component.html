@@ -1,0 +1,33 @@
+<div class="relative">
+  <button
+    type="button"
+    [attr.aria-label]="ariaLabel"
+    [attr.aria-expanded]="open()"
+    aria-haspopup="menu"
+    (click)="toggle($event)"
+    class="inline-flex items-center justify-center w-10 h-10 rounded-full text-gray-600 hover:bg-gray-100 hover:text-emerald-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+  >
+    <i [class]="triggerIcon" aria-hidden="true"></i>
+  </button>
+
+  @if (open()) {
+    <div
+      role="menu"
+      class="absolute right-0 mt-2 w-52 origin-top-right rounded-lg bg-white py-1 shadow-lg ring-1 ring-black/5 z-50 animate-fade animate-duration-150"
+    >
+      @for (item of items; track item.label) {
+        <button
+          type="button"
+          role="menuitem"
+          (click)="onItemClick(item)"
+          class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors text-left"
+        >
+          @if (item.icon) {
+            <i [class]="item.icon + ' text-gray-400'" aria-hidden="true"></i>
+          }
+          <span>{{ item.label }}</span>
+        </button>
+      }
+    </div>
+  }
+</div>

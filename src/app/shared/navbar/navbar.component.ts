@@ -1,26 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services/auth.service';
-import { SplitButtonModule } from 'primeng/splitbutton';
 import { TitleComponent } from '../title/title.component';
 import { SearcherComponent } from '../searcher/searcher.component';
-import { Menu, MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
+import { DropdownMenuComponent } from '../ui/dropdown-menu/dropdown-menu.component';
+import { DropdownMenuItem } from '../ui/dropdown-menu/dropdown-menu-item.model';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, ButtonModule, SplitButtonModule, TitleComponent, SearcherComponent, MenuModule],
+  imports: [CommonModule, TitleComponent, SearcherComponent, DropdownMenuComponent],
   templateUrl: './navbar.component.html',
   styles: ``
 })
 export class NavbarComponent implements OnInit {
   currentUser = this.authService.currentUser;
-  open: boolean = false;
-  dropdownOpen: boolean = false;
-  items = signal<MenuItem[]>([]);
+  items = signal<DropdownMenuItem[]>([]);
 
   windowWidth: number = window.innerWidth;
   md: number = 768; 
@@ -29,20 +25,16 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.authService.user$.subscribe(async (user) => {
-      const menuItems: MenuItem[] = [
+      const menuItems: DropdownMenuItem[] = [
         {
           label: 'Productos',
-          icon: "pi pi-box",
-          command: () => {
-            this.router.navigate(['fernanpop/user/products'])
-          }
+          icon: 'pi pi-box',
+          action: () => this.router.navigate(['fernanpop/user/products']),
         },
         {
           label: 'Transacciones',
-          icon: "pi pi-truck",
-          command: () => {
-            this.router.navigate(['fernanpop/user/transactions'])
-          }
+          icon: 'pi pi-truck',
+          action: () => this.router.navigate(['fernanpop/user/transactions']),
         },
       ];
 
@@ -50,18 +42,13 @@ export class NavbarComponent implements OnInit {
         menuItems.push({
           label: 'Iniciar sesión',
           icon: 'pi pi-fw pi-sign-in',
-          command: () => {
-            this.router.navigate(['fernanpop/login'])
-          }
+          action: () => this.router.navigate(['fernanpop/login']),
         });
-
       } else {
         menuItems.push({
           label: 'Cerrar sesión',
           icon: 'pi pi-fw pi-sign-out',
-          command: () => {
-            this.logout();
-          }
+          action: () => this.logout(),
         });
       }
       this.items.set(menuItems);
@@ -75,14 +62,6 @@ export class NavbarComponent implements OnInit {
 
   apperarBottomSearcher(): boolean {
     return this.windowWidth < this.md;
-  }
-
-  toggleMenu() {
-    this.open = !this.open;
-  }
-
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
   }
 
   logout() {
