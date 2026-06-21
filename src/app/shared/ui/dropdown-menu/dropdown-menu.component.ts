@@ -16,7 +16,6 @@ import { DropdownMenuItem } from './dropdown-menu-item.model';
 })
 export class DropdownMenuComponent {
   @Input({ required: true }) items!: DropdownMenuItem[];
-  @Input() triggerIcon = 'pi pi-ellipsis-v';
   @Input() ariaLabel = 'Abrir menú';
 
   open = signal(false);

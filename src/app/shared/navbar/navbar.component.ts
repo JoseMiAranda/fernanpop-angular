@@ -28,12 +28,12 @@ export class NavbarComponent implements OnInit {
       const menuItems: DropdownMenuItem[] = [
         {
           label: 'Productos',
-          icon: 'pi pi-box',
+          icon: 'box',
           action: () => this.router.navigate(['fernanpop/user/products']),
         },
         {
           label: 'Transacciones',
-          icon: 'pi pi-truck',
+          icon: 'truck',
           action: () => this.router.navigate(['fernanpop/user/transactions']),
         },
       ];
@@ -41,13 +41,13 @@ export class NavbarComponent implements OnInit {
       if (!user) {
         menuItems.push({
           label: 'Iniciar sesión',
-          icon: 'pi pi-fw pi-sign-in',
+          icon: 'sign-in',
           action: () => this.router.navigate(['fernanpop/login']),
         });
       } else {
         menuItems.push({
           label: 'Cerrar sesión',
-          icon: 'pi pi-fw pi-sign-out',
+          icon: 'sign-out',
           action: () => this.logout(),
         });
       }
