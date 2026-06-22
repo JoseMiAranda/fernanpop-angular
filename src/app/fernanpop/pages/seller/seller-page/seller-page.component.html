@@ -65,6 +65,10 @@
                             <p class="font-headline text-2xl font-bold text-primary">{{ soldItems().length }}</p>
                         </div>
                         <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Comprados</p>
+                            <p class="font-headline text-2xl font-bold text-on-surface">{{ purchasedItems().length }}</p>
+                        </div>
+                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Valoración</p>
                             <p class="font-headline text-2xl font-bold text-on-surface">
                                 @if (reviewsSummary().totalReviews > 0) {
@@ -101,6 +105,14 @@
                 [class.bg-surface-container-low]="activeTab() !== 'sold'"
                 [class.text-on-surface-variant]="activeTab() !== 'sold'">
                 Vendidos
+            </button>
+            <button type="button" (click)="setTab('purchased')"
+                class="rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                [class.bg-primary]="activeTab() === 'purchased'"
+                [class.text-white]="activeTab() === 'purchased'"
+                [class.bg-surface-container-low]="activeTab() !== 'purchased'"
+                [class.text-on-surface-variant]="activeTab() !== 'purchased'">
+                Comprados
             </button>
         </div>
 
@@ -164,6 +176,82 @@
                                             class="size-12 shrink-0 rounded-lg border border-outline-variant/40 object-cover" />
                                         <span class="font-medium text-on-surface">{{ item.title | titlecase }}</span>
                                     </div>
+                                </td>
+                                <td class="px-6 py-5 font-semibold text-on-surface">
+                                    {{ item.price | monetary }}
+                                </td>
+                                <td class="px-6 py-5">
+                                    @if (item.review) {
+                                    <div>
+                                        <p class="font-semibold text-primary">★ {{ item.review.score }}/5</p>
+                                        @if (item.review.description) {
+                                        <p class="mt-1 max-w-xs text-sm text-on-surface-variant">{{ item.review.description }}</p>
+                                        }
+                                        <p class="mt-1 text-xs text-outline">{{ formatReviewDate(item.review.createdAt) }}</p>
+                                    </div>
+                                    } @else {
+                                    <span class="text-sm text-on-surface-variant">Sin valorar</span>
+                                    }
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            }
+        </div>
+        }
+
+        @if (activeTab() === 'purchased') {
+        <div>
+            <div class="mb-stack-md">
+                <h2 class="font-headline text-2xl font-semibold text-on-surface">Histórico de compras</h2>
+            </div>
+
+            @if (purchasedItems().length === 0) {
+            <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
+                <p class="text-lg font-medium text-on-surface">Sin compras completadas</p>
+                <p class="mt-2 text-on-surface-variant">Cuando este usuario compre y reciba un producto, aparecerá aquí.</p>
+            </div>
+            } @else {
+            <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse text-left">
+                        <thead class="border-b border-outline-variant bg-surface-container">
+                            <tr>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Fecha
+                                </th>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Producto
+                                </th>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Vendedor
+                                </th>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Importe
+                                </th>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Valoración
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of purchasedItems(); track item.id) {
+                            <tr class="border-b border-outline-variant/40 transition-colors last:border-0 hover:bg-surface-container-low/50">
+                                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                                    {{ formatPurchasedDate(item.purchasedAt) }}
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <img [src]="item.image" [alt]="item.title"
+                                            class="size-12 shrink-0 rounded-lg border border-outline-variant/40 object-cover" />
+                                        <span class="font-medium text-on-surface">{{ item.title | titlecase }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                                    {{ item.sellerEmail }}
                                 </td>
                                 <td class="px-6 py-5 font-semibold text-on-surface">
                                     {{ item.price | monetary }}

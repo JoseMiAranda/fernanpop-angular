@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Seller } from '../interfaces/seller.interface';
 import { SoldItem } from '../interfaces/sold-item.interface';
+import { PurchasedItem } from '../interfaces/purchased-item.interface';
 import { Product } from '../interfaces/product.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
 import { getErrorMessage } from '../utils/utils';
@@ -32,6 +33,13 @@ export class SellersService {
   getSellerSold(id: string): Observable<CustomResponse> {
     return this.http.get<SoldItem[]>(`${this.baseUrl}/sellers/${id}/sold`).pipe(
       map((response: SoldItem[]) => new SuccessResponse(response)),
+      catchError((err) => of(new ErrorResponse(getErrorMessage(err)))),
+    );
+  }
+
+  getSellerPurchased(id: string): Observable<CustomResponse> {
+    return this.http.get<PurchasedItem[]>(`${this.baseUrl}/sellers/${id}/purchased`).pipe(
+      map((response: PurchasedItem[]) => new SuccessResponse(response)),
       catchError((err) => of(new ErrorResponse(getErrorMessage(err)))),
     );
   }

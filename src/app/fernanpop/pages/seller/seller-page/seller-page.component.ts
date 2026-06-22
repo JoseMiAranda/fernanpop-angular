@@ -5,6 +5,7 @@ import { ReviewsService } from '../../../../services/reviews.service';
 import { Seller } from '../../../../interfaces/seller.interface';
 import { Product } from '../../../../interfaces/product.interface';
 import { SoldItem } from '../../../../interfaces/sold-item.interface';
+import { PurchasedItem } from '../../../../interfaces/purchased-item.interface';
 import { Review, SellerReviewsSummary } from '../../../../interfaces/review.interface';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
@@ -12,7 +13,7 @@ import { ErrorState, LoadingState, State, SuccessState } from '../../../../state
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { forkJoin, Subscription } from 'rxjs';
 
-type SellerTab = 'active' | 'sold';
+type SellerTab = 'active' | 'sold' | 'purchased';
 
 @Component({
   selector: 'app-seller-page',
@@ -28,6 +29,7 @@ export class SellerPageComponent implements OnInit, OnDestroy {
   public seller = signal<Seller | null>(null);
   public products = signal<Product[]>([]);
   public soldItems = signal<SoldItem[]>([]);
+  public purchasedItems = signal<PurchasedItem[]>([]);
   public reviewsSummary = signal<SellerReviewsSummary>({ averageScore: 0, totalReviews: 0, reviews: [] });
 
   private loadSubscription: Subscription = new Subscription();
@@ -48,9 +50,10 @@ export class SellerPageComponent implements OnInit, OnDestroy {
       seller: this.sellersService.getSeller(this.sellerId),
       products: this.sellersService.getSellerProducts(this.sellerId),
       sold: this.sellersService.getSellerSold(this.sellerId),
+      purchased: this.sellersService.getSellerPurchased(this.sellerId),
       reviews: this.reviewsService.getSellerReviews(this.sellerId),
     }).subscribe({
-      next: ({ seller, products, sold, reviews }) => {
+      next: ({ seller, products, sold, purchased, reviews }) => {
         if (seller instanceof ErrorResponse) {
           this.pageState.set(new ErrorState(seller.error));
           return;
@@ -92,6 +95,10 @@ export class SellerPageComponent implements OnInit, OnDestroy {
           this.soldItems.set(soldWithReviews);
         }
 
+        if (purchased instanceof SuccessResponse) {
+          this.purchasedItems.set(purchased.data);
+        }
+
         this.pageState.set(new SuccessState(null));
       },
     });
@@ -119,6 +126,10 @@ export class SellerPageComponent implements OnInit, OnDestroy {
   }
 
   formatSoldDate(value: string): string {
+    return this.formatReviewDate(value);
+  }
+
+  formatPurchasedDate(value: string): string {
     return this.formatReviewDate(value);
   }
 
