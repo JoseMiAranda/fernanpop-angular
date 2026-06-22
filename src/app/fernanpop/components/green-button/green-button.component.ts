@@ -11,6 +11,7 @@ export class GreenButtonComponent {
   @Input() title!: string; 
   @Input() isDisabled = false;
   @Input() submit = false;
+  @Input() fullWidth = false;
   @Output() action = new EventEmitter<void>();
 
   onClick() {

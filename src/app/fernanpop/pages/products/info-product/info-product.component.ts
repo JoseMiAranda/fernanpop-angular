@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -27,9 +28,16 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   images: string[] = [];
   private getProductsByIdSubscription: Subscription = new Subscription();
   public buyProductState = signal<State>(new InitialState());
+  public selectedImageIndex = signal(0);
   private buyProductSubscription: Subscription = new Subscription();
 
-  constructor(private transactionsService: TransactionsService, private productService: ProductsService, private authService: AuthService, private router: Router) { }
+  constructor(
+    private transactionsService: TransactionsService,
+    private productService: ProductsService,
+    private authService: AuthService,
+    private router: Router,
+    private location: Location,
+  ) { }
 
   ngOnInit(): void {
     this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
@@ -37,6 +45,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));
           this.images = this.productState().data.images;
+          this.selectedImageIndex.set(0);
         } else if (response instanceof ErrorResponse) {
           this.productState.set(new ErrorState(response.error));
         }
@@ -75,6 +84,22 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   goToUpdate() {
     this.router.navigate(['/fernanpop/update-product', this.productId]);
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  previousImage() {
+    const last = this.images.length - 1;
+    const next = this.selectedImageIndex() === 0 ? last : this.selectedImageIndex() - 1;
+    this.selectedImageIndex.set(next);
+  }
+
+  nextImage() {
+    const last = this.images.length - 1;
+    const next = this.selectedImageIndex() === last ? 0 : this.selectedImageIndex() + 1;
+    this.selectedImageIndex.set(next);
   }
 
 }
