@@ -251,7 +251,10 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-5 text-sm text-on-surface-variant">
-                                    {{ item.sellerEmail }}
+                                    <a [routerLink]="['/fernanpop/seller', item.sellerId]"
+                                        class="font-medium text-on-surface transition-colors hover:text-primary">
+                                        {{ item.sellerName ?? item.sellerEmail }}
+                                    </a>
                                 </td>
                                 <td class="px-6 py-5 font-semibold text-on-surface">
                                     {{ item.price | monetary }}

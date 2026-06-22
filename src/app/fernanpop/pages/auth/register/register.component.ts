@@ -18,8 +18,11 @@ export class RegisterComponent {
   public errorRegister = signal<string | undefined>(undefined);
 
   form: FormGroup = new FormGroup({
+    firstName: new FormControl(null),
+    lastName: new FormControl(null),
     email: new FormControl(null),
     password: new FormControl(null),
+    acceptTerms: new FormControl(false),
   });
 
   submitted = false;
@@ -29,6 +32,8 @@ export class RegisterComponent {
   ngOnInit(): void {
     this.form = this.formBuilder.group(
       {
+        firstName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+        lastName: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
         email: [null, [Validators.required, Validators.email]],
         password: [
           null,
@@ -38,6 +43,7 @@ export class RegisterComponent {
             Validators.maxLength(this.maxLenght),
           ],
         ],
+        acceptTerms: [false, Validators.requiredTrue],
       },
     );
   }
@@ -54,9 +60,9 @@ export class RegisterComponent {
       return;
     }
 
-    const { email, password } = this.form.value;
+    const { firstName, lastName, email, password } = this.form.value;
 
-    this.authService.registerWithEmailAndPassword(email, password).subscribe({
+    this.authService.registerWithEmailAndPassword(email, password, firstName, lastName).subscribe({
       next: () => {
         this.router.navigate(['fernanpop']);
       },

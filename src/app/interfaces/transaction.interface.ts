@@ -12,6 +12,8 @@ export interface Transaction {
     sellerId: string;
     buyerId: string;
     sellerEmail: string;
+    sellerName?: string;
+    buyerName?: string;
     title: string;
     price: number;
     image: string;

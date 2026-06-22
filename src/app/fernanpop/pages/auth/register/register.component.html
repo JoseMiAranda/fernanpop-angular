@@ -5,6 +5,42 @@
 			<p class="text-gray-500">Crea una cuenta para comprar y vender productos.</p>
 		</div>
 		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+				<div class="form-group space-y-2">
+					<label class="text-sm font-medium text-gray-700 tracking-wide">Nombre</label>
+					<input type="text" formControlName="firstName"
+						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+						[ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }" />
+					@if (submitted && f['firstName'].errors) {
+					<div class="invalid-feedback">
+						@if (f['firstName'].errors['required']) {
+						<div class="text-red-500">Nombre requerido</div>
+						} @if (f['firstName'].errors['minlength']) {
+						<div class="text-red-500">Mínimo 2 caracteres</div>
+						} @if (f['firstName'].errors['maxlength']) {
+						<div class="text-red-500">Máximo 50 caracteres</div>
+						}
+					</div>
+					}
+				</div>
+				<div class="form-group space-y-2">
+					<label class="text-sm font-medium text-gray-700 tracking-wide">Apellidos</label>
+					<input type="text" formControlName="lastName"
+						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+						[ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }" />
+					@if (submitted && f['lastName'].errors) {
+					<div class="invalid-feedback">
+						@if (f['lastName'].errors['required']) {
+						<div class="text-red-500">Apellidos requeridos</div>
+						} @if (f['lastName'].errors['minlength']) {
+						<div class="text-red-500">Mínimo 2 caracteres</div>
+						} @if (f['lastName'].errors['maxlength']) {
+						<div class="text-red-500">Máximo 80 caracteres</div>
+						}
+					</div>
+					}
+				</div>
+			</div>
 			<div class="form-group space-y-2">
 				<label class="text-sm font-medium text-gray-700 tracking-wide">Correo electrónico</label>
 				<input type="text" formControlName="email"
@@ -35,6 +71,21 @@
 					<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
 					}
 				</div>
+				}
+			</div>
+			<div class="form-group">
+				<label class="flex items-start gap-3 cursor-pointer">
+					<input type="checkbox" formControlName="acceptTerms"
+						class="mt-1 size-4 rounded border-gray-300 text-green-400 focus:ring-green-400" />
+					<span class="text-sm text-gray-600">
+						Acepto los
+						<a href="#" class="text-green-400 hover:text-green-500 underline" (click)="$event.preventDefault()">
+							términos y condiciones
+						</a>
+					</span>
+				</label>
+				@if (submitted && f['acceptTerms'].errors) {
+				<div class="mt-2 text-red-500 text-sm">Debes aceptar los términos y condiciones</div>
 				}
 			</div>
 			@if(errorRegister()) {

@@ -119,10 +119,10 @@
                                             {{ transaction.title | titlecase }}
                                         </a>
                                         <p class="text-xs text-outline">
-                                            @if (transaction.sellerEmail == currentUser()!.email) {
-                                            Vendedor: Tú
+                                            @if (transaction.sellerId == currentUser()!.uid) {
+                                            Comprador: {{ transaction.buyerName }}
                                             } @else {
-                                            Vendedor: {{ transaction.sellerEmail }}
+                                            Vendedor: {{ transaction.sellerName }}
                                             }
                                         </p>
                                     </div>

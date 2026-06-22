@@ -5,6 +5,7 @@ export interface PurchasedItem {
   productId: string;
   sellerId: string;
   sellerEmail: string;
+  sellerName?: string;
   title: string;
   price: number;
   image: string;

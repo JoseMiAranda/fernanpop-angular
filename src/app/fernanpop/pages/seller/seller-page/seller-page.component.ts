@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { SellersService } from '../../../../services/sellers.service';
 import { ReviewsService } from '../../../../services/reviews.service';
 import { Seller } from '../../../../interfaces/seller.interface';
@@ -18,7 +19,7 @@ type SellerTab = 'active' | 'sold' | 'purchased';
 @Component({
   selector: 'app-seller-page',
   standalone: true,
-  imports: [CommonModule, ListProductsComponent, CurrentCurrencyPipe],
+  imports: [CommonModule, RouterLink, ListProductsComponent, CurrentCurrencyPipe],
   templateUrl: './seller-page.component.html',
 })
 export class SellerPageComponent implements OnInit, OnDestroy {
