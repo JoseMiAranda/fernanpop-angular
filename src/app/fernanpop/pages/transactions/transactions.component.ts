@@ -5,17 +5,20 @@ import { ProductsService } from '../../../services/products.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { TransactionsService } from '../../../services/transactions.service';
+import { ReviewsService } from '../../../services/reviews.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 import { StatusPipe } from '../../../pipes/status.pipe';
 import { ConfirmDialogComponent } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { RatingDialogComponent } from '../../../shared/ui/rating-dialog/rating-dialog.component';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
+import { CreateReviewPayload } from '../../../interfaces/review.interface';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, ConfirmDialogComponent, RouterLink, StatusPipe, DatePipe],
+  imports: [CommonModule, CurrentCurrencyPipe, ConfirmDialogComponent, RatingDialogComponent, RouterLink, StatusPipe, DatePipe],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })
@@ -28,13 +31,16 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public confirmAcceptLabel = signal('Estoy seguro');
   public confirmRejectLabel = signal('Cancelar');
   public confirmAcceptVariant = signal<'teal' | 'success' | 'danger'>('teal');
+  public ratingVisible = signal(false);
+  public ratingProductTitle = signal('');
+  private ratingTransactionId: string | null = null;
   private getTransactionsSubscription: Subscription = new Subscription();
   private pendingConfirmAction: (() => void) | null = null;
 
   queryParams: any = {};
 
   constructor(private transactionsService: TransactionsService, private productsService: ProductsService,
-    private authService: AuthService, private router: Router) {}
+    private authService: AuthService, private reviewsService: ReviewsService, private router: Router) {}
 
   ngOnInit(): void {
     // Agregamos todas las subscripciones
@@ -80,6 +86,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
                 return transaction;
               });
               this.transactionsState.set(new SuccessState(transactions));
+              this.openRatingDialog(acceptedTransaction);
             } else {
               this.router.navigate(['fernanpop/error/'], {
                 state: {
@@ -130,6 +137,61 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   onConfirmReject(): void {
     this.confirmVisible.set(false);
     this.pendingConfirmAction = null;
+  }
+
+  onRate(_event: Event, transaction: Transaction): void {
+    this.openRatingDialog(transaction);
+  }
+
+  onRatingSubmit(payload: CreateReviewPayload): void {
+    if (!this.ratingTransactionId) {
+      return;
+    }
+
+    const transactionId = this.ratingTransactionId;
+    this.ratingVisible.set(false);
+    this.ratingTransactionId = null;
+
+    this.reviewsService.createReview(transactionId, payload).subscribe((resp) => {
+      if (resp instanceof SuccessResponse) {
+        const review = resp.data;
+        const transactions = this.transactionsState().data.map((transaction: Transaction) => {
+          if (transaction.id === transactionId) {
+            return {
+              ...transaction,
+              review: {
+                score: review.score,
+                description: review.description,
+                createdAt: review.createdAt,
+              },
+            };
+          }
+          return transaction;
+        });
+        this.transactionsState.set(new SuccessState(transactions));
+      } else {
+        this.router.navigate(['fernanpop/error/'], {
+          state: {
+            message: 'Parece que no se pudo enviar la valoración'
+          }
+        });
+      }
+    });
+  }
+
+  onRatingSkip(): void {
+    this.ratingVisible.set(false);
+    this.ratingTransactionId = null;
+  }
+
+  isBuyer(transaction: Transaction): boolean {
+    return transaction.buyerId === this.currentUser()?.uid;
+  }
+
+  private openRatingDialog(transaction: Transaction): void {
+    this.ratingTransactionId = transaction.id;
+    this.ratingProductTitle.set(transaction.title);
+    this.ratingVisible.set(true);
   }
 
   private openConfirmDialog(options: {

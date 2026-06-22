@@ -1,3 +1,5 @@
+import { TransactionReview } from './review.interface';
+
 export enum StatusTransaction {
     IN_PROCESS = 'in-process',
     RECEIVED = 'received',
@@ -16,4 +18,5 @@ export interface Transaction {
     status: StatusTransaction;
     createdAt: Date;
     updatedAt: Date;
+    review?: TransactionReview;
 }

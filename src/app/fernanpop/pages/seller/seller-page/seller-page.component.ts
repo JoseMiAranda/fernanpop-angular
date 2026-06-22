@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { SellersService } from '../../../../services/sellers.service';
+import { ReviewsService } from '../../../../services/reviews.service';
 import { Seller } from '../../../../interfaces/seller.interface';
 import { Product } from '../../../../interfaces/product.interface';
 import { SoldItem } from '../../../../interfaces/sold-item.interface';
+import { Review, SellerReviewsSummary } from '../../../../interfaces/review.interface';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
@@ -26,11 +28,13 @@ export class SellerPageComponent implements OnInit, OnDestroy {
   public seller = signal<Seller | null>(null);
   public products = signal<Product[]>([]);
   public soldItems = signal<SoldItem[]>([]);
+  public reviewsSummary = signal<SellerReviewsSummary>({ averageScore: 0, totalReviews: 0, reviews: [] });
 
   private loadSubscription: Subscription = new Subscription();
 
   constructor(
     private sellersService: SellersService,
+    private reviewsService: ReviewsService,
     private location: Location,
   ) {}
 
@@ -44,8 +48,9 @@ export class SellerPageComponent implements OnInit, OnDestroy {
       seller: this.sellersService.getSeller(this.sellerId),
       products: this.sellersService.getSellerProducts(this.sellerId),
       sold: this.sellersService.getSellerSold(this.sellerId),
+      reviews: this.reviewsService.getSellerReviews(this.sellerId),
     }).subscribe({
-      next: ({ seller, products, sold }) => {
+      next: ({ seller, products, sold, reviews }) => {
         if (seller instanceof ErrorResponse) {
           this.pageState.set(new ErrorState(seller.error));
           return;
@@ -59,8 +64,32 @@ export class SellerPageComponent implements OnInit, OnDestroy {
           this.products.set(products.data);
         }
 
+        const reviewsData = reviews instanceof SuccessResponse
+          ? reviews.data as SellerReviewsSummary
+          : { averageScore: 0, totalReviews: 0, reviews: [] as Review[] };
+
+        this.reviewsSummary.set(reviewsData);
+
         if (sold instanceof SuccessResponse) {
-          this.soldItems.set(sold.data);
+          const reviewByTransactionId = new Map(
+            reviewsData.reviews.map((review) => [review.transactionId, review]),
+          );
+
+          const soldWithReviews: SoldItem[] = sold.data.map((item: SoldItem) => {
+            const review = item.id ? reviewByTransactionId.get(item.id) : undefined;
+            return {
+              ...item,
+              review: review
+                ? {
+                    score: review.score,
+                    description: review.description,
+                    createdAt: review.createdAt,
+                  }
+                : undefined,
+            };
+          });
+
+          this.soldItems.set(soldWithReviews);
         }
 
         this.pageState.set(new SuccessState(null));
@@ -90,11 +119,19 @@ export class SellerPageComponent implements OnInit, OnDestroy {
   }
 
   formatSoldDate(value: string): string {
+    return this.formatReviewDate(value);
+  }
+
+  formatReviewDate(value: string): string {
     const date = new Date(value);
     return date.toLocaleDateString('es-ES', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     });
+  }
+
+  formatRating(score: number): string {
+    return score % 1 === 0 ? score.toFixed(0) : score.toFixed(1);
   }
 }

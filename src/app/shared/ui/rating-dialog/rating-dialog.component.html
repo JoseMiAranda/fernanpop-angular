@@ -1,0 +1,63 @@
+@if (visible) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-black/50" (click)="onBackdropClick()"></div>
+
+    <div class="relative w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-xl">
+      <h2 class="font-headline text-lg font-semibold text-on-surface">¿Cómo fue el producto?</h2>
+      @if (productTitle) {
+      <p class="mt-1 text-sm text-on-surface-variant">{{ productTitle | titlecase }}</p>
+      }
+      <p class="mt-2 text-sm text-on-surface-variant">Valora tu experiencia con una puntuación del 1 al 5.</p>
+
+      <div class="mt-5 flex justify-center gap-2">
+        @for (score of scores; track score) {
+        <button
+          type="button"
+          (click)="selectScore(score)"
+          class="flex size-11 items-center justify-center rounded-lg border text-sm font-semibold transition-colors"
+          [class.border-primary]="selectedScore() === score"
+          [class.bg-primary]="selectedScore() === score"
+          [class.text-white]="selectedScore() === score"
+          [class.border-outline-variant]="selectedScore() !== score"
+          [class.bg-surface-container]="selectedScore() !== score"
+          [class.text-on-surface]="selectedScore() !== score"
+          [class.hover:border-primary]="selectedScore() !== score"
+          [attr.aria-label]="'Puntuación ' + score">
+          {{ score }}
+        </button>
+        }
+      </div>
+
+      <div class="mt-5">
+        <label for="review-description" class="mb-2 block text-sm font-medium text-on-surface">
+          Descripción <span class="text-on-surface-variant">(opcional)</span>
+        </label>
+        <textarea
+          id="review-description"
+          rows="3"
+          maxlength="500"
+          [ngModel]="description()"
+          (ngModelChange)="description.set($event)"
+          placeholder="Cuéntanos tu experiencia con el producto..."
+          class="w-full resize-none rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm text-on-surface placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+        </textarea>
+      </div>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button
+          type="button"
+          (click)="onSkip()"
+          class="rounded-lg px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container">
+          Omitir
+        </button>
+        <button
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="selectedScore() === null"
+          class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50">
+          Enviar valoración
+        </button>
+      </div>
+    </div>
+  </div>
+}

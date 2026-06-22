@@ -47,6 +47,13 @@
             (reject)="onConfirmReject()">
         </app-confirm-dialog>
 
+        <app-rating-dialog
+            [visible]="ratingVisible()"
+            [productTitle]="ratingProductTitle()"
+            (submitRating)="onRatingSubmit($event)"
+            (skip)="onRatingSkip()">
+        </app-rating-dialog>
+
         <div class="mb-stack-lg">
             <p class="mb-stack-sm text-sm font-medium text-on-surface-variant">Mi cuenta</p>
             <h1 class="font-headline text-4xl font-bold text-on-surface md:text-5xl">Transacciones</h1>
@@ -177,6 +184,28 @@
                                     </button>
                                     }
                                 </div>
+                                } @else if (transaction.status === 'received' && isBuyer(transaction)) {
+                                @if (transaction.review) {
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-primary">★ {{ transaction.review.score }}/5</p>
+                                    @if (transaction.review.description) {
+                                    <p class="mt-1 max-w-48 truncate text-xs text-on-surface-variant" [title]="transaction.review.description">
+                                        {{ transaction.review.description }}
+                                    </p>
+                                    }
+                                </div>
+                                } @else {
+                                <button type="button" (click)="onRate($event, transaction)"
+                                    class="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary-container/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:bg-primary-container/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24"
+                                        fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="hidden sm:inline">Valorar</span>
+                                </button>
+                                }
                                 } @else {
                                 <span class="text-xs text-on-surface-variant">—</span>
                                 }

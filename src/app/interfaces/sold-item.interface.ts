@@ -1,3 +1,9 @@
+export interface SoldItemReview {
+  score: number;
+  description?: string;
+  createdAt: string;
+}
+
 export interface SoldItem {
   id?: string;
   productId: string;
@@ -5,4 +11,5 @@ export interface SoldItem {
   price: number;
   image: string;
   soldAt: string;
+  review?: SoldItemReview;
 }
