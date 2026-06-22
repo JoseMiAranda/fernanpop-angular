@@ -1,21 +1,19 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Product, } from '../interfaces/product.interface';
 import { ProductsResponse } from '../interfaces/products-response';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
 import { getErrorMessage } from '../utils/utils';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  private currentUser = this.authService.currentUser; 
   private baseUrl: string = import.meta.env.NG_APP_BASE_URL;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
   // SELECT
   getProducts({
@@ -56,10 +54,7 @@ export class ProductsService {
   }
 
   getUserProducts(): Observable<CustomResponse> {
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.get<Product[]>(this.baseUrl + '/products/seller', {
-      headers: headers
-    }).pipe(
+    return this.http.get<Product[]>(this.baseUrl + '/products/seller').pipe(
       map((transactions: Product[]) => {
         return new SuccessResponse(transactions);
       }),
@@ -84,10 +79,7 @@ export class ProductsService {
   createProduct(newProduct: Product): Observable<CustomResponse> {
     const { title, desc, price, images, categoryId } = newProduct;
     const productData = { title, desc, price, images, categoryId };
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.post<Product>(this.baseUrl + '/products', productData, {
-      headers: headers
-    }).pipe(
+    return this.http.post<Product>(this.baseUrl + '/products', productData).pipe(
       map((response: Product) => {
         return new SuccessResponse(response);
       }),
@@ -101,10 +93,7 @@ export class ProductsService {
   updateProduct(updatedProduct: Product): Observable<CustomResponse> {
     const { title, desc, price, images, status, categoryId } = updatedProduct;
     const productData = { title, desc, price, images, status, categoryId };
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.patch<Product>(this.baseUrl + `/products/${updatedProduct.id}`, productData, {
-      headers: headers
-    }).pipe(
+    return this.http.patch<Product>(this.baseUrl + `/products/${updatedProduct.id}`, productData).pipe(
       map((response: Product) => {
         return new SuccessResponse(response);
       }),
@@ -116,8 +105,7 @@ export class ProductsService {
 
   // DELETE
   deleteProduct(id: string): Observable<CustomResponse> {
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.delete<Product>(this.baseUrl + `/products/${id}`, { headers: headers }).pipe(
+    return this.http.delete<Product>(this.baseUrl + `/products/${id}`).pipe(
       map((response: Product) => {
         return new SuccessResponse(response);
       }),

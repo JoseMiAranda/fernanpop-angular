@@ -5,7 +5,8 @@ import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth.interceptor';
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 
 import { provideLottieOptions } from 'ngx-lottie';
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
     // Control de rutas y sus parámteros
     provideRouter(routes, withComponentInputBinding()), 
     // Para peticiones Http
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     // Para perimitir las animaciones
     provideAnimationsAsync(),
     // Para las animaciones de Netlify

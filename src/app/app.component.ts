@@ -1,6 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { FavoritesService } from './services/favorites.service';
 
@@ -11,28 +12,44 @@ import { FavoritesService } from './services/favorites.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   authService = inject(AuthService);
   favoritesService = inject(FavoritesService);
+  private router = inject(Router);
+  private routerSubscription?: Subscription;
 
   title = 'fernanpop';
 
   ngOnInit(): void {
-    this.authService.user$.subscribe(async (user) => {
+    this.authService.user$.subscribe((user) => {
       if (user) {
-        const token = await user?.getIdToken();
         this.authService.currentUser.set({
           uid: user.uid,
           email: user.email!,
-          accessToken: token,
         });
-        this.favoritesService.loadFavoriteIds();
+
+        void this.authService.refreshAccessToken().then(() => {
+          this.favoritesService.loadFavoriteIds();
+        });
       } else {
+        this.authService.clearAccessToken();
         this.authService.currentUser.set(null);
         this.favoritesService.clearFavorites();
       }
     });
+
+    this.routerSubscription = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.authService.currentUser()) {
+          void this.authService.refreshAccessToken();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.routerSubscription?.unsubscribe();
   }
 
 }

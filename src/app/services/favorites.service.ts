@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Product } from '../interfaces/product.interface';
@@ -11,7 +11,6 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class FavoritesService {
-  private currentUser = this.authService.currentUser;
   private baseUrl: string = import.meta.env.NG_APP_BASE_URL;
 
   favoriteIds = signal<Set<string>>(new Set());
@@ -19,7 +18,7 @@ export class FavoritesService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   loadFavoriteIds(): void {
-    if (!this.currentUser()) {
+    if (!this.authService.currentUser()) {
       return;
     }
 
@@ -49,16 +48,14 @@ export class FavoritesService {
   }
 
   getFavorites(): Observable<CustomResponse> {
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.get<Product[]>(this.baseUrl + '/favorites', { headers }).pipe(
+    return this.http.get<Product[]>(this.baseUrl + '/favorites').pipe(
       map((products: Product[]) => new SuccessResponse(products)),
       catchError((err) => of(new ErrorResponse(getErrorMessage(err)))),
     );
   }
 
   getFavoriteIds(): Observable<CustomResponse> {
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.get<string[]>(this.baseUrl + '/favorites/ids', { headers }).pipe(
+    return this.http.get<string[]>(this.baseUrl + '/favorites/ids').pipe(
       map((ids: string[]) => new SuccessResponse(ids)),
       catchError((err) => of(new ErrorResponse(getErrorMessage(err)))),
     );
@@ -68,8 +65,7 @@ export class FavoritesService {
     const previousIds = new Set(this.favoriteIds());
     this.favoriteIds.update((ids) => new Set(ids).add(productId));
 
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.post<Favorite>(this.baseUrl + `/favorites/${productId}`, {}, { headers }).pipe(
+    return this.http.post<Favorite>(this.baseUrl + `/favorites/${productId}`, {}).pipe(
       map((favorite: Favorite) => new SuccessResponse(favorite)),
       catchError((err) => {
         this.favoriteIds.set(previousIds);
@@ -86,8 +82,7 @@ export class FavoritesService {
       return next;
     });
 
-    const headers = new HttpHeaders().set('authorization', `Bearer ${this.currentUser()?.accessToken}`);
-    return this.http.delete<void>(this.baseUrl + `/favorites/${productId}`, { headers }).pipe(
+    return this.http.delete<void>(this.baseUrl + `/favorites/${productId}`).pipe(
       map(() => new SuccessResponse(null)),
       catchError((err) => {
         this.favoriteIds.set(previousIds);

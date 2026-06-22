@@ -1,17 +1,21 @@
 import { inject } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, authState } from '@angular/fire/auth';
 import { CanActivateFn, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
-export const LoggedGuard: CanActivateFn = async (route, state) => {
+export const LoggedGuard: CanActivateFn = async () => {
   const router = inject(Router);
   const auth = inject(Auth);
+  const authService = inject(AuthService);
 
-  const isLogged = !!auth.currentUser;
+  const user = await firstValueFrom(authState(auth));
 
-  if(isLogged) {
-    return true;
+  if (!user) {
+    router.navigate(['fernanpop/']);
+    return false;
   }
-  // Redirigimos a la pagina principal si no está logueado
-  router.navigate(['fernanpop/']);
-  return false;
-};  
+
+  await authService.refreshAccessToken();
+  return true;
+};

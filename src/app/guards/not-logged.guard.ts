@@ -1,19 +1,18 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Auth } from '@angular/fire/auth';
+import { Auth, authState } from '@angular/fire/auth';
+import { firstValueFrom } from 'rxjs';
 
-export const NotLoggedGuard: CanActivateFn = async (route, state) => {
-  
+export const NotLoggedGuard: CanActivateFn = async () => {
   const router = inject(Router);
   const auth = inject(Auth);
 
-  const isLogged = !!auth.currentUser;
+  const user = await firstValueFrom(authState(auth));
 
-  if(!isLogged) {
+  if (!user) {
     return true;
   }
-  
-  // Redirigimos a la pagina principal si está logueado
+
   router.navigate(['fernanpop/']);
   return false;
-};  
+};
