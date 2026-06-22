@@ -94,6 +94,29 @@
                     {{ productState().data.desc }}
                 </p>
 
+                @if (seller(); as sellerData) {
+                <a [routerLink]="['/fernanpop/seller', sellerData.id]"
+                    class="flex items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-4 transition-colors hover:border-primary hover:bg-surface-container-low">
+                    @if (sellerData.photoUrl) {
+                    <img [src]="sellerData.photoUrl" [alt]="sellerData.displayName"
+                        class="size-14 shrink-0 rounded-full object-cover" />
+                    } @else {
+                    <div
+                        class="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary-container text-lg font-bold text-white">
+                        {{ sellerInitials(sellerData.displayName) }}
+                    </div>
+                    }
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Vendedor</p>
+                        <p class="truncate font-headline text-lg font-semibold text-on-surface">{{ sellerData.displayName }}</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto size-5 shrink-0 text-on-surface-variant"
+                        viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                    </svg>
+                </a>
+                }
+
                 <div class="pt-4">
                     @if (productState().data.status == 'reserved') {
                     } @else if (productState().data.sellerId == currentUser()?.uid) {

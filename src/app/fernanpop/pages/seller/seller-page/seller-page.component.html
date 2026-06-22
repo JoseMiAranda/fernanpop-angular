@@ -1,0 +1,172 @@
+<div class="min-h-full bg-surface font-body text-on-surface">
+
+    @if (pageState().type === 'loading') {
+    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-desktop">
+        <div class="mb-stack-lg flex flex-col items-center gap-stack-md md:flex-row md:items-start">
+            <div class="size-40 rounded-full bg-outline-variant/40 md:size-48"></div>
+            <div class="flex-1 space-y-3 text-center md:text-left">
+                <div class="mx-auto h-10 w-48 rounded bg-outline-variant/40 md:mx-0"></div>
+                <div class="mx-auto h-4 w-64 rounded bg-outline-variant/30 md:mx-0"></div>
+            </div>
+        </div>
+        <div class="mb-stack-lg flex gap-3">
+            <div class="h-10 w-28 rounded-full bg-outline-variant/40"></div>
+            <div class="h-10 w-28 rounded-full bg-outline-variant/30"></div>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @for (i of [1, 2, 3]; track i) {
+            <div class="h-80 rounded-xl bg-outline-variant/30"></div>
+            }
+        </div>
+    </div>
+    }
+
+    @if (pageState().type === 'success' && seller(); as sellerData) {
+    <div class="border-b border-outline-variant bg-surface-container-lowest px-margin-mobile py-stack-lg md:px-margin-desktop">
+        <div class="mx-auto max-w-container-max">
+            <button type="button" (click)="goBack()"
+                class="mb-stack-md flex items-center gap-2 text-secondary transition-colors hover:text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" />
+                </svg>
+                <span class="text-sm font-medium">Volver</span>
+            </button>
+
+            <div class="flex flex-col items-center gap-stack-lg md:flex-row md:items-start">
+                <div class="relative shrink-0">
+                    @if (sellerData.photoUrl) {
+                    <img [src]="sellerData.photoUrl" [alt]="sellerData.displayName"
+                        class="size-40 rounded-full border-4 border-white object-cover shadow-sm md:size-48" />
+                    } @else {
+                    <div
+                        class="flex size-40 items-center justify-center rounded-full border-4 border-white bg-primary-container text-3xl font-bold text-white shadow-sm md:size-48">
+                        {{ sellerInitials(sellerData.displayName) }}
+                    </div>
+                    }
+                </div>
+
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="font-headline text-3xl font-bold text-on-surface md:text-4xl">
+                        {{ sellerData.displayName }}
+                    </h1>
+                    <p class="mt-stack-sm text-on-surface-variant">
+                        Vendedor en Fernanpop
+                        @if (sellerData.email) {
+                        <span class="text-on-surface-variant/80"> · {{ sellerData.email }}</span>
+                        }
+                    </p>
+                    <div class="mt-stack-md flex flex-wrap items-center justify-center gap-stack-md md:justify-start">
+                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">En venta</p>
+                            <p class="font-headline text-2xl font-bold text-on-surface">{{ products().length }}</p>
+                        </div>
+                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Vendidos</p>
+                            <p class="font-headline text-2xl font-bold text-primary">{{ soldItems().length }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+        <div class="mb-stack-lg flex gap-2">
+            <button type="button" (click)="setTab('active')"
+                class="rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                [class.bg-primary]="activeTab() === 'active'"
+                [class.text-white]="activeTab() === 'active'"
+                [class.bg-surface-container-low]="activeTab() !== 'active'"
+                [class.text-on-surface-variant]="activeTab() !== 'active'">
+                En venta
+            </button>
+            <button type="button" (click)="setTab('sold')"
+                class="rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                [class.bg-primary]="activeTab() === 'sold'"
+                [class.text-white]="activeTab() === 'sold'"
+                [class.bg-surface-container-low]="activeTab() !== 'sold'"
+                [class.text-on-surface-variant]="activeTab() !== 'sold'">
+                Vendidos
+            </button>
+        </div>
+
+        @if (activeTab() === 'active') {
+        <div>
+            <div class="mb-stack-md flex items-center justify-between">
+                <h2 class="font-headline text-2xl font-semibold text-on-surface">Productos en venta</h2>
+            </div>
+
+            @if (products().length === 0) {
+            <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
+                <p class="text-lg font-medium text-on-surface">No hay productos en venta</p>
+                <p class="mt-2 text-on-surface-variant">Este vendedor no tiene anuncios activos en este momento.</p>
+            </div>
+            } @else {
+            <app-list-products [listProducts]="products()" [variant]="'stitch'" [compact]="true" />
+            }
+        </div>
+        }
+
+        @if (activeTab() === 'sold') {
+        <div>
+            <div class="mb-stack-md">
+                <h2 class="font-headline text-2xl font-semibold text-on-surface">Histórico de ventas</h2>
+            </div>
+
+            @if (soldItems().length === 0) {
+            <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
+                <p class="text-lg font-medium text-on-surface">Sin ventas completadas</p>
+                <p class="mt-2 text-on-surface-variant">Cuando este vendedor complete una venta, aparecerá aquí.</p>
+            </div>
+            } @else {
+            <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse text-left">
+                        <thead class="border-b border-outline-variant bg-surface-container">
+                            <tr>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Fecha
+                                </th>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Producto
+                                </th>
+                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Importe
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of soldItems(); track item.id) {
+                            <tr class="border-b border-outline-variant/40 transition-colors last:border-0 hover:bg-surface-container-low/50">
+                                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                                    {{ formatSoldDate(item.soldAt) }}
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-4">
+                                        <img [src]="item.image" [alt]="item.title"
+                                            class="size-12 shrink-0 rounded-lg border border-outline-variant/40 object-cover" />
+                                        <span class="font-medium text-on-surface">{{ item.title | titlecase }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 font-semibold text-on-surface">
+                                    {{ item.price | monetary }}
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    @if (pageState().type === 'error') {
+    <div class="flex min-h-[50vh] items-center justify-center px-margin-mobile">
+        <p class="text-on-surface-variant">Error: {{ pageState().error }}</p>
+    </div>
+    }
+
+</div>

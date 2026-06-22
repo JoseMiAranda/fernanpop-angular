@@ -28,6 +28,11 @@ export const routes: Routes = [
                 loadComponent: () => InfoProductComponent,
             },
             {
+                path: 'seller/:id',
+                title: 'seller',
+                loadComponent: () => import('./fernanpop/pages/seller/seller-page/seller-page.component').then(c => c.SellerPageComponent),
+            },
+            {
                 path: 'products',
                 title: 'products',
                 loadComponent: () => SearchProductComponent,

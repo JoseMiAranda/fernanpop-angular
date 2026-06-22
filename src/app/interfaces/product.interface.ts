@@ -1,3 +1,5 @@
+import { SellerSummary } from './seller.interface';
+
 export enum ProductStatus {
     RESERVED = 'reserved',
     SOLD = 'sold',
@@ -14,4 +16,5 @@ export interface Product {
     createdAt: Date;
     updatedAt: Date;
     status: ProductStatus[];
+    seller?: SellerSummary;
 }

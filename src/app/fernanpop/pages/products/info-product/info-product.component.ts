@@ -14,11 +14,13 @@ import { Category } from '../../../../interfaces/category.interface';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
+import { RouterLink } from '@angular/router';
+import { SellerSummary } from '../../../../interfaces/seller.interface';
 
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, GreenButtonComponent, ImageGalleryComponent, CategoryNamePipe],
+  imports: [CommonModule, CurrentCurrencyPipe, GreenButtonComponent, ImageGalleryComponent, CategoryNamePipe, RouterLink],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
@@ -115,6 +117,23 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     const last = this.images.length - 1;
     const next = this.selectedImageIndex() === last ? 0 : this.selectedImageIndex() + 1;
     this.selectedImageIndex.set(next);
+  }
+
+  seller(): SellerSummary | null {
+    if (this.productState().type !== 'success') {
+      return null;
+    }
+
+    return this.productState().data.seller ?? null;
+  }
+
+  sellerInitials(name: string): string {
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('');
   }
 
 }
