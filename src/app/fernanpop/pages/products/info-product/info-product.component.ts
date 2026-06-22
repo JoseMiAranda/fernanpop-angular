@@ -7,6 +7,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
+import { FavoritesService } from '../../../../services/favorites.service';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { ImageGalleryComponent } from '../../../components/image-gallery/image-gallery.component';
 import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
@@ -29,6 +30,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   @Input('id') productId: string | undefined;
 
   public currentUser = this.authService.currentUser;
+  public favoriteIds = this.favoritesService.favoriteIds;
   public productState = signal<State>(new LoadingState());
   images: string[] = [];
   private getProductsByIdSubscription: Subscription = new Subscription();
@@ -40,6 +42,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   constructor(
     private transactionsService: TransactionsService,
+    private favoritesService: FavoritesService,
     private productService: ProductsService,
     private categoriesService: CategoriesService,
     private authService: AuthService,
@@ -134,6 +137,36 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase() ?? '')
       .join('');
+  }
+
+  canShowFavorite(): boolean {
+    if (this.productState().type !== 'success') {
+      return false;
+    }
+
+    const currentUser = this.currentUser();
+    return !!currentUser && currentUser.uid !== this.productState().data.sellerId;
+  }
+
+  isFavorite(): boolean {
+    if (this.productState().type !== 'success' || !this.productId) {
+      return false;
+    }
+
+    return this.favoriteIds().has(this.productId);
+  }
+
+  toggleFavorite(): void {
+    if (!this.authService.currentUser()) {
+      this.router.navigate(['/fernanpop/login']);
+      return;
+    }
+
+    if (!this.productId) {
+      return;
+    }
+
+    this.favoritesService.toggleFavorite(this.productId).subscribe();
   }
 
 }

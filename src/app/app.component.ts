@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { FavoritesService } from './services/favorites.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit {
 
   authService = inject(AuthService);
+  favoritesService = inject(FavoritesService);
 
   title = 'fernanpop';
 
@@ -25,8 +27,10 @@ export class AppComponent implements OnInit {
           email: user.email!,
           accessToken: token,
         });
+        this.favoritesService.loadFavoriteIds();
       } else {
         this.authService.currentUser.set(null);
+        this.favoritesService.clearFavorites();
       }
     });
   }

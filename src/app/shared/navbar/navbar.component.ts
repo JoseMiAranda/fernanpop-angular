@@ -31,12 +31,21 @@ export class NavbarComponent implements OnInit {
           icon: 'box',
           action: () => this.router.navigate(['fernanpop/user/products']),
         },
-        {
-          label: 'Transacciones',
-          icon: 'truck',
-          action: () => this.router.navigate(['fernanpop/user/transactions']),
-        },
       ];
+
+      if (user) {
+        menuItems.push({
+          label: 'Favoritos',
+          icon: 'heart',
+          action: () => this.router.navigate(['fernanpop/user/favorites']),
+        });
+      }
+
+      menuItems.push({
+        label: 'Transacciones',
+        icon: 'truck',
+        action: () => this.router.navigate(['fernanpop/user/transactions']),
+      });
 
       if (!user) {
         menuItems.push({

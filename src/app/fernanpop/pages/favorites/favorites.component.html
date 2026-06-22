@@ -1,0 +1,25 @@
+@if (favoritesState().type === 'loading') {
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <p class="text-on-surface-variant">Cargando favoritos...</p>
+</div>
+}
+
+@if (favoritesState().type === 'success') {
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <h1 class="mb-stack-lg font-headline text-2xl font-bold text-on-surface">Mis favoritos</h1>
+
+    @if (displayedProducts().length > 0) {
+    <app-list-products [listProducts]="displayedProducts()" variant="stitch"></app-list-products>
+    } @else {
+    <div class="flex min-h-[40vh] items-center justify-center">
+        <p class="text-on-surface-variant">No tienes favoritos aún</p>
+    </div>
+    }
+</div>
+}
+
+@if (favoritesState().type === 'error') {
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <p class="text-on-surface-variant">Error: {{ favoritesState().error }}</p>
+</div>
+}

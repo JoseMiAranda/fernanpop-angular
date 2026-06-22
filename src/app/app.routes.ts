@@ -11,6 +11,7 @@ import { LoggedGuard } from './guards/logged.guard';
 import { CreateProductComponent } from './fernanpop/pages/products/create-product/create-product.component';
 import { UpdateProductComponent } from './fernanpop/pages/products/update-product/update-product.component';
 import { TransactionsComponent } from './fernanpop/pages/transactions/transactions.component';
+import { FavoritesComponent } from './fernanpop/pages/favorites/favorites.component';
 
 export const routes: Routes = [
     {
@@ -71,6 +72,12 @@ export const routes: Routes = [
                 path: 'update-product/:id',
                 title: 'update-product',
                 loadComponent: () => UpdateProductComponent,
+            },
+            {
+                canActivate: [LoggedGuard],
+                path: 'user/favorites',
+                title: 'favorites',
+                loadComponent: () => FavoritesComponent,
             },
             {
                 // Solamente accesible si no está logueado
