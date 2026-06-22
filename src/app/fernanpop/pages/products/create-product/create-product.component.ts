@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../../../../services/products.service';
 import { CategoriesService } from '../../../../services/categories.service';
-import { Product } from '../../../../interfaces/product.interface';
+import { Product, PRODUCT_CONDITIONS } from '../../../../interfaces/product.interface';
 import { Category } from '../../../../interfaces/category.interface';
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
@@ -35,12 +35,14 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   public isLoading = false;
   public existImage = false;
   public categories: Category[] = [];
+  public conditions = PRODUCT_CONDITIONS;
   private categoriesSubscription: Subscription = new Subscription();
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
     price: new FormControl(null),
     categoryId: new FormControl(null),
+    condition: new FormControl(null),
     img: new FormControl(null),
     desc: new FormControl(null),
   });
@@ -76,6 +78,12 @@ export class CreateProductComponent implements OnInit, OnDestroy {
           ]
         ],
         categoryId: [
+          null,
+          [
+            Validators.required,
+          ]
+        ],
+        condition: [
           null,
           [
             Validators.required,
@@ -138,7 +146,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   }
 
   createProduct() {
-    const { title, price, desc, categoryId } = this.form.value;
+    const { title, price, desc, categoryId, condition } = this.form.value;
 
     const newProduct: Product = {
       id: '',
@@ -147,6 +155,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       price: price,
       desc: desc,
       categoryId: categoryId,
+      condition: condition,
       images: this.urlsSignal(),
       createdAt: new Date(),
       updatedAt: new Date(),

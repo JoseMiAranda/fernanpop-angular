@@ -162,6 +162,25 @@
 
                             <div class="md:col-span-2">
                                 <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Estado
+                                </label>
+                                <select formControlName="condition"
+                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    [class.border-error]="submitted && f['condition'].errors">
+                                    <option value="" disabled>Selecciona el estado</option>
+                                    @for (condition of conditions; track condition.id) {
+                                    <option [value]="condition.id">{{ condition.name }}</option>
+                                    }
+                                </select>
+                                @if (submitted && f['condition'].errors) {
+                                <div class="mt-1 text-sm text-error">
+                                    @if (f['condition'].errors['required']) { Estado requerido }
+                                </div>
+                                }
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
                                     Descripción
                                 </label>
                                 <textarea formControlName="desc" rows="5"

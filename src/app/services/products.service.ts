@@ -77,8 +77,8 @@ export class ProductsService {
 
   // CREATE
   createProduct(newProduct: Product): Observable<CustomResponse> {
-    const { title, desc, price, images, categoryId } = newProduct;
-    const productData = { title, desc, price, images, categoryId };
+    const { title, desc, price, images, categoryId, condition } = newProduct;
+    const productData = { title, desc, price, images, categoryId, condition };
     return this.http.post<Product>(this.baseUrl + '/products', productData).pipe(
       map((response: Product) => {
         return new SuccessResponse(response);
@@ -91,8 +91,8 @@ export class ProductsService {
 
   // UPDATE
   updateProduct(updatedProduct: Product): Observable<CustomResponse> {
-    const { title, desc, price, images, status, categoryId } = updatedProduct;
-    const productData = { title, desc, price, images, status, categoryId };
+    const { title, desc, price, images, status, categoryId, condition } = updatedProduct;
+    const productData = { title, desc, price, images, status, categoryId, condition };
     return this.http.patch<Product>(this.baseUrl + `/products/${updatedProduct.id}`, productData).pipe(
       map((response: Product) => {
         return new SuccessResponse(response);

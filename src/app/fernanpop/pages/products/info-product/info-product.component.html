@@ -85,6 +85,9 @@
                         </h1>
                         <p class="mb-stack-sm text-sm font-medium uppercase tracking-wider text-on-surface-variant">
                             {{ productState().data.categoryId | categoryName:categories }}
+                            @if (productState().data.condition) {
+                            · {{ productState().data.condition | conditionName }}
+                            }
                         </p>
                         <span class="font-headline text-2xl font-semibold text-on-surface md:text-3xl">
                             {{ productState().data.price | monetary }}

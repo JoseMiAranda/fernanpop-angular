@@ -11,6 +11,7 @@ import { FavoritesService } from '../../../../services/favorites.service';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { ImageGalleryComponent } from '../../../components/image-gallery/image-gallery.component';
 import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
+import { ConditionNamePipe } from '../../../../pipes/condition-name.pipe';
 import { Category } from '../../../../interfaces/category.interface';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
@@ -23,7 +24,7 @@ import { SellerReviewsSummary } from '../../../../interfaces/review.interface';
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, GreenButtonComponent, ImageGalleryComponent, CategoryNamePipe, RouterLink],
+  imports: [CommonModule, CurrentCurrencyPipe, GreenButtonComponent, ImageGalleryComponent, CategoryNamePipe, ConditionNamePipe, RouterLink],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })

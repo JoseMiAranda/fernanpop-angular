@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
-import { Product } from '../../../../interfaces/product.interface';
+import { Product, PRODUCT_CONDITIONS } from '../../../../interfaces/product.interface';
 import { Category } from '../../../../interfaces/category.interface';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductsService } from '../../../../services/products.service';
@@ -41,6 +41,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public confirmVisible = signal(false);
   public previewIndex = signal(0);
   public categories: Category[] = [];
+  public conditions = PRODUCT_CONDITIONS;
   private pendingConfirmAction: (() => void) | null = null;
   private categoriesSubscription: Subscription = new Subscription();
 
@@ -48,6 +49,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     title: new FormControl(null),
     price: new FormControl(null),
     categoryId: new FormControl(null),
+    condition: new FormControl(null),
     img: new FormControl(null),
     desc: new FormControl(null),
   });
@@ -75,13 +77,14 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));
-          const { title, price, img, desc, categoryId } = response.data;
+          const { title, price, img, desc, categoryId, condition } = response.data;
           this.form.patchValue({
             title: title,
             price: price,
             img: img,
             desc: desc,
             categoryId: categoryId ?? '',
+            condition: condition ?? '',
           });
         } else if (response instanceof ErrorResponse) {
           this.router.navigate(['fernanpop/error/'], {
@@ -110,6 +113,12 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
           ]
         ],
         categoryId: [
+          null,
+          [
+            Validators.required,
+          ]
+        ],
+        condition: [
           null,
           [
             Validators.required,
@@ -184,7 +193,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   }
   
   updateProduct() {
-    const { title, price, desc, categoryId } = this.form.value;
+    const { title, price, desc, categoryId, condition } = this.form.value;
     const { id, sellerId, images, status, createdAt } = this.productState().data;
   
     const updatedProduct: Product = {
@@ -194,6 +203,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       price: price,
       desc: desc,
       categoryId: categoryId,
+      condition: condition,
       images: images,
       status: status,
       createdAt: createdAt,

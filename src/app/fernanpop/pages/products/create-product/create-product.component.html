@@ -58,6 +58,24 @@
 				  }
 				</div>
 				<div class="form-group space-y-2">
+				  <label class="text-sm font-medium text-gray-700 tracking-wide">Estado</label>
+				  <select formControlName="condition"
+					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['condition'].errors }">
+					<option value="" disabled>Selecciona el estado</option>
+					@for (condition of conditions; track condition.id) {
+					<option [value]="condition.id">{{ condition.name }}</option>
+					}
+				  </select>
+				  @if (submitted && f['condition'].errors) {
+				  <div class="invalid-feedback">
+					@if (f['condition'].errors['required']) {
+					<div class="text-red-500">Estado requerido</div>
+					}
+				  </div>
+				  }
+				</div>
+				<div class="form-group space-y-2">
 				  <label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
 				  <input type="text" formControlName="desc"
 					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"

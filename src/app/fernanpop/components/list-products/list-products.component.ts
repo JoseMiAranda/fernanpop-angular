@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 import { CategoryNamePipe } from '../../../pipes/category-name.pipe';
+import { ConditionNamePipe } from '../../../pipes/condition-name.pipe';
 import { AuthService } from '../../../services/auth.service';
 import { CategoriesService } from '../../../services/categories.service';
 import { FavoritesService } from '../../../services/favorites.service';
@@ -14,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [CommonModule, RouterLink, CurrentCurrencyPipe, CategoryNamePipe],
+  imports: [CommonModule, RouterLink, CurrentCurrencyPipe, CategoryNamePipe, ConditionNamePipe],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })
