@@ -35,6 +35,11 @@ export class NavbarComponent implements OnInit {
 
       if (user) {
         menuItems.push({
+          label: 'Mi perfil',
+          icon: 'user',
+          action: () => this.router.navigate(['fernanpop/seller', user.uid]),
+        });
+        menuItems.push({
           label: 'Favoritos',
           icon: 'heart',
           action: () => this.router.navigate(['fernanpop/user/favorites']),
