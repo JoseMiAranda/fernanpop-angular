@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Product } from '../../../../interfaces/product.interface';
+import { Category } from '../../../../interfaces/category.interface';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductsService } from '../../../../services/products.service';
+import { CategoriesService } from '../../../../services/categories.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -38,11 +40,14 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public existImage = false;
   public confirmVisible = signal(false);
   public previewIndex = signal(0);
+  public categories: Category[] = [];
   private pendingConfirmAction: (() => void) | null = null;
+  private categoriesSubscription: Subscription = new Subscription();
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
     price: new FormControl(null),
+    categoryId: new FormControl(null),
     img: new FormControl(null),
     desc: new FormControl(null),
   });
@@ -51,22 +56,32 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private productsService: ProductsService,
+    private categoriesService: CategoriesService,
     private imagesService: ImagesService,
     private router: Router,
     private location: Location,
   ) { }
 
   ngOnInit(): void {
+    this.categoriesSubscription = this.categoriesService.getCategories().subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.categories = response.data;
+        }
+      },
+    });
+
     this.getProductsByIdSubscription = this.productsService.getProductById(this.productId!).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));
-          const { title, price, img, desc } = response.data;
+          const { title, price, img, desc, categoryId } = response.data;
           this.form.patchValue({
             title: title,
             price: price,
             img: img,
-            desc: desc
+            desc: desc,
+            categoryId: categoryId ?? '',
           });
         } else if (response instanceof ErrorResponse) {
           this.router.navigate(['fernanpop/error/'], {
@@ -94,6 +109,12 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
             Validators.required,
           ]
         ],
+        categoryId: [
+          null,
+          [
+            Validators.required,
+          ]
+        ],
         desc: [
           null,
           [
@@ -110,6 +131,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.getProductsByIdSubscription.unsubscribe();
     this.updateProductSubscription.unsubscribe();
     this.deleteProductSubscription.unsubscribe();
+    this.categoriesSubscription.unsubscribe();
   }
 
   // Obtenemos un campo del formulario
@@ -162,7 +184,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   }
   
   updateProduct() {
-    const { title, price, desc } = this.form.value;
+    const { title, price, desc, categoryId } = this.form.value;
     const { id, sellerId, images, status, createdAt } = this.productState().data;
   
     const updatedProduct: Product = {
@@ -171,6 +193,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       title: title,
       price: price,
       desc: desc,
+      categoryId: categoryId,
       images: images,
       status: status,
       createdAt: createdAt,

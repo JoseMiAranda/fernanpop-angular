@@ -10,6 +10,7 @@ export interface Product {
     desc: string;
     price: number;
     images: string[];
+    categoryId?: string;
     createdAt: Date;
     updatedAt: Date;
     status: ProductStatus[];

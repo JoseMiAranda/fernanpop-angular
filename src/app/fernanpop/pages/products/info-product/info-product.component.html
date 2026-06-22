@@ -82,6 +82,9 @@
                     <h1 class="mb-stack-sm font-headline text-3xl font-bold leading-tight text-on-surface md:text-4xl lg:text-5xl">
                         {{ productState().data.title | titlecase }}
                     </h1>
+                    <p class="mb-stack-sm text-sm font-medium uppercase tracking-wider text-on-surface-variant">
+                        {{ productState().data.categoryId | categoryName:categories }}
+                    </p>
                     <span class="font-headline text-2xl font-semibold text-on-surface md:text-3xl">
                         {{ productState().data.price | monetary }}
                     </span>

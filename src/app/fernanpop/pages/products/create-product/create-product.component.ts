@@ -3,7 +3,9 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModu
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '../../../../services/products.service';
+import { CategoriesService } from '../../../../services/categories.service';
 import { Product } from '../../../../interfaces/product.interface';
+import { Category } from '../../../../interfaces/category.interface';
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { InitialState, LoadingState, State } from '../../../../states/state.interface';
@@ -32,19 +34,31 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   public submitted = false;
   public isLoading = false;
   public existImage = false;
+  public categories: Category[] = [];
+  private categoriesSubscription: Subscription = new Subscription();
 
   form: FormGroup = new FormGroup({
     title: new FormControl(null),
     price: new FormControl(null),
+    categoryId: new FormControl(null),
     img: new FormControl(null),
     desc: new FormControl(null),
   });
 
 
-  constructor(private formBuilder: FormBuilder, private productsService: ProductsService, 
+  constructor(private formBuilder: FormBuilder, private productsService: ProductsService,
+    private categoriesService: CategoriesService,
     private imagesService: ImagesService, private router: Router) { }
 
   ngOnInit(): void {
+    this.categoriesSubscription = this.categoriesService.getCategories().subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.categories = response.data;
+        }
+      },
+    });
+
     this.form = this.formBuilder.group(
       {
         title: [
@@ -56,6 +70,12 @@ export class CreateProductComponent implements OnInit, OnDestroy {
           ],
         ],
         price: [
+          null,
+          [
+            Validators.required,
+          ]
+        ],
+        categoryId: [
           null,
           [
             Validators.required,
@@ -75,6 +95,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.createProductSubscription.unsubscribe();
+    this.categoriesSubscription.unsubscribe();
   }
 
   // Obtenemos un campo del formulario
@@ -117,7 +138,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   }
 
   createProduct() {
-    const { title, price, desc } = this.form.value;
+    const { title, price, desc, categoryId } = this.form.value;
 
     const newProduct: Product = {
       id: '',
@@ -125,6 +146,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       title: title,
       price: price,
       desc: desc,
+      categoryId: categoryId,
       images: this.urlsSignal(),
       createdAt: new Date(),
       updatedAt: new Date(),

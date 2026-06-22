@@ -143,6 +143,25 @@
 
                             <div class="md:col-span-2">
                                 <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Categoría
+                                </label>
+                                <select formControlName="categoryId"
+                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    [class.border-error]="submitted && f['categoryId'].errors">
+                                    <option value="" disabled>Selecciona una categoría</option>
+                                    @for (category of categories; track category.id) {
+                                    <option [value]="category.id">{{ category.name }}</option>
+                                    }
+                                </select>
+                                @if (submitted && f['categoryId'].errors) {
+                                <div class="mt-1 text-sm text-error">
+                                    @if (f['categoryId'].errors['required']) { Categoría requerida }
+                                </div>
+                                }
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
                                     Descripción
                                 </label>
                                 <textarea formControlName="desc" rows="5"

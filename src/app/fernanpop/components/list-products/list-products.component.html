@@ -23,6 +23,9 @@
                     {{ product.title | titlecase }}
                 </h3>
             </a>
+            <p class="truncate text-xs text-slate-400">
+                {{ product.categoryId | categoryName:categories }}
+            </p>
 
             <div class="flex items-center justify-between gap-2">
                 <span class="text-sm text-slate-300">

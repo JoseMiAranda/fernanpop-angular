@@ -40,6 +40,24 @@
 				  }
 				</div>
 				<div class="form-group space-y-2">
+				  <label class="text-sm font-medium text-gray-700 tracking-wide">Categoría</label>
+				  <select formControlName="categoryId"
+					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
+					[ngClass]="{ 'is-invalid': submitted && f['categoryId'].errors }">
+					<option value="" disabled>Selecciona una categoría</option>
+					@for (category of categories; track category.id) {
+					<option [value]="category.id">{{ category.name }}</option>
+					}
+				  </select>
+				  @if (submitted && f['categoryId'].errors) {
+				  <div class="invalid-feedback">
+					@if (f['categoryId'].errors['required']) {
+					<div class="text-red-500">Categoría requerida</div>
+					}
+				  </div>
+				  }
+				</div>
+				<div class="form-group space-y-2">
 				  <label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
 				  <input type="text" formControlName="desc"
 					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
