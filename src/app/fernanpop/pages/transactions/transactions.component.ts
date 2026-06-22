@@ -9,14 +9,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 import { StatusPipe } from '../../../pipes/status.pipe';
 import { ConfirmDialogComponent } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
-import { ColorStatusPipe } from '../../../pipes/color-status.pipe';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, ConfirmDialogComponent, RouterLink, StatusPipe, DatePipe, ColorStatusPipe],
+  imports: [CommonModule, CurrentCurrencyPipe, ConfirmDialogComponent, RouterLink, StatusPipe, DatePipe],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })

@@ -19,7 +19,9 @@ module.exports = {
         'surface-container-highest': '#d9e4e9',
         'gallery-bg': '#f3f7f8',
         error: '#ba1a1a',
+        'error-container': '#ffdad6',
         outline: '#6d7a77',
+        'surface-container-lowest': '#ffffff',
       },
       fontFamily: {
         headline: ['Montserrat', 'sans-serif'],
