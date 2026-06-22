@@ -17,6 +17,8 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../inte
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { SellerSummary } from '../../../../interfaces/seller.interface';
+import { ReviewsService } from '../../../../services/reviews.service';
+import { SellerReviewsSummary } from '../../../../interfaces/review.interface';
 
 @Component({
   selector: 'app-info-product',
@@ -36,15 +38,18 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   private getProductsByIdSubscription: Subscription = new Subscription();
   public buyProductState = signal<State>(new InitialState());
   public selectedImageIndex = signal(0);
+  public sellerReviewsSummary = signal<SellerReviewsSummary>({ averageScore: 0, totalReviews: 0, reviews: [] });
   public categories: Category[] = [];
   private buyProductSubscription: Subscription = new Subscription();
   private categoriesSubscription: Subscription = new Subscription();
+  private reviewsSubscription: Subscription = new Subscription();
 
   constructor(
     private transactionsService: TransactionsService,
     private favoritesService: FavoritesService,
     private productService: ProductsService,
     private categoriesService: CategoriesService,
+    private reviewsService: ReviewsService,
     private authService: AuthService,
     private router: Router,
     private location: Location,
@@ -65,6 +70,11 @@ export class InfoProductComponent implements OnInit, OnDestroy {
           this.productState.set(new SuccessState(response.data));
           this.images = this.productState().data.images;
           this.selectedImageIndex.set(0);
+
+          const sellerId = response.data.seller?.id ?? response.data.sellerId;
+          if (sellerId) {
+            this.loadSellerReviews(sellerId);
+          }
         } else if (response instanceof ErrorResponse) {
           this.productState.set(new ErrorState(response.error));
         }
@@ -76,6 +86,18 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     this.getProductsByIdSubscription.unsubscribe();
     this.buyProductSubscription.unsubscribe();
     this.categoriesSubscription.unsubscribe();
+    this.reviewsSubscription.unsubscribe();
+  }
+
+  private loadSellerReviews(sellerId: string): void {
+    this.reviewsSubscription.unsubscribe();
+    this.reviewsSubscription = this.reviewsService.getSellerReviews(sellerId).subscribe({
+      next: (response: CustomResponse) => {
+        if (response instanceof SuccessResponse) {
+          this.sellerReviewsSummary.set(response.data);
+        }
+      },
+    });
   }
 
   buy() {
@@ -137,6 +159,10 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase() ?? '')
       .join('');
+  }
+
+  formatRating(score: number): string {
+    return score % 1 === 0 ? score.toFixed(0) : score.toFixed(1);
   }
 
   canShowFavorite(): boolean {
