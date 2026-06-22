@@ -23,6 +23,7 @@ export class ListProductsComponent implements OnInit, OnDestroy {
   private categoriesSubscription: Subscription = new Subscription();
 
   @Input() listProducts: Product[] = [];
+  @Input() compact = false;
 
   constructor(
     private authService: AuthService,

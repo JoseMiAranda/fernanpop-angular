@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Product, } from '../interfaces/product.interface';
@@ -18,8 +18,34 @@ export class ProductsService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   // SELECT
-  getProducts({ page = 1, q = '', minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER }): Observable<CustomResponse> {
-    return this.http.get<ProductsResponse>(this.baseUrl + `/products?page=${page}&q=${q}`).pipe(
+  getProducts({
+    page = 1,
+    q = '',
+    price_min,
+    price_max,
+    categoryId,
+  }: {
+    page?: number;
+    q?: string;
+    price_min?: number;
+    price_max?: number;
+    categoryId?: string;
+  } = {}): Observable<CustomResponse> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('q', q);
+
+    if (price_min != null && price_min > 0) {
+      params = params.set('price_min', price_min);
+    }
+    if (price_max != null) {
+      params = params.set('price_max', price_max);
+    }
+    if (categoryId) {
+      params = params.set('categoryId', categoryId);
+    }
+
+    return this.http.get<ProductsResponse>(this.baseUrl + '/products', { params }).pipe(
       map((response: ProductsResponse) => {
         return new SuccessResponse(response);
       }),
