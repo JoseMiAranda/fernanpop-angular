@@ -1,25 +1,32 @@
-<div class="flex flex-col h-full justify-between">
-
-  <div *ngIf="productsState().type === 'loading'" class="w-full h-full flex justify-center items-center">
-    <p>Cargando productos...</p>
-  </div>
-
-  <div *ngIf="productsState().type === 'success'">
-    <app-list-products [listProducts]="productsState().data['products']"></app-list-products>
-  </div>
-
-  <div *ngIf="productsState().type === 'error'" class="w-full h-full flex justify-center items-center">
-    <p>Error: {{ productsState().error }}</p>
-  </div>
-
-  <div class="flex justify-center py-8">
-    <button class="max-w-40 relative w-fit inline-flex items-center justify-center 
-                    text-sm font-medium text-gray-900 
-                    rounded-lg bg-teal-700
-                  dark:text-white">
-      <button (click)="onClick()" class="w-full flex gap-3 truncate relative px-2 py-2 text-white">
-        <h1>Ver todo</h1>
-      </button>
-    </button>
-  </div>
+@if (productsState().type === 'loading') {
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <p class="text-on-surface-variant">Cargando productos...</p>
 </div>
+}
+
+@if (productsState().type === 'success') {
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <h1 class="mb-stack-lg font-headline text-2xl font-bold text-on-surface">Últimos productos</h1>
+
+    @if (productsState().data['products'].length > 0) {
+    <app-list-products [listProducts]="productsState().data['products']"></app-list-products>
+
+    <div class="mt-stack-lg flex justify-center">
+        <button type="button" (click)="onClick()"
+            class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90">
+            Ver todo
+        </button>
+    </div>
+    } @else {
+    <div class="flex min-h-[40vh] items-center justify-center">
+        <p class="text-on-surface-variant">No hay productos disponibles</p>
+    </div>
+    }
+</div>
+}
+
+@if (productsState().type === 'error') {
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <p class="text-on-surface-variant">Error: {{ productsState().error }}</p>
+</div>
+}

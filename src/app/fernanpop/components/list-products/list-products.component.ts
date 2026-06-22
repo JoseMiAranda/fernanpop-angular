@@ -26,7 +26,7 @@ export class ListProductsComponent implements OnInit, OnDestroy {
 
   @Input() listProducts: Product[] = [];
   @Input() compact = false;
-  @Input() variant: 'legacy' | 'stitch' = 'legacy';
+  @Input() variant: 'legacy' | 'stitch' = 'stitch';
 
   constructor(
     private authService: AuthService,

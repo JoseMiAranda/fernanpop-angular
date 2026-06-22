@@ -23,9 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private productsService: ProductsService, private router: Router) {}
 
   onClick() {
-    this.router.navigate(['/fernanpop/products'], {
-      queryParams: {page: 2}
-    });
+    this.router.navigate(['/fernanpop/products']);
   }
   
   ngOnInit(): void {

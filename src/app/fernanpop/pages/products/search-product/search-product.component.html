@@ -1,76 +1,86 @@
 @if (productsState().type === 'loading') {
-<div class="flex h-full w-full items-center justify-center py-16">
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
     <p class="text-on-surface-variant">Cargando productos...</p>
 </div>
 }
 
 @if (productsState().type === 'success') {
-<div class="mx-auto flex max-w-[1400px] flex-col gap-6 px-4 py-8 lg:flex-row lg:px-8">
-    <aside class="w-full shrink-0 lg:w-64">
-        <div class="sticky top-4 rounded-xl border border-outline-variant bg-white p-5 shadow-sm">
-            <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-on-surface">Filtros</h2>
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div class="flex flex-col gap-6 lg:flex-row lg:gap-8">
+        <aside class="w-full shrink-0 lg:w-64">
+            <div class="sticky top-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
+                <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-on-surface">Filtros</h2>
 
-            <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="space-y-5">
-                <div>
-                    <p class="mb-3 text-sm font-medium text-on-surface">Precio</p>
-                    <div class="space-y-2">
-                        <div>
-                            <label class="mb-1 block text-xs text-on-surface-variant">Mínimo (€)</label>
-                            <input type="number" formControlName="price_min" min="0" placeholder="0"
-                                class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
-                        </div>
-                        <div>
-                            <label class="mb-1 block text-xs text-on-surface-variant">Máximo (€)</label>
-                            <input type="number" formControlName="price_max" min="0" placeholder="Sin límite"
-                                class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+                <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="space-y-5">
+                    <div>
+                        <p class="mb-3 text-sm font-medium text-on-surface">Precio</p>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="mb-1 block text-xs text-on-surface-variant">Mínimo (€)</label>
+                                <input type="number" formControlName="price_min" min="0" placeholder="0"
+                                    class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+                            </div>
+                            <div>
+                                <label class="mb-1 block text-xs text-on-surface-variant">Máximo (€)</label>
+                                <input type="number" formControlName="price_max" min="0" placeholder="Sin límite"
+                                    class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div>
-                    <p class="mb-3 text-sm font-medium text-on-surface">Categoría</p>
-                    <select formControlName="categoryId"
-                        class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
-                        <option value="">Todas las categorías</option>
-                        @for (category of categories; track category.id) {
-                        <option [value]="category.id">{{ category.name }}</option>
-                        }
-                    </select>
-                </div>
+                    <div>
+                        <p class="mb-3 text-sm font-medium text-on-surface">Categoría</p>
+                        <select formControlName="categoryId"
+                            class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+                            <option value="">Todas las categorías</option>
+                            @for (category of categories; track category.id) {
+                            <option [value]="category.id">{{ category.name }}</option>
+                            }
+                        </select>
+                    </div>
 
-                <div class="flex flex-col gap-2 pt-2">
-                    <button type="submit"
-                        class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90">
-                        Aplicar filtros
-                    </button>
-                    <button type="button" (click)="clearFilters()"
-                        class="rounded-lg border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low">
-                        Limpiar filtros
-                    </button>
-                </div>
-            </form>
-        </div>
-    </aside>
+                    <div class="flex flex-col gap-2 pt-2">
+                        <button type="submit"
+                            class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90">
+                            Aplicar filtros
+                        </button>
+                        <button type="button" (click)="clearFilters()"
+                            class="rounded-lg border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low">
+                            Limpiar filtros
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </aside>
 
-    <main class="min-w-0 flex-1">
-        <h1 class="mb-6 text-center text-lg font-medium text-on-surface">
-            Se han encontrado {{ productsState().data['total'] }} resultados
-        </h1>
+        <main class="min-w-0 flex-1">
+            <h1 class="mb-stack-lg font-headline text-2xl font-bold text-on-surface">
+                {{ productsState().data['total'] }}
+                {{ productsState().data['total'] === 1 ? 'resultado' : 'resultados' }}
+            </h1>
 
-        <app-list-products [listProducts]="productsState().data['products']" [compact]="true"></app-list-products>
+            @if (productsState().data['products'].length > 0) {
+            <app-list-products [listProducts]="productsState().data['products']"></app-list-products>
+            } @else {
+            <div class="flex min-h-[40vh] items-center justify-center rounded-xl border border-outline-variant bg-surface-container-lowest">
+                <p class="text-on-surface-variant">No se encontraron productos</p>
+            </div>
+            }
 
-        <app-paginator
-            [page]="productsState().data['page']"
-            [limit]="productsState().data['limit']"
-            [total]="productsState().data['total']"
-            (pageChange)="onPageChange($event)">
-        </app-paginator>
-    </main>
+            <app-paginator
+                class="mt-stack-lg block"
+                [page]="productsState().data['page']"
+                [limit]="productsState().data['limit']"
+                [total]="productsState().data['total']"
+                (pageChange)="onPageChange($event)">
+            </app-paginator>
+        </main>
+    </div>
 </div>
 }
 
 @if (productsState().type === 'error') {
-<div class="flex h-full w-full items-center justify-center py-16">
-    <p class="text-error">Error: {{ productsState().error }}</p>
+<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <p class="text-on-surface-variant">Error: {{ productsState().error }}</p>
 </div>
 }
