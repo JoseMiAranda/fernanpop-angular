@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-image-drop',
@@ -8,6 +8,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrl: './image-drop.component.css'
 })
 export class ImageDropComponent implements OnInit {
+  @Input() compact = false;
   public validImages: string[] = [
     'image/png',
     'image/jpeg',
@@ -32,13 +33,13 @@ export class ImageDropComponent implements OnInit {
     };
 
     const highlight = (e: DragEvent) => {
-      dropZone.classList.remove('border-gray-300');
-      dropZone.classList.add('border-green-500', 'bg-green-50');
+      dropZone.classList.remove('border-outline-variant');
+      dropZone.classList.add('border-primary', 'bg-surface-container-high');
     };
 
     const unHighlight = (e: DragEvent) => {
-      dropZone.classList.remove('border-green-500', 'bg-green-50');
-      dropZone.classList.add('border-gray-300');
+      dropZone.classList.remove('border-primary', 'bg-surface-container-high');
+      dropZone.classList.add('border-outline-variant');
     };
 
     const createFileList = (files: File[]): FileList => {

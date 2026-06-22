@@ -1,22 +1,30 @@
-<div class="flex items-center justify-center w-full">
+@if (compact) {
+<label for="file-upload"
+    class="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-outline-variant text-on-surface-variant transition-colors hover:border-primary hover:bg-surface-container-high hover:text-primary"
+    id="drop-zone">
+    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+    </svg>
+    <span class="text-[10px] font-bold uppercase" id="lbl-selected-files">Añadir</span>
+    <input id="file-upload" name="imageFiles" type="file" accept="image/*" multiple class="hidden" />
+</label>
+} @else {
+<div class="flex w-full items-center justify-center">
     <label for="file-upload"
-        class="flex flex-col items-center justify-center w-full h-52 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+        class="flex h-52 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-outline-variant transition-colors hover:bg-surface-container-high"
         id="drop-zone">
-        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg class="w-8 h-8 mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 48 48" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
-                xmlns="http://www.w3.org/2000/svg" >
-                <path d="M24.008 41L24 23m16.518 11.316A9.21 9.21 0 0 0 44 24c-1.213-3.83-4.93-5.929-8.947-5.925h-2.321a14.737 14.737 0 1 0-25.31 13.429"/><path d="M30.364 27.636L24 21.272l-6.364 6.364"/>
+        <div class="flex flex-col items-center justify-center pb-6 pt-5">
+            <svg class="mb-4 size-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 48 48"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="4" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24.008 41L24 23m16.518 11.316A9.21 9.21 0 0 0 44 24c-1.213-3.83-4.93-5.929-8.947-5.925h-2.321a14.737 14.737 0 1 0-25.31 13.429" />
+                <path d="M30.364 27.636L24 21.272l-6.364 6.364" />
             </svg>
-            <p class="mb-2 text-sm text-gray-500" id="lbl-selected-files">
-                <span class="font-semibold">Click aquí </span> o arrastra los archivos
+            <p class="mb-2 text-sm text-secondary" id="lbl-selected-files">
+                <span class="font-semibold">Click aquí</span> o arrastra los archivos
             </p>
-            <p class="text-xs text-gray-500">
-                PNG, JPG, JPEG
-            </p>
+            <p class="text-xs text-on-surface-variant">PNG, JPG, JPEG</p>
         </div>
-
-        <!-- class="hidden" -->
-        <!-- accept only images -->
         <input id="file-upload" name="imageFiles" type="file" accept="image/*" multiple class="hidden" />
     </label>
 </div>
+}

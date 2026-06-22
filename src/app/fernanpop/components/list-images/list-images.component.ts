@@ -10,9 +10,16 @@ import { RedButtonComponent } from '../red-button/red-button.component';
 })
 export class ListImagesComponent {
   @Input() images: string[] = [];
-  @Output() deleteImage = new EventEmitter<any>();
+  @Input() selectedIndex = 0;
+  @Output() deleteImage = new EventEmitter<string>();
+  @Output() selectImage = new EventEmitter<number>();
 
-  onClick(image: string) {
+  onSelect(index: number) {
+    this.selectImage.emit(index);
+  }
+
+  onDelete(image: string, event: Event) {
+    event.stopPropagation();
     this.deleteImage.emit(image);
   }
 }

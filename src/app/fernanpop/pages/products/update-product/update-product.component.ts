@@ -2,14 +2,14 @@ import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Product } from '../../../../interfaces/product.interface';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductsService } from '../../../../services/products.service';
-import { Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
-import { RedButtonComponent } from '../../../components/red-button/red-button.component';
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 import { ImageDropComponent } from "../../../components/image-drop/image-drop.component";
 import { ImagesService } from '../../../../services/images.service';
@@ -17,7 +17,7 @@ import { ImagesService } from '../../../../services/images.service';
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent, GreenButtonComponent, RedButtonComponent, ListImagesComponent, ImageDropComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent, GreenButtonComponent, ListImagesComponent, ImageDropComponent],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
 })
@@ -37,6 +37,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public isLoading = false;
   public existImage = false;
   public confirmVisible = signal(false);
+  public previewIndex = signal(0);
   private pendingConfirmAction: (() => void) | null = null;
 
   form: FormGroup = new FormGroup({
@@ -47,8 +48,13 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   });
 
 
-  constructor(private formBuilder: FormBuilder, private productsService: ProductsService, private imagesService: ImagesService,
-    private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private productsService: ProductsService,
+    private imagesService: ImagesService,
+    private router: Router,
+    private location: Location,
+  ) { }
 
   ngOnInit(): void {
     this.getProductsByIdSubscription = this.productsService.getProductById(this.productId!).subscribe({
@@ -114,6 +120,9 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   deleteImage(image: string) {
     const images = this.productState().data.images.filter((i: string) => i !== image);
     this.productState.set(new SuccessState({ ...this.productState().data, images: images }));
+    if (this.previewIndex() >= images.length) {
+      this.previewIndex.set(Math.max(0, images.length - 1));
+    }
   }
 
   onDrop(files: FileList) {
@@ -146,6 +155,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       });
       const images = [...this.productState().data.images, ...newImages];
       this.productState.set(new SuccessState({ ...this.productState().data, images: images }));
+      this.previewIndex.set(images.length - 1);
     }).catch((error) => {
       console.error('Error al subir imágenes:', error);
     });
@@ -229,5 +239,9 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   onConfirmReject(): void {
     this.confirmVisible.set(false);
     this.pendingConfirmAction = null;
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

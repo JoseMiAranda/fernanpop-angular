@@ -14,7 +14,12 @@ module.exports = {
         secondary: '#586062',
         'outline-variant': '#bdc9c6',
         'surface-container-low': '#eaf5fa',
+        'surface-container': '#e4f0f4',
+        'surface-container-high': '#dfeaef',
+        'surface-container-highest': '#d9e4e9',
         'gallery-bg': '#f3f7f8',
+        error: '#ba1a1a',
+        outline: '#6d7a77',
       },
       fontFamily: {
         headline: ['Montserrat', 'sans-serif'],

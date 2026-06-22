@@ -1,8 +1,21 @@
-<ul class="flex flex-col space-y-2 w-full">
-    @for (image of images; track image) {
-        <li class="flex justify-between">
-            <img class="w-16 h-16 rounded-full" src="{{image}}" alt="Product Image">
-            <button (click)="onClick(image)">X</button>
-        </li>
+<div class="grid grid-cols-4 gap-stack-sm">
+    @for (image of images; track image; let i = $index) {
+    <div class="group relative aspect-square cursor-pointer rounded-lg border bg-white p-2 transition-colors"
+        [class.border-2]="i === selectedIndex"
+        [class.border-primary]="i === selectedIndex"
+        [class.border-outline-variant]="i !== selectedIndex"
+        [class.hover:border-primary]="i !== selectedIndex">
+        <button type="button" (click)="onSelect(i)" class="h-full w-full">
+            <img class="h-full w-full object-contain" [src]="image" alt="Imagen del producto" />
+        </button>
+        <button type="button" (click)="onDelete(image, $event)"
+            class="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full bg-white/90 text-error opacity-0 shadow-sm transition-opacity group-hover:opacity-100"
+            aria-label="Eliminar imagen">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.7 2.88 18.3 9.17 12 2.88 5.71 4.29 4.3 10.59 10.6 16.89 4.3z" />
+            </svg>
+        </button>
+    </div>
     }
-</ul>
+    <ng-content />
+</div>
