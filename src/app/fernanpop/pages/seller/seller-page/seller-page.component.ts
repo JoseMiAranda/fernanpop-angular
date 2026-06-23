@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SellersService } from '../../../../services/sellers.service';
 import { ReviewsService } from '../../../../services/reviews.service';
@@ -57,7 +57,6 @@ export class SellerPageComponent implements OnInit, OnDestroy {
     private sellersService: SellersService,
     private reviewsService: ReviewsService,
     private authService: AuthService,
-    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -130,10 +129,6 @@ export class SellerPageComponent implements OnInit, OnDestroy {
 
   setTab(tab: SellerTab): void {
     this.activeTab.set(tab);
-  }
-
-  goBack(): void {
-    this.location.back();
   }
 
   isOwnProfile(): boolean {

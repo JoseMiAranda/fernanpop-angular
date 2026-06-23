@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
 import { CategoriesService } from '../../../../services/categories.service';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -53,7 +52,6 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     private reviewsService: ReviewsService,
     private authService: AuthService,
     private router: Router,
-    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -127,10 +125,6 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   goToUpdate() {
     this.router.navigate(['/fernanpop/update-product', this.productId]);
-  }
-
-  goBack() {
-    this.location.back();
   }
 
   previousImage() {
