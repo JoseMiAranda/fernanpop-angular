@@ -27,6 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authService.currentUser.set({
           uid: user.uid,
           email: user.email!,
+          displayName: user.displayName ?? undefined,
+          photoUrl: user.photoURL ?? undefined,
         });
 
         void this.authService.refreshAccessToken().then(() => {

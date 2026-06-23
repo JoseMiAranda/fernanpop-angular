@@ -17,6 +17,8 @@ import { DropdownMenuItem } from './dropdown-menu-item.model';
 export class DropdownMenuComponent {
   @Input({ required: true }) items!: DropdownMenuItem[];
   @Input() ariaLabel = 'Abrir menú';
+  @Input() photoUrl?: string | null;
+  @Input() displayName?: string | null;
 
   open = signal(false);
 
@@ -42,5 +44,14 @@ export class DropdownMenuComponent {
   @HostListener('document:keydown.escape')
   onEscape() {
     this.open.set(false);
+  }
+
+  userInitials(name: string): string {
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('');
   }
 }

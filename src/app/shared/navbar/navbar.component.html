@@ -5,12 +5,11 @@
                 <app-title class="shrink-0"></app-title>
                 <app-searcher *ngIf="!apperarBottomSearcher()" class="hidden min-w-0 md:flex md:flex-1 md:px-6 lg:px-10"></app-searcher>
                 <div class="flex shrink-0 items-center justify-center gap-2 sm:gap-3">
-                    @if (currentUser()) {
-                        <span class="hidden text-sm text-gray-600 truncate max-w-[120px] md:inline md:max-w-[180px]">
-                            {{ currentUser()!.email }}
-                        </span>
-                    }
-                    <app-dropdown-menu [items]="items()" />
+                    <app-dropdown-menu
+                        [items]="items()"
+                        [photoUrl]="currentUser()?.photoUrl"
+                        [displayName]="userDisplayName()"
+                        [ariaLabel]="currentUser() ? 'Abrir menú de usuario' : 'Abrir menú'" />
                 </div>
             </div>
             <app-searcher *ngIf="apperarBottomSearcher()" class="min-w-0 px-2 pb-2 sm:px-4 md:hidden"></app-searcher>

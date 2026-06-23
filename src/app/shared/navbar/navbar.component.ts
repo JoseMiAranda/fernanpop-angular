@@ -78,6 +78,19 @@ export class NavbarComponent implements OnInit {
     return this.windowWidth < this.md;
   }
 
+  userDisplayName(): string | null {
+    const user = this.currentUser();
+    if (!user) {
+      return null;
+    }
+
+    if (user.displayName?.trim()) {
+      return user.displayName.trim();
+    }
+
+    return user.email.split('@')[0];
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['fernanpop']);
