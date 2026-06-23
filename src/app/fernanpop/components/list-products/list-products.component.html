@@ -6,7 +6,7 @@
     <div class="group cursor-pointer overflow-hidden transition-transform hover:-translate-y-1">
         <app-card variant="elevated" padding="none">
         <a [routerLink]="['/product', product.slug ?? product.id]" class="block">
-            <div class="relative h-48 overflow-hidden bg-surface-container sm:h-56 md:h-64">
+            <div class="relative h-48 overflow-hidden rounded-t-xl bg-surface-container sm:h-56 md:h-64">
                 @if (canShowFavorite(product)) {
                 <button type="button"
                     (click)="toggleFavorite($event, product.id!)"
