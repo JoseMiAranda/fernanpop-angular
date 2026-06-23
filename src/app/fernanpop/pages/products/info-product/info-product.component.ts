@@ -29,7 +29,7 @@ import { SellerReviewsSummary } from '../../../../interfaces/review.interface';
 })
 export class InfoProductComponent implements OnInit, OnDestroy {
 
-  @Input('id') productId: string | undefined;
+  @Input('slug') productSlug: string | undefined;
 
   public currentUser = this.authService.currentUser;
   public favoriteIds = this.favoritesService.favoriteIds;
@@ -63,7 +63,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.getProductsByIdSubscription = this.productService.getProductById(this.productId!).subscribe({
+    this.getProductsByIdSubscription = this.productService.getProductBySlug(this.productSlug!).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
           this.productState.set(new SuccessState(response.data));
@@ -107,7 +107,11 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.buyProductSubscription = this.transactionsService.createTransaction(this.productId!)
+    if (this.productState().type !== 'success') {
+      return;
+    }
+
+    this.buyProductSubscription = this.transactionsService.createTransaction(this.productState().data.id)
       .subscribe({
         next: (result: CustomResponse) => {
           if (result instanceof SuccessResponse) {
@@ -124,7 +128,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   }
 
   goToUpdate() {
-    this.router.navigate(['/fernanpop/update-product', this.productId]);
+    this.router.navigate(['/fernanpop/update-product', this.productState().data.id]);
   }
 
   previousImage() {
@@ -170,11 +174,12 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   }
 
   isFavorite(): boolean {
-    if (this.productState().type !== 'success' || !this.productId) {
+    if (this.productState().type !== 'success') {
       return false;
     }
 
-    return this.favoriteIds().has(this.productId);
+    const productId = this.productState().data.id;
+    return this.favoriteIds().has(productId);
   }
 
   toggleFavorite(): void {
@@ -183,11 +188,11 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.productId) {
+    if (this.productState().type !== 'success') {
       return;
     }
 
-    this.favoritesService.toggleFavorite(this.productId).subscribe();
+    this.favoritesService.toggleFavorite(this.productState().data.id).subscribe();
   }
 
 }

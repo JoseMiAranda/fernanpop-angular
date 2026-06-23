@@ -26,6 +26,7 @@ export const PRODUCT_CONDITIONS: ProductConditionOption[] = [
 
 export interface Product {
     id: string;
+    slug?: string;
     sellerId: string;
     title: string;
     desc: string;

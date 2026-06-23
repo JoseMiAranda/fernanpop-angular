@@ -24,7 +24,7 @@ export const routes: Routes = [
                 loadComponent: () => HomeComponent,
             },
             {
-                path: 'product/:id',
+                path: 'product/:slug',
                 title: 'product',
                 loadComponent: () => InfoProductComponent,
             },

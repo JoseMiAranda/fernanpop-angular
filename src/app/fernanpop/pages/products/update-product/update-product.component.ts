@@ -211,10 +211,11 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   
   updateProduct() {
     const { title, price, desc, categoryId, condition } = this.form.value;
-    const { id, sellerId, images, status, createdAt } = this.productState().data;
+    const { id, sellerId, images, status, createdAt, slug } = this.productState().data;
   
     const updatedProduct: Product = {
       id: id,
+      slug: slug,
       sellerId: sellerId,
       title: title,
       price: price,
@@ -230,7 +231,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.updateProductSubscription = this.productsService.updateProduct(updatedProduct).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
-          this.router.navigate(['/fernanpop/product', response.data.id]);
+          this.router.navigate(['/fernanpop/product', response.data.slug]);
           return;
         } 
         this.router.navigate(['fernanpop/error/'], {

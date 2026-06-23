@@ -179,7 +179,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     this.createProductSubscription = this.productsService.createProduct(newProduct).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
-          this.router.navigate(['/fernanpop/product', response.data.id]);
+          this.router.navigate(['/fernanpop/product', response.data.slug]);
           return;
         }
         this.router.navigate(['fernanpop/error/'], {

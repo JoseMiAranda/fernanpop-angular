@@ -70,6 +70,17 @@ export class ProductsService {
     );
   }
 
+  getProductBySlug(slug: string): Observable<CustomResponse> {
+    return this.http.get<Product>(this.baseUrl + '/products/' + slug)
+      .pipe(
+        map((response: Product) => {
+          return new SuccessResponse(response);
+        }),
+        catchError((err) => {
+          return of(new ErrorResponse(getErrorMessage(err)));
+        }));
+  }
+
   getProductById(id: string): Observable<CustomResponse> {
     return this.http.get<Product>(this.baseUrl + '/products/' + id)
       .pipe(

@@ -95,7 +95,7 @@
                     </div>
                     <div class="min-w-0 flex-1">
                         <a class="line-clamp-2 font-medium text-on-surface transition-colors hover:text-primary"
-                            [routerLink]="['/fernanpop/product', transaction.productId]">
+                            [routerLink]="['/fernanpop/product', transaction.productSlug ?? transaction.productId]">
                             {{ transaction.title | titlecase }}
                         </a>
                         <p class="mt-0.5 truncate text-xs text-outline">
@@ -227,7 +227,7 @@
                                 </div>
                                 <div class="min-w-0">
                                     <a class="font-medium text-on-surface transition-colors hover:text-primary"
-                                        [routerLink]="['/fernanpop/product', transaction.productId]">
+                                        [routerLink]="['/fernanpop/product', transaction.productSlug ?? transaction.productId]">
                                         {{ transaction.title | titlecase }}
                                     </a>
                                     <p class="truncate text-xs text-outline">

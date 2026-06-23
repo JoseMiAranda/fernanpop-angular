@@ -9,6 +9,7 @@ export enum StatusTransaction {
 export interface Transaction {
     id: string;
     productId: string;
+    productSlug?: string;
     sellerId: string;
     buyerId: string;
     sellerEmail: string;
