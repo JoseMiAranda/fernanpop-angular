@@ -1,32 +1,115 @@
-@if (productsState().type === 'loading') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <p class="text-on-surface-variant">Cargando productos...</p>
-</div>
-}
+<main class="bg-surface text-on-surface">
+  <!-- Hero -->
+  <section class="relative flex h-[420px] items-center overflow-hidden sm:h-[500px] md:h-[600px]">
+    <div class="absolute inset-0 z-0">
+      <div class="h-full w-full bg-cover bg-center" [style.background-image]="'url(' + heroImage + ')'"></div>
+      <div class="absolute inset-0 bg-black/30"></div>
+    </div>
+    <div class="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest/90 p-stack-lg backdrop-blur-md">
+        <p class="mb-stack-sm text-xs font-semibold uppercase tracking-widest text-primary">Fernanpop</p>
+        <h1 class="mb-stack-md font-headline text-3xl font-bold tracking-tight text-on-surface sm:text-4xl md:text-5xl">
+          Compra y vende de segunda mano
+        </h1>
+        <p class="mb-stack-lg max-w-lg font-body text-base text-on-surface-variant sm:text-lg">
+          Encuentra tesoros únicos, da una segunda vida a lo que ya no usas y conecta con vendedores de tu comunidad.
+        </p>
+        <button type="button" (click)="browseMarketplace()"
+          class="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:opacity-90 active:opacity-80">
+          Explorar productos
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
 
-@if (productsState().type === 'success') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <h1 class="mb-stack-lg font-headline text-xl font-bold text-on-surface sm:text-2xl">Últimos productos</h1>
+  <!-- Categories Bento -->
+  <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap md:px-margin-desktop">
+    <div class="mb-stack-lg">
+      <span class="text-sm font-semibold uppercase tracking-widest text-primary">Categorías</span>
+      <h2 class="mt-2 font-headline text-2xl font-semibold text-on-surface sm:text-3xl">Encuentra lo que buscas</h2>
+    </div>
+    <div class="grid h-auto grid-cols-1 gap-gutter md:grid-cols-4 md:grid-rows-2 md:min-h-[600px]">
+      @for (tile of categoryTiles(); track tile.id) {
+      <button type="button" (click)="browseCategory(tile.id)"
+        class="group relative min-h-[200px] overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low text-left md:min-h-0"
+        [class.md:col-span-2]="tile.colSpan === 2">
+        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+          [style.background-image]="'url(' + tile.image + ')'"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        <div class="absolute bottom-stack-lg left-stack-lg">
+          <h3 class="font-headline text-xl font-semibold text-white sm:text-2xl">{{ tile.name }}</h3>
+          @if (tile.subtitle) {
+          <p class="mt-1 text-sm font-medium text-white/80">{{ tile.subtitle }}</p>
+          }
+        </div>
+      </button>
+      }
+    </div>
+  </section>
 
-    @if (productsState().data['products'].length > 0) {
-    <app-list-products [listProducts]="productsState().data['products']"></app-list-products>
+  <!-- Featured Products -->
+  <section class="bg-surface-container-low py-section-gap">
+    <div class="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+      <div class="mb-stack-lg flex items-center justify-between gap-4">
+        <h2 class="font-headline text-2xl font-semibold text-on-surface sm:text-3xl">Últimos anuncios</h2>
+        <button type="button" (click)="browseMarketplace()"
+          class="hidden shrink-0 rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90 sm:inline-flex">
+          Ver todo
+        </button>
+      </div>
 
-    <div class="mt-stack-lg flex justify-center">
-        <button type="button" (click)="onClick()"
+      @if (productsState().type === 'loading') {
+      <p class="text-on-surface-variant">Cargando productos...</p>
+      }
+
+      @if (productsState().type === 'error') {
+      <p class="text-on-surface-variant">Error: {{ productsState().error }}</p>
+      }
+
+      @if (productsState().type === 'success') {
+        @if (featuredProducts().length > 0) {
+        <app-list-products [listProducts]="featuredProducts()" variant="stitch"></app-list-products>
+
+        <div class="mt-stack-lg flex justify-center">
+          <button type="button" (click)="browseMarketplace()"
             class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90">
             Ver todo
-        </button>
+          </button>
+        </div>
+        } @else {
+        <div class="flex min-h-[30vh] items-center justify-center">
+          <p class="text-on-surface-variant">Aún no hay productos publicados. ¡Sé el primero en vender!</p>
+        </div>
+        }
+      }
     </div>
-    } @else {
-    <div class="flex min-h-[40vh] items-center justify-center">
-        <p class="text-on-surface-variant">No hay productos disponibles</p>
-    </div>
-    }
-</div>
-}
+  </section>
 
-@if (productsState().type === 'error') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <p class="text-on-surface-variant">Error: {{ productsState().error }}</p>
-</div>
-}
+  <!-- Community -->
+  <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap text-center md:px-margin-desktop">
+    <span class="text-sm font-semibold uppercase tracking-widest text-primary">Comunidad</span>
+    <h2 class="mx-auto mt-4 mb-stack-lg max-w-3xl font-headline text-2xl font-bold text-on-surface sm:text-3xl md:text-4xl">
+      "Fernanpop me ha ayudado a dar una segunda vida a cosas que ya no usaba. Comprar y vender nunca fue tan fácil."
+    </h2>
+    <div class="flex flex-col items-center">
+      <div class="mb-4 size-16 overflow-hidden rounded-full border-2 border-primary-container">
+        <img class="h-full w-full object-cover"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80"
+          alt="Usuario de Fernanpop" />
+      </div>
+      <p class="font-semibold text-on-surface">María García</p>
+      <p class="text-xs uppercase tracking-widest text-on-surface-variant">Compradora habitual</p>
+    </div>
+  </section>
+</main>
+
+<button type="button" (click)="scrollToTop()"
+  class="fixed bottom-8 right-8 z-40 flex size-12 items-center justify-center rounded-full border border-outline-variant bg-white/80 shadow-lg backdrop-blur-md transition-all hover:bg-primary hover:text-white"
+  [class.opacity-0]="!showBackToTop()" [class.pointer-events-none]="!showBackToTop()">
+  <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75 12 8.25m0 0 7.5 7.5M12 8.25v13.5" />
+  </svg>
+</button>
