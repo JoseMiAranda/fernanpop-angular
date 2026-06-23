@@ -77,12 +77,8 @@
                                 @if (reviewsSummary().totalReviews > 0) {
                                 ★ {{ formatRating(reviewsSummary().averageScore) }}
                                 } @else {
-                                —
+                                0
                                 }
-                            </p>
-                            <p class="text-xs text-on-surface-variant">
-                                {{ reviewsSummary().totalReviews }}
-                                {{ reviewsSummary().totalReviews === 1 ? 'reseña' : 'reseñas' }}
                             </p>
                         </app-card>
                     </div>
