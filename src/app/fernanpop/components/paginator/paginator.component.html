@@ -1,7 +1,7 @@
 @if (totalPages > 1) {
 <nav class="flex flex-wrap items-center justify-center gap-1 py-4" aria-label="Paginación">
     <button type="button" (click)="goToPage(page - 1)" [disabled]="page <= 1"
-        class="inline-flex size-9 items-center justify-center rounded-md text-slate-300 transition-colors hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+        class="inline-flex size-9 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         aria-label="Página anterior">
         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z" />
@@ -10,11 +10,11 @@
 
     @for (pageNum of visiblePages; track pageNum) {
     <button type="button" (click)="goToPage(pageNum)"
-        [class.bg-teal-700]="pageNum === page"
+        [class.bg-primary]="pageNum === page"
         [class.text-white]="pageNum === page"
-        [class.text-slate-300]="pageNum !== page"
-        [class.hover:bg-slate-700]="pageNum !== page"
-        [class.hover:text-white]="pageNum !== page"
+        [class.text-on-surface-variant]="pageNum !== page"
+        [class.hover:bg-surface-container-high]="pageNum !== page"
+        [class.hover:text-on-surface]="pageNum !== page"
         class="inline-flex size-9 items-center justify-center rounded-md text-sm font-medium transition-colors"
         [attr.aria-current]="pageNum === page ? 'page' : null"
         [attr.aria-label]="'Página ' + pageNum">
@@ -23,7 +23,7 @@
     }
 
     <button type="button" (click)="goToPage(page + 1)" [disabled]="page >= totalPages"
-        class="inline-flex size-9 items-center justify-center rounded-md text-slate-300 transition-colors hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+        class="inline-flex size-9 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         aria-label="Página siguiente">
         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M10 6L8.59 7.41L13.17 12l-4.58 4.59L10 18l6-6z" />

@@ -1,112 +1,108 @@
-<div class="flex min-h-full flex-col items-center justify-center bg-slate-100 px-4 py-6 sm:py-8">
-	<div class="mx-auto w-full rounded-2xl bg-white p-6 shadow-md sm:max-w-[500px] sm:p-8 md:p-12">
-		<div class="mb-4">
-			<h3 class="text-xl font-semibold text-gray-800 sm:text-2xl">¡Conozca Fernanpop!</h3>
-			<p class="text-gray-500">Crea una cuenta para comprar y vender productos.</p>
-		</div>
-		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Nombre</label>
-					<input type="text" formControlName="firstName"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }" />
-					@if (submitted && f['firstName'].errors) {
-					<div class="invalid-feedback">
-						@if (f['firstName'].errors['required']) {
-						<div class="text-red-500">Nombre requerido</div>
-						} @if (f['firstName'].errors['minlength']) {
-						<div class="text-red-500">Mínimo 2 caracteres</div>
-						} @if (f['firstName'].errors['maxlength']) {
-						<div class="text-red-500">Máximo 50 caracteres</div>
+<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-6 sm:py-8">
+	<app-page-container [narrow]="true">
+		<app-card variant="elevated" padding="lg">
+			<div class="mb-stack-md">
+				<app-page-title size="compact" [withMargin]="false">¡Conozca Fernanpop!</app-page-title>
+				<app-text>Crea una cuenta para comprar y vender productos.</app-text>
+			</div>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+				<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+					<div class="space-y-2">
+						<label class="text-sm font-medium text-on-surface-variant">Nombre</label>
+						<input type="text" formControlName="firstName"
+							class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+							[class.border-error]="submitted && f['firstName'].errors" />
+						@if (submitted && f['firstName'].errors) {
+						<div>
+							@if (f['firstName'].errors['required']) {
+							<p class="text-error">Nombre requerido</p>
+							} @if (f['firstName'].errors['minlength']) {
+							<p class="text-error">Mínimo 2 caracteres</p>
+							} @if (f['firstName'].errors['maxlength']) {
+							<p class="text-error">Máximo 50 caracteres</p>
+							}
+						</div>
+						}
+					</div>
+					<div class="space-y-2">
+						<label class="text-sm font-medium text-on-surface-variant">Apellidos</label>
+						<input type="text" formControlName="lastName"
+							class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+							[class.border-error]="submitted && f['lastName'].errors" />
+						@if (submitted && f['lastName'].errors) {
+						<div>
+							@if (f['lastName'].errors['required']) {
+							<p class="text-error">Apellidos requeridos</p>
+							} @if (f['lastName'].errors['minlength']) {
+							<p class="text-error">Mínimo 2 caracteres</p>
+							} @if (f['lastName'].errors['maxlength']) {
+							<p class="text-error">Máximo 80 caracteres</p>
+							}
+						</div>
+						}
+					</div>
+				</div>
+				<div class="space-y-2">
+					<label class="text-sm font-medium text-on-surface-variant">Correo electrónico</label>
+					<input type="text" formControlName="email"
+						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						[class.border-error]="submitted && f['email'].errors" />
+					@if (submitted && f['email'].errors) {
+					<div>
+						@if (f['email'].errors['required']) {
+						<p class="text-error">Correo electrónico requerido</p>
+						} @if (f['email'].errors['email']) {
+						<p class="text-error">Correo electrónico válido</p>
 						}
 					</div>
 					}
 				</div>
-				<div class="form-group space-y-2">
-					<label class="text-sm font-medium text-gray-700 tracking-wide">Apellidos</label>
-					<input type="text" formControlName="lastName"
-						class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-						[ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }" />
-					@if (submitted && f['lastName'].errors) {
-					<div class="invalid-feedback">
-						@if (f['lastName'].errors['required']) {
-						<div class="text-red-500">Apellidos requeridos</div>
-						} @if (f['lastName'].errors['minlength']) {
-						<div class="text-red-500">Mínimo 2 caracteres</div>
-						} @if (f['lastName'].errors['maxlength']) {
-						<div class="text-red-500">Máximo 80 caracteres</div>
+				<div class="space-y-2">
+					<label class="text-sm font-medium text-on-surface-variant">Contraseña</label>
+					<input type="password" formControlName="password"
+						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						[class.border-error]="submitted && f['password'].errors" />
+					@if (submitted && f['password'].errors) {
+					<div>
+						@if (f['password'].errors['required']) {
+						<p class="text-error">Contraseña requerida</p>
+						} @if (f['password'].errors['minlength']) {
+						<p class="text-error">Longitud mínima: {{ minLenght }}</p>
+						} @if (f['password'].errors['maxlength']) {
+						<p class="text-error">Lóngitud máxima permitida: {{ maxLenght }}</p>
 						}
 					</div>
 					}
 				</div>
-			</div>
-			<div class="form-group space-y-2">
-				<label class="text-sm font-medium text-gray-700 tracking-wide">Correo electrónico</label>
-				<input type="text" formControlName="email"
-					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
-				@if (submitted && f['email'].errors) {
-				<div class="invalid-feedback">
-					@if (f['email'].errors['required']) {
-					<div class="text-red-500">Correo electrónico requerido</div>
-					} @if (f['email'].errors['email']) {
-					<div class="text-red-500">Correo electrónico válido</div>
+				<div>
+					<label class="flex cursor-pointer items-start gap-3">
+						<input type="checkbox" formControlName="acceptTerms"
+							class="mt-1 size-4 rounded border-outline-variant text-primary focus:ring-primary" />
+						<span class="text-sm text-on-surface-variant">
+							Acepto los
+							<a href="#" class="text-primary underline hover:text-primary-container" (click)="$event.preventDefault()">
+								términos y condiciones
+							</a>
+						</span>
+					</label>
+					@if (submitted && f['acceptTerms'].errors) {
+					<p class="mt-2 text-sm text-error">Debes aceptar los términos y condiciones</p>
 					}
 				</div>
+				@if(errorRegister()) {
+				<p class="text-center text-error">{{errorRegister()}}</p>
 				}
-			</div>
-			<div class="form-group space-y-2">
-				<label class="text-sm font-medium text-gray-700 tracking-wide">Contraseña</label>
-				<input type="password" formControlName="password"
-					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
-				@if (submitted && f['password'].errors) {
-				<div class="invalid-feedback">
-					@if (f['password'].errors['required']) {
-					<div class="text-red-500">Contraseña requerida</div>
-					} @if (f['password'].errors['minlength']) {
-					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
-					} @if (f['password'].errors['maxlength']) {
-					<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
-					}
+				<app-button type="submit" [fullWidth]="true">Registrarse</app-button>
+				<div class="flex flex-wrap items-center justify-center gap-1 text-on-surface-variant">
+					<p>¿Ya tienes una cuenta?</p>
+					<a [routerLink]="['/fernanpop/login']" class="text-primary hover:text-primary-container">
+						Inicia sesión
+					</a>
 				</div>
-				}
-			</div>
-			<div class="form-group">
-				<label class="flex items-start gap-3 cursor-pointer">
-					<input type="checkbox" formControlName="acceptTerms"
-						class="mt-1 size-4 rounded border-gray-300 text-green-400 focus:ring-green-400" />
-					<span class="text-sm text-gray-600">
-						Acepto los
-						<a href="#" class="text-green-400 hover:text-green-500 underline" (click)="$event.preventDefault()">
-							términos y condiciones
-						</a>
-					</span>
-				</label>
-				@if (submitted && f['acceptTerms'].errors) {
-				<div class="mt-2 text-red-500 text-sm">Debes aceptar los términos y condiciones</div>
-				}
-			</div>
-			@if(errorRegister()) {
-				<div class="text-red-500 text-center">{{errorRegister()}}</div>
-			}
-			<div>
-				<button type="submit"
-					class="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
-					Registrase
-				</button>
-			</div>
-			<div class="flex flex-wrap items-center justify-center gap-1">
-				<p>¿Ya tienes una cuenta?</p>
-				<a [routerLink]="['/fernanpop/login']"
-					class="text-green-400  hover:text-green-500">Inicia sesión</a>
-			</div>
-		</form>
-		<div class="pt-5 text-center text-gray-400 text-xs">
-			<span>
+			</form>
+			<p class="pt-5 text-center text-xs text-on-surface-variant">
 				Copyright © 2024-2025
-			</span>
-		</div>
-	</div>
+			</p>
+		</app-card>
+	</app-page-container>
 </div>

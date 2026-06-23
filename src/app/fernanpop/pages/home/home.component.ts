@@ -2,6 +2,12 @@ import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/cor
 import { ProductsService } from '../../../services/products.service';
 import { CategoriesService } from '../../../services/categories.service';
 import { ListProductsComponent } from '../../components/list-products/list-products.component';
+import {
+  ButtonComponent,
+  EyebrowComponent,
+  SectionHeadingComponent,
+  TextComponent,
+} from '../../../shared/ui';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -52,7 +58,7 @@ const CATEGORY_TILE_CONFIG: Record<string, { subtitle?: string; image: string; c
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ListProductsComponent],
+  imports: [CommonModule, ListProductsComponent, ButtonComponent, EyebrowComponent, SectionHeadingComponent, TextComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

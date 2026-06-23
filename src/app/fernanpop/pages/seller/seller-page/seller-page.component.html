@@ -24,13 +24,12 @@
     @if (pageState().type === 'success' && seller(); as sellerData) {
     <div class="border-b border-outline-variant bg-surface-container-lowest px-margin-mobile py-stack-lg md:px-margin-desktop">
         <div class="mx-auto max-w-container-max">
-            <button type="button" (click)="goBack()"
-                class="mb-stack-md flex items-center gap-2 text-secondary transition-colors hover:text-primary">
+            <app-button variant="tertiary" (action)="goBack()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" />
                 </svg>
                 <span class="text-sm font-medium">Volver</span>
-            </button>
+            </app-button>
 
             <div class="flex flex-col items-center gap-stack-lg md:flex-row md:items-start">
                 <div class="relative shrink-0">
@@ -59,26 +58,27 @@
                     </p>
                         </div>
                         @if (isOwnProfile()) {
-                        <a routerLink="/fernanpop/user/profile"
-                            class="shrink-0 rounded-lg border border-outline px-stack-md py-3 text-sm font-semibold uppercase tracking-wider text-secondary transition-all hover:bg-surface-container-high">
-                            Editar perfil
-                        </a>
+                        <app-button
+                            variant="secondary"
+                            size="lg"
+                            label="Editar perfil"
+                            [routerLink]="['/fernanpop/user/profile']" />
                         }
                     </div>
                     <div class="mt-stack-md flex flex-wrap items-center justify-center gap-stack-md md:justify-start">
-                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                        <app-card variant="elevated" padding="sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">En venta</p>
                             <p class="font-headline text-2xl font-bold text-on-surface">{{ products().length }}</p>
-                        </div>
-                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                        </app-card>
+                        <app-card variant="elevated" padding="sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Vendidos</p>
                             <p class="font-headline text-2xl font-bold text-primary">{{ soldItems().length }}</p>
-                        </div>
-                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                        </app-card>
+                        <app-card variant="elevated" padding="sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Comprados</p>
                             <p class="font-headline text-2xl font-bold text-on-surface">{{ purchasedItems().length }}</p>
-                        </div>
-                        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
+                        </app-card>
+                        <app-card variant="elevated" padding="sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Valoración</p>
                             <p class="font-headline text-2xl font-bold text-on-surface">
                                 @if (reviewsSummary().totalReviews > 0) {
@@ -91,14 +91,14 @@
                                 {{ reviewsSummary().totalReviews }}
                                 {{ reviewsSummary().totalReviews === 1 ? 'reseña' : 'reseñas' }}
                             </p>
-                        </div>
+                        </app-card>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <app-page-container>
         <div class="mb-stack-lg flex flex-wrap gap-2">
             <button type="button" (click)="setTab('active')"
                 class="rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:px-5 sm:py-2.5"
@@ -129,14 +129,13 @@
         @if (activeTab() === 'active') {
         <div>
             <div class="mb-stack-md flex items-center justify-between">
-                <h2 class="font-headline text-2xl font-semibold text-on-surface">Productos en venta</h2>
+                <app-section-heading>Productos en venta</app-section-heading>
             </div>
 
             @if (products().length === 0) {
-            <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
-                <p class="text-lg font-medium text-on-surface">No hay productos en venta</p>
-                <p class="mt-2 text-on-surface-variant">Este vendedor no tiene anuncios activos en este momento.</p>
-            </div>
+            <app-empty-state
+                title="No hay productos en venta"
+                description="Este vendedor no tiene anuncios activos en este momento." />
             } @else {
             <app-list-products [listProducts]="products()" />
             }
@@ -146,14 +145,13 @@
         @if (activeTab() === 'sold') {
         <div>
             <div class="mb-stack-md">
-                <h2 class="font-headline text-2xl font-semibold text-on-surface">Histórico de ventas</h2>
+                <app-section-heading>Histórico de ventas</app-section-heading>
             </div>
 
             @if (soldItems().length === 0) {
-            <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
-                <p class="text-lg font-medium text-on-surface">Sin ventas completadas</p>
-                <p class="mt-2 text-on-surface-variant">Cuando este vendedor complete una venta, aparecerá aquí.</p>
-            </div>
+            <app-empty-state
+                title="Sin ventas completadas"
+                description="Cuando este vendedor complete una venta, aparecerá aquí." />
             } @else {
             <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
                 <div class="overflow-x-auto">
@@ -216,14 +214,13 @@
         @if (activeTab() === 'purchased') {
         <div>
             <div class="mb-stack-md">
-                <h2 class="font-headline text-2xl font-semibold text-on-surface">Histórico de compras</h2>
+                <app-section-heading>Histórico de compras</app-section-heading>
             </div>
 
             @if (purchasedItems().length === 0) {
-            <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
-                <p class="text-lg font-medium text-on-surface">Sin compras completadas</p>
-                <p class="mt-2 text-on-surface-variant">Cuando este usuario compre y reciba un producto, aparecerá aquí.</p>
-            </div>
+            <app-empty-state
+                title="Sin compras completadas"
+                description="Cuando este usuario compre y reciba un producto, aparecerá aquí." />
             } @else {
             <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
                 <div class="overflow-x-auto">
@@ -291,7 +288,7 @@
             }
         </div>
         }
-    </div>
+    </app-page-container>
     }
 
     @if (pageState().type === 'error') {

@@ -1,25 +1,25 @@
 @if (favoritesState().type === 'loading') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <p class="text-on-surface-variant">Cargando favoritos...</p>
-</div>
+<app-page-container>
+    <app-text>Cargando favoritos...</app-text>
+</app-page-container>
 }
 
 @if (favoritesState().type === 'success') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <h1 class="mb-stack-lg font-headline text-2xl font-bold text-on-surface">Mis favoritos</h1>
+<app-page-container>
+    <app-page-title size="compact">Mis favoritos</app-page-title>
 
     @if (displayedProducts().length > 0) {
-    <app-list-products [listProducts]="displayedProducts()" variant="stitch"></app-list-products>
+    <app-list-products [listProducts]="displayedProducts()"></app-list-products>
     } @else {
-    <div class="flex min-h-[40vh] items-center justify-center">
-        <p class="text-on-surface-variant">No tienes favoritos aún</p>
-    </div>
+    <app-empty-state
+        title="Sin favoritos"
+        description="No tienes favoritos aún. Explora el marketplace y guarda los productos que te interesen." />
     }
-</div>
+</app-page-container>
 }
 
 @if (favoritesState().type === 'error') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <p class="text-on-surface-variant">Error: {{ favoritesState().error }}</p>
-</div>
+<app-page-container>
+    <app-text>Error: {{ favoritesState().error }}</app-text>
+</app-page-container>
 }

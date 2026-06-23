@@ -10,11 +10,30 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../inte
 import { CommonModule } from '@angular/common';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
 import { Category } from '../../../../interfaces/category.interface';
+import {
+  ButtonComponent,
+  CardComponent,
+  EmptyStateComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+  TextComponent,
+} from '../../../../shared/ui';
 
 @Component({
   selector: 'app-search-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ListProductsComponent, PaginatorComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ListProductsComponent,
+    PaginatorComponent,
+    PageContainerComponent,
+    PageTitleComponent,
+    ButtonComponent,
+    CardComponent,
+    EmptyStateComponent,
+    TextComponent,
+  ],
   templateUrl: './search-product.component.html',
 })
 export class SearchProductComponent implements OnInit, OnDestroy {

@@ -1,31 +1,28 @@
 @if (productState().type === 'loading') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <p class="text-on-surface-variant">Cargando productos...</p>
-</div>
+<app-page-container>
+    <app-text>Cargando productos...</app-text>
+</app-page-container>
 }
 
 @if (productState().type === 'success') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <div class="mb-stack-lg flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 class="font-headline text-2xl font-bold text-on-surface">Mis productos</h1>
-        <a [routerLink]="['/fernanpop/create-product']"
-            class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90">
-            Agregar producto
-        </a>
+<app-page-container>
+    <div class="mb-stack-lg flex flex-col gap-stack-md sm:flex-row sm:items-center sm:justify-between">
+        <app-page-title size="compact" [withMargin]="false">Mis productos</app-page-title>
+        <app-button label="Agregar producto" [routerLink]="['/fernanpop/create-product']" />
     </div>
 
     @if (productState().data.length > 0) {
-    <app-list-products [listProducts]="productState().data" variant="stitch"></app-list-products>
+    <app-list-products [listProducts]="productState().data"></app-list-products>
     } @else {
-    <div class="flex min-h-[40vh] items-center justify-center">
-        <p class="text-on-surface-variant">No hay productos disponibles</p>
-    </div>
+    <app-empty-state
+        title="Sin productos"
+        description="No hay productos disponibles. Publica tu primer anuncio para empezar a vender." />
     }
-</div>
+</app-page-container>
 }
 
 @if (productState().type === 'error') {
-<div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <p class="text-on-surface-variant">Error: {{ productState().error }}</p>
-</div>
+<app-page-container>
+    <app-text>Error: {{ productState().error }}</app-text>
+</app-page-container>
 }

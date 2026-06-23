@@ -25,17 +25,17 @@
   @if (open()) {
     <div
       role="menu"
-      class="absolute right-0 mt-2 w-52 origin-top-right rounded-lg bg-white py-1 shadow-lg ring-1 ring-black/5 z-50 animate-fade animate-duration-150"
+      class="absolute right-0 z-50 mt-2 w-52 origin-top-right animate-fade animate-duration-150 rounded-lg bg-surface-container-lowest py-1 shadow-lg ring-1 ring-outline-variant/40"
     >
       @for (item of items; track item.label) {
         <button
           type="button"
           role="menuitem"
           (click)="onItemClick(item)"
-          class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors text-left"
+          class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary"
         >
           @if (item.icon) {
-            <span class="text-gray-400" aria-hidden="true">
+            <span class="text-outline" aria-hidden="true">
               @switch (item.icon) {
                 @case ('box') {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-4 h-4">

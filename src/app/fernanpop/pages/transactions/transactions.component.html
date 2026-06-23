@@ -55,7 +55,7 @@
     }
 
     @if (transactionsState().type === 'success') {
-    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <app-page-container>
         <app-confirm-dialog
             [visible]="confirmVisible()"
             [header]="confirmHeader()"
@@ -76,19 +76,18 @@
 
         <div class="mb-stack-lg">
             <p class="mb-stack-sm text-sm font-medium text-on-surface-variant">Mi cuenta</p>
-            <h1 class="font-headline text-3xl font-bold text-on-surface md:text-4xl lg:text-5xl">Transacciones</h1>
+            <app-page-title [withMargin]="false">Transacciones</app-page-title>
         </div>
 
         @if (transactionsState().data.length === 0) {
-        <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-6 py-16 text-center">
-            <p class="text-lg font-medium text-on-surface">No tienes transacciones todavía</p>
-            <p class="mt-2 text-on-surface-variant">Cuando compres o vendas un producto, aparecerá aquí.</p>
-        </div>
+        <app-empty-state
+            title="No tienes transacciones todavía"
+            description="Cuando compres o vendas un producto, aparecerá aquí." />
         } @else {
         <!-- Vista móvil: tarjetas -->
         <div class="space-y-3 md:hidden">
             @for (transaction of transactionsState().data; track transaction.id) {
-            <article class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest p-4 shadow-sm">
+            <app-card variant="elevated" padding="sm">
                 <div class="flex gap-3">
                     <div class="size-14 shrink-0 overflow-hidden rounded-lg border border-outline-variant bg-surface-container">
                         <img class="h-full w-full object-cover" [src]="transaction.image"
@@ -143,16 +142,14 @@
                     <div class="flex flex-wrap items-center justify-end gap-2">
                         @if (transaction.status != 'canceled' && transaction.status != 'received') {
                             @if (transaction.sellerId == currentUser()!.uid) {
-                            <button type="button" (click)="onCancel($event, transaction.id)"
-                                class="inline-flex items-center gap-2 rounded-lg border border-error-container/30 bg-error-container/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-error transition-colors hover:bg-error-container/20">
+                            <app-button variant="destructive" destructiveStyle="border" (action)="onCancel(undefined, transaction.id)">
                                 Cancelar
-                            </button>
+                            </app-button>
                             }
                             @if (transaction.sellerId != currentUser()!.uid) {
-                            <button type="button" (click)="onAccept($event, transaction.id)"
-                                class="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-primary-container">
+                            <app-button (action)="onAccept(undefined, transaction.id)">
                                 Confirmar
-                            </button>
+                            </app-button>
                             }
                         } @else if (transaction.status === 'received' && isBuyer(transaction)) {
                             @if (transaction.review) {
@@ -165,15 +162,12 @@
                                 }
                             </div>
                             } @else {
-                            <button type="button" (click)="onRate($event, transaction)"
-                                class="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary-container/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:bg-primary-container/20">
-                                Valorar
-                            </button>
+                            <app-button variant="secondary" label="Valorar" (action)="onRate(undefined, transaction)" />
                             }
                         }
                     </div>
                 </div>
-            </article>
+            </app-card>
             }
 
             <p class="pt-1 text-center text-xs text-on-surface-variant">
@@ -183,7 +177,8 @@
         </div>
 
         <!-- Vista desktop: tabla -->
-        <div class="hidden overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm md:block">
+        <div class="hidden md:block">
+        <app-card variant="elevated" padding="none" class="overflow-hidden">
             <table class="w-full border-collapse text-left">
                 <thead class="border-b border-outline-variant bg-surface-container">
                     <tr>
@@ -279,16 +274,14 @@
                             @if (transaction.status != 'canceled' && transaction.status != 'received') {
                             <div class="flex items-center justify-end gap-2">
                                 @if (transaction.sellerId == currentUser()!.uid) {
-                                <button type="button" (click)="onCancel($event, transaction.id)"
-                                    class="inline-flex items-center gap-2 rounded-lg border border-error-container/30 bg-error-container/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-error transition-colors hover:bg-error-container/20">
+                                <app-button variant="destructive" destructiveStyle="border" (action)="onCancel(undefined, transaction.id)">
                                     Cancelar
-                                </button>
+                                </app-button>
                                 }
                                 @if (transaction.sellerId != currentUser()!.uid) {
-                                <button type="button" (click)="onAccept($event, transaction.id)"
-                                    class="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-primary-container">
+                                <app-button (action)="onAccept(undefined, transaction.id)">
                                     Confirmar
-                                </button>
+                                </app-button>
                                 }
                             </div>
                             } @else if (transaction.status === 'received' && isBuyer(transaction)) {
@@ -302,10 +295,7 @@
                                 }
                             </div>
                             } @else {
-                            <button type="button" (click)="onRate($event, transaction)"
-                                class="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary-container/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:bg-primary-container/20">
-                                Valorar
-                            </button>
+                            <app-button variant="secondary" label="Valorar" (action)="onRate(undefined, transaction)" />
                             }
                             } @else {
                             <span class="text-xs text-on-surface-variant">—</span>
@@ -322,9 +312,10 @@
                     {{ transactionsState().data.length === 1 ? 'transacción' : 'transacciones' }}
                 </p>
             </div>
+        </app-card>
         </div>
         }
-    </div>
+    </app-page-container>
     }
 
     @if (transactionsState().type === 'error') {

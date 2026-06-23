@@ -11,7 +11,13 @@ import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
-import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
+import {
+  ButtonComponent,
+  CardComponent,
+  EyebrowComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+} from '../../../../shared/ui';
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 import { ImageDropComponent } from "../../../components/image-drop/image-drop.component";
 import { ImagesService } from '../../../../services/images.service';
@@ -19,7 +25,18 @@ import { ImagesService } from '../../../../services/images.service';
 @Component({
   selector: 'app-update-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent, GreenButtonComponent, ListImagesComponent, ImageDropComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ConfirmDialogComponent,
+    ListImagesComponent,
+    ImageDropComponent,
+    ButtonComponent,
+    CardComponent,
+    EyebrowComponent,
+    PageContainerComponent,
+    PageTitleComponent,
+  ],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
 })
@@ -242,7 +259,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.updateProduct();
   }
   
-  onDelete(_event: Event): void {
+  onDelete(): void {
     this.pendingConfirmAction = () => {
       this.isLoading = true;
       this.deleteProductState.set(new LoadingState());

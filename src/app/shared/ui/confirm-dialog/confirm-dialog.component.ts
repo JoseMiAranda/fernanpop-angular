@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
+import { CardComponent } from '../card/card.component';
 
 export type ConfirmDialogVariant = 'teal' | 'success' | 'danger';
 
 @Component({
   selector: 'app-confirm-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent, CardComponent],
   templateUrl: './confirm-dialog.component.html',
 })
 export class ConfirmDialogComponent {
@@ -20,18 +22,12 @@ export class ConfirmDialogComponent {
   @Output() accept = new EventEmitter<void>();
   @Output() reject = new EventEmitter<void>();
 
-  get acceptButtonClasses(): string {
-    const base =
-      'w-full px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors sm:w-auto';
+  get acceptButtonVariant(): 'primary' | 'destructive' {
+    return this.acceptVariant === 'danger' ? 'destructive' : 'primary';
+  }
 
-    switch (this.acceptVariant) {
-      case 'danger':
-        return `${base} bg-red-700 hover:bg-red-600`;
-      case 'success':
-        return `${base} bg-green-700 hover:bg-green-600`;
-      default:
-        return `${base} bg-teal-700 hover:bg-teal-600`;
-    }
+  get acceptDestructiveStyle(): 'text' | 'border' {
+    return this.acceptVariant === 'danger' ? 'border' : 'text';
   }
 
   onAccept(): void {

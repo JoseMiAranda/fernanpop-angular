@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from '../button/button.component';
+import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'app-rating-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ButtonComponent, CardComponent],
   templateUrl: './rating-dialog.component.html',
 })
 export class RatingDialogComponent {

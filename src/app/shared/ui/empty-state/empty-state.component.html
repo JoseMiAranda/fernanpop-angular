@@ -1,0 +1,14 @@
+<app-card variant="empty" padding="none">
+  @if (icon) {
+  <span class="material-symbols-outlined mb-stack-md text-4xl text-on-surface-variant">{{ icon }}</span>
+  }
+  @if (title) {
+  <app-section-heading>{{ title }}</app-section-heading>
+  }
+  @if (description) {
+  <p class="mt-stack-sm font-body text-base text-on-surface-variant">{{ description }}</p>
+  }
+  <div class="mt-stack-md">
+    <ng-content />
+  </div>
+</app-card>

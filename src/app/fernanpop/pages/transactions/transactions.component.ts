@@ -11,6 +11,13 @@ import { CurrentCurrencyPipe } from '../../../pipes/current-currency.pipe';
 import { StatusPipe } from '../../../pipes/status.pipe';
 import { ConfirmDialogComponent } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { RatingDialogComponent } from '../../../shared/ui/rating-dialog/rating-dialog.component';
+import {
+  ButtonComponent,
+  CardComponent,
+  EmptyStateComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+} from '../../../shared/ui';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 import { CreateReviewPayload } from '../../../interfaces/review.interface';
@@ -18,7 +25,20 @@ import { CreateReviewPayload } from '../../../interfaces/review.interface';
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, ConfirmDialogComponent, RatingDialogComponent, RouterLink, StatusPipe, DatePipe],
+  imports: [
+    CommonModule,
+    CurrentCurrencyPipe,
+    ConfirmDialogComponent,
+    RatingDialogComponent,
+    RouterLink,
+    StatusPipe,
+    DatePipe,
+    PageContainerComponent,
+    PageTitleComponent,
+    EmptyStateComponent,
+    CardComponent,
+    ButtonComponent,
+  ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })
@@ -69,7 +89,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAccept(_event: Event, transactionId: string): void {
+  onAccept(_event?: Event, transactionId?: string): void {
+    if (!transactionId) return;
     this.openConfirmDialog({
       header: '¿Estás seguro de confirmar?',
       message: 'Asegúrate de que el producto esté en buenas condiciones antes de aceptar',
@@ -99,7 +120,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCancel(_event: Event, transactionId: string): void {
+  onCancel(_event?: Event, transactionId?: string): void {
+    if (!transactionId) return;
     this.openConfirmDialog({
       header: '¿Estás seguro de cancelar?',
       message: 'El comprador no podrá recibir el producto',
@@ -139,7 +161,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.pendingConfirmAction = null;
   }
 
-  onRate(_event: Event, transaction: Transaction): void {
+  onRate(_event?: Event, transaction?: Transaction): void {
+    if (!transaction) return;
     this.openRatingDialog(transaction);
   }
 

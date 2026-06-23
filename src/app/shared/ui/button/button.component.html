@@ -1,0 +1,20 @@
+@if (routerLink) {
+<a
+  [routerLink]="routerLink"
+  [class]="classes"
+  (click)="onClick($event)">
+  {{ label }}
+</a>
+} @else {
+<button
+  [attr.type]="type"
+  [disabled]="disabled"
+  [class]="classes"
+  (click)="onClick($event)">
+  @if (label) {
+    {{ label }}
+  } @else {
+    <ng-content />
+  }
+</button>
+}

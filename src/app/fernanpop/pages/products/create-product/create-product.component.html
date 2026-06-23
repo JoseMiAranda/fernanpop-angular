@@ -1,124 +1,112 @@
-<div class="flex min-h-full flex-col items-center justify-center bg-slate-100 px-4 py-6 sm:py-8">
-	<div class="mx-auto w-full rounded-2xl bg-white p-6 shadow-md sm:max-w-[1000px] sm:p-8 md:p-12">
-		<div class="mb-4">
-			<h3 class="text-xl font-semibold text-gray-800 sm:text-2xl">¡Crea un nuevo producto!</h3>
-			<p class="text-gray-500">Rellene el formulario con todos los datos.</p>
-		</div>
-		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col space-y-4">
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			  <div class="col-span-1">
-				<div class="form-group space-y-2">
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Título</label>
-				  <input type="text" formControlName="title"
-					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['title'].errors }" />
-				  @if (submitted && f['title'].errors) {
-				  <div class="invalid-feedback">
-					@if (f['title'].errors['required']) {
-					<div class="text-red-500">Título requerido</div>
-					}@if (f['title'].errors['minlength']) {
-					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
-					} @if (f['title'].errors['maxlength']) {
-					<div class="text-red-500">
-					  Lóngitud máxima permitida: {{ maxLenght }}
-					</div>
-					}
-				  </div>
-				  }
-				</div>
-				<div class="form-group space-y-2">
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Precio</label>
-				  <input type="number" formControlName="price"
-					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['price'].errors }" />
-				  @if (submitted && f['price'].errors) {
-				  <div class="invalid-feedback">
-					@if (f['price'].errors['required']) {
-					<div class="text-red-500">Título requerido</div>
-					}
-				  </div>
-				  }
-				</div>
-				<div class="form-group space-y-2">
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Categoría</label>
-				  <select formControlName="categoryId"
-					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['categoryId'].errors }">
-					<option value="" disabled>Selecciona una categoría</option>
-					@for (category of categories; track category.id) {
-					<option [value]="category.id">{{ category.name }}</option>
-					}
-				  </select>
-				  @if (submitted && f['categoryId'].errors) {
-				  <div class="invalid-feedback">
-					@if (f['categoryId'].errors['required']) {
-					<div class="text-red-500">Categoría requerida</div>
-					}
-				  </div>
-				  }
-				</div>
-				<div class="form-group space-y-2">
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Estado</label>
-				  <select formControlName="condition"
-					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['condition'].errors }">
-					<option value="" disabled>Selecciona el estado</option>
-					@for (condition of conditions; track condition.id) {
-					<option [value]="condition.id">{{ condition.name }}</option>
-					}
-				  </select>
-				  @if (submitted && f['condition'].errors) {
-				  <div class="invalid-feedback">
-					@if (f['condition'].errors['required']) {
-					<div class="text-red-500">Estado requerido</div>
-					}
-				  </div>
-				  }
-				</div>
-				<div class="form-group space-y-2">
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Descripción</label>
-				  <input type="text" formControlName="desc"
-					class="form-control w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['desc'].errors }" />
-				  @if (submitted && f['desc'].errors) {
-				  <div class="invalid-feedback">
-					@if (f['desc'].errors['required']) {
-					<div class="text-red-500">Descripción requerida</div>
-					} @if (f['desc'].errors['minlength']) {
-					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
-					} @if (f['desc'].errors['maxlength']) {
-					<div class="text-red-500">
-					  Lóngitud máxima permitida: {{ maxLenght }}
-					</div>
-					}
-				  </div>
-				  }
-				</div>
-			  </div>
-	
-			  <div class="col-span-1">
-				<div class="flex flex-col space-y-2">
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Imágenes</label>
-				  <app-image-drop (onDrop)="onDrop($event)"></app-image-drop>
-				  <label class="text-sm font-medium text-gray-700 tracking-wide">Guardadas:</label>
-				  <div class="form-group space-y-2">
-					<app-list-images *ngIf="productState().data?.images.length > 0; else noimages" [images]="productState().data.images"></app-list-images>
-					<ng-template #noimages>
-					  <p class="text-gray-500">No hay imágenes guardadas</p>
-					</ng-template>
-					@if (submitted && !existImage) {
-					<div class="text-red-500">Imagen requerida</div>
-					}
-				  </div>
-				</div>
-			  </div>
+<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-6 sm:py-8">
+	<app-page-container>
+		<app-card variant="elevated" padding="lg">
+			<div class="mb-stack-md">
+				<app-page-title size="compact" [withMargin]="false">¡Crea un nuevo producto!</app-page-title>
+				<app-text>Rellene el formulario con todos los datos.</app-text>
 			</div>
-			<div class="flex flex-col items-center justify-center gap-4 sm:flex-row sm:space-x-6">
-			  <app-product-button *ngIf="createProductState().type === 'initial'" [title]="'Crear producto'"
-				[submit]="!isLoading" [isDisabled]="isLoading"></app-product-button>
-			  <app-product-button *ngIf="createProductState().type === 'loading'" [title]="'Creando producto...'"
-				[isDisabled]="true"></app-product-button>
-			</div>
-		  </form>
-	</div>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col space-y-4">
+				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+					<div class="col-span-1 space-y-4">
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-on-surface-variant">Título</label>
+							<input type="text" formControlName="title"
+								class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+								[class.border-error]="submitted && f['title'].errors" />
+							@if (submitted && f['title'].errors) {
+							<div>
+								@if (f['title'].errors['required']) {
+								<p class="text-error">Título requerido</p>
+								}@if (f['title'].errors['minlength']) {
+								<p class="text-error">Longitud mínima: {{ minLenght }}</p>
+								} @if (f['title'].errors['maxlength']) {
+								<p class="text-error">Lóngitud máxima permitida: {{ maxLenght }}</p>
+								}
+							</div>
+							}
+						</div>
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-on-surface-variant">Precio</label>
+							<input type="number" formControlName="price"
+								class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+								[class.border-error]="submitted && f['price'].errors" />
+							@if (submitted && f['price'].errors) {
+							<p class="text-error">Precio requerido</p>
+							}
+						</div>
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-on-surface-variant">Categoría</label>
+							<select formControlName="categoryId"
+								class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+								[class.border-error]="submitted && f['categoryId'].errors">
+								<option value="" disabled>Selecciona una categoría</option>
+								@for (category of categories; track category.id) {
+								<option [value]="category.id">{{ category.name }}</option>
+								}
+							</select>
+							@if (submitted && f['categoryId'].errors) {
+							<p class="text-error">Categoría requerida</p>
+							}
+						</div>
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-on-surface-variant">Estado</label>
+							<select formControlName="condition"
+								class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+								[class.border-error]="submitted && f['condition'].errors">
+								<option value="" disabled>Selecciona el estado</option>
+								@for (condition of conditions; track condition.id) {
+								<option [value]="condition.id">{{ condition.name }}</option>
+								}
+							</select>
+							@if (submitted && f['condition'].errors) {
+							<p class="text-error">Estado requerido</p>
+							}
+						</div>
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-on-surface-variant">Descripción</label>
+							<input type="text" formControlName="desc"
+								class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+								[class.border-error]="submitted && f['desc'].errors" />
+							@if (submitted && f['desc'].errors) {
+							<div>
+								@if (f['desc'].errors['required']) {
+								<p class="text-error">Descripción requerida</p>
+								} @if (f['desc'].errors['minlength']) {
+								<p class="text-error">Longitud mínima: {{ minLenght }}</p>
+								} @if (f['desc'].errors['maxlength']) {
+								<p class="text-error">Lóngitud máxima permitida: {{ maxDescLenght }}</p>
+								}
+							</div>
+							}
+						</div>
+					</div>
+
+					<div class="col-span-1">
+						<div class="flex flex-col space-y-2">
+							<label class="text-sm font-medium text-on-surface-variant">Imágenes</label>
+							<app-image-drop (onDrop)="onDrop($event)"></app-image-drop>
+							<label class="text-sm font-medium text-on-surface-variant">Guardadas:</label>
+							<div class="space-y-2">
+								@if (imagesSignal().length > 0) {
+								<app-text size="sm">{{ imagesSignal().length }} imagen(es) seleccionada(s)</app-text>
+								} @else {
+								<app-text size="sm">No hay imágenes seleccionadas</app-text>
+								}
+								@if (submitted && !existImage) {
+								<p class="text-error">Imagen requerida</p>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+					@if (createProductState().type === 'initial') {
+					<app-button type="submit" [disabled]="isLoading">Crear producto</app-button>
+					} @else {
+					<app-button [disabled]="true">Creando producto...</app-button>
+					}
+				</div>
+			</form>
+		</app-card>
+	</app-page-container>
 </div>

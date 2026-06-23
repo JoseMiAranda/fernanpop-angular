@@ -2,7 +2,8 @@
   <div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
     <div class="fixed inset-0 bg-black/50" (click)="onBackdropClick()"></div>
 
-    <div class="relative w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-xl">
+    <div class="relative w-full max-w-md">
+      <app-card variant="elevated" padding="lg">
       <h2 class="font-headline text-lg font-semibold text-on-surface">¿Cómo fue el producto?</h2>
       @if (productTitle) {
       <p class="mt-1 text-sm text-on-surface-variant">{{ productTitle | titlecase }}</p>
@@ -44,20 +45,12 @@
       </div>
 
       <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <button
-          type="button"
-          (click)="onSkip()"
-          class="w-full rounded-lg px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container sm:w-auto">
-          Omitir
-        </button>
-        <button
-          type="button"
-          (click)="onSubmit()"
-          [disabled]="selectedScore() === null"
-          class="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">
+        <app-button variant="tertiary" (action)="onSkip()">Omitir</app-button>
+        <app-button [disabled]="selectedScore() === null" (action)="onSubmit()">
           Enviar valoración
-        </button>
+        </app-button>
       </div>
+      </app-card>
     </div>
   </div>
 }

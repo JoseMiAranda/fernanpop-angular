@@ -9,15 +9,29 @@ import { Category } from '../../../../interfaces/category.interface';
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { InitialState, LoadingState, State } from '../../../../states/state.interface';
-import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
+import {
+  ButtonComponent,
+  CardComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+  TextComponent,
+} from '../../../../shared/ui';
 import { ImageDropComponent } from '../../../components/image-drop/image-drop.component';
-import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 import { ImagesService } from '../../../../services/images.service';
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, GreenButtonComponent, ImageDropComponent, ListImagesComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    CardComponent,
+    PageContainerComponent,
+    PageTitleComponent,
+    TextComponent,
+    ImageDropComponent,
+  ],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.css'
 })

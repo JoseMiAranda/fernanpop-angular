@@ -30,16 +30,14 @@
     }
 
     @if (productState().type === 'success') {
-    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <app-page-container>
         <div class="mb-stack-lg flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <button type="button" (click)="goBack()"
-                class="flex items-center gap-2 text-secondary transition-colors hover:text-primary"
-                aria-label="Volver">
+            <app-button variant="tertiary" (action)="goBack()" aria-label="Volver">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" />
                 </svg>
                 <span class="hidden text-sm font-medium sm:inline">Volver</span>
-            </button>
+            </app-button>
 
             @if (images.length > 1) {
             <div class="flex items-center justify-between gap-3 sm:justify-end sm:gap-4">
@@ -117,8 +115,9 @@
                 </p>
 
                 @if (seller(); as sellerData) {
-                <a [routerLink]="['/fernanpop/seller', sellerData.id]"
-                    class="flex items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-4 transition-colors hover:border-primary hover:bg-surface-container-low">
+                <a [routerLink]="['/fernanpop/seller', sellerData.id]" class="block">
+                <app-card variant="interactive" padding="sm">
+                    <div class="flex items-center gap-4">
                     @if (sellerData.photoUrl) {
                     <img [src]="sellerData.photoUrl" [alt]="sellerData.displayName"
                         class="size-14 shrink-0 rounded-full object-cover" />
@@ -143,18 +142,20 @@
                         viewBox="0 0 24 24" fill="currentColor">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                     </svg>
+                    </div>
+                </app-card>
                 </a>
                 }
 
                 <div class="pt-4">
                     @if (productState().data.status == 'reserved') {
                     } @else if (productState().data.sellerId == currentUser()?.uid) {
-                    <app-product-button [title]="'Modificar'" [fullWidth]="true" (action)="goToUpdate()" />
+                    <app-button [fullWidth]="true" (action)="goToUpdate()">Modificar</app-button>
                     } @else {
                     @if (buyProductState().type === 'initial') {
-                    <app-product-button [title]="'Comprar'" [fullWidth]="true" (action)="buy()" />
+                    <app-button [fullWidth]="true" (action)="buy()">Comprar</app-button>
                     } @else {
-                    <app-product-button [title]="'Comprando...'" [fullWidth]="true" [isDisabled]="true" />
+                    <app-button [fullWidth]="true" [disabled]="true">Comprando...</app-button>
                     }
                     }
                 </div>
@@ -167,7 +168,7 @@
                     (selectedIndexChange)="selectedImageIndex.set($event)" />
             </div>
         </div>
-    </div>
+    </app-page-container>
     }
 
     @if (productState().type === 'error') {

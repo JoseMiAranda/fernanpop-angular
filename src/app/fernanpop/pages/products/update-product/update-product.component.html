@@ -33,17 +33,16 @@
     }
 
     @if (productState().type === 'success') {
-    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <app-page-container>
         <div class="mb-stack-lg flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <button type="button" (click)="goBack()"
-                class="group flex items-center text-on-surface-variant transition-colors hover:text-primary">
+            <app-button variant="tertiary" (action)="goBack()">
                 <svg xmlns="http://www.w3.org/2000/svg"
                     class="mr-2 size-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24"
                     fill="currentColor">
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" />
                 </svg>
                 <span class="text-sm font-semibold uppercase tracking-wider">Volver</span>
-            </button>
+            </app-button>
 
             <app-confirm-dialog
                 [visible]="confirmVisible()"
@@ -57,19 +56,18 @@
             </app-confirm-dialog>
 
             @if (deleteProductState().type === 'initial') {
-            <button type="button" (click)="onDelete($event!)" [disabled]="isLoading"
-                class="self-start text-sm font-semibold uppercase tracking-wider text-error transition-colors hover:text-error/80 disabled:opacity-50 sm:self-auto">
+            <app-button variant="destructive" (action)="onDelete()">
                 <span class="hidden sm:inline">Eliminar producto</span>
                 <span class="sm:hidden">Eliminar</span>
-            </button>
+            </app-button>
             } @else {
             <span class="text-sm font-semibold uppercase tracking-wider text-on-surface-variant">Eliminando...</span>
             }
         </div>
 
         <div class="mb-section-gap">
-            <h1 class="mb-stack-sm font-headline text-3xl font-bold text-on-surface md:text-4xl lg:text-5xl">Editar producto</h1>
-            <p class="max-w-2xl text-base text-on-surface-variant">
+            <app-page-title [withMargin]="false">Editar producto</app-page-title>
+            <p class="mt-stack-sm max-w-2xl font-body text-base text-on-surface-variant">
                 Modifica los detalles de tu producto. Asegúrate de que la información esté completa antes de guardar.
             </p>
         </div>
@@ -77,10 +75,8 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="grid grid-cols-1 items-start gap-stack-lg lg:grid-cols-12">
                 <div class="space-y-stack-lg lg:col-span-5">
-                    <div class="rounded-xl border border-outline-variant bg-surface-container-low p-stack-lg">
-                        <h3 class="mb-stack-lg text-sm font-semibold uppercase tracking-wider text-primary">
-                            Imágenes del producto
-                        </h3>
+                    <app-card variant="filled" padding="lg">
+                        <app-eyebrow>Imágenes del producto</app-eyebrow>
 
                         @if (productState().data.images.length > 0) {
                         <div class="relative mb-stack-md aspect-square overflow-hidden rounded-lg bg-white">
@@ -106,11 +102,12 @@
                             <p class="text-sm text-error">Imagen requerida</p>
                             }
                         </div>
-                    </div>
+                    </app-card>
                 </div>
 
                 <div class="lg:col-span-7">
-                    <div class="space-y-stack-lg rounded-xl border border-outline-variant bg-white p-stack-lg lg:p-12">
+                    <app-card variant="elevated" padding="lg">
+                        <div class="space-y-stack-lg">
                         <div class="grid grid-cols-1 gap-stack-lg md:grid-cols-2">
                             <div class="md:col-span-2">
                                 <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
@@ -198,27 +195,30 @@
                         </div>
 
                         <div class="flex flex-col justify-end gap-stack-md border-t border-outline-variant pt-stack-lg sm:flex-row">
-                            <button type="button" (click)="goBack()"
-                                class="order-2 rounded-lg border border-outline px-stack-lg py-4 text-sm font-semibold uppercase tracking-wider text-secondary transition-all hover:bg-surface-container-high sm:order-1">
-                                Cancelar
-                            </button>
+                            <div class="order-2 sm:order-1">
+                                <app-button variant="secondary" size="lg" label="Cancelar" (action)="goBack()" />
+                            </div>
 
                             @if (updateProductState().type === 'initial') {
                             <div class="order-1 sm:order-2">
-                                <app-product-button [title]="'Guardar cambios'" [submit]="!isLoading"
-                                    [isDisabled]="isLoading" />
+                                <app-button type="submit" size="lg" [fullWidth]="true" [disabled]="isLoading">
+                                    Guardar cambios
+                                </app-button>
                             </div>
                             } @else {
                             <div class="order-1 sm:order-2">
-                                <app-product-button [title]="'Guardando cambios...'" [isDisabled]="true" />
+                                <app-button size="lg" [fullWidth]="true" [disabled]="true">
+                                    Guardando cambios...
+                                </app-button>
                             </div>
                             }
                         </div>
-                    </div>
+                        </div>
+                    </app-card>
                 </div>
             </div>
         </form>
-    </div>
+    </app-page-container>
     }
 
 </div>

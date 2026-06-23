@@ -11,11 +11,12 @@ import { CategoriesService } from '../../../services/categories.service';
 import { FavoritesService } from '../../../services/favorites.service';
 import { CustomResponse, SuccessResponse } from '../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
+import { ButtonComponent, CardComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [CommonModule, RouterLink, CurrentCurrencyPipe, CategoryNamePipe, ConditionNamePipe],
+  imports: [CommonModule, RouterLink, CurrentCurrencyPipe, CategoryNamePipe, ConditionNamePipe, CardComponent, ButtonComponent],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })
@@ -27,7 +28,6 @@ export class ListProductsComponent implements OnInit, OnDestroy {
 
   @Input() listProducts: Product[] = [];
   @Input() compact = false;
-  @Input() variant: 'legacy' | 'stitch' = 'stitch';
 
   constructor(
     private authService: AuthService,

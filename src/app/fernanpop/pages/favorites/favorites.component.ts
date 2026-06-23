@@ -1,6 +1,12 @@
 import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { FavoritesService } from '../../../services/favorites.service';
 import { ListProductsComponent } from '../../components/list-products/list-products.component';
+import {
+  EmptyStateComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+  TextComponent,
+} from '../../../shared/ui';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../interfaces/response-interface';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../states/state.interface';
 import { Product } from '../../../interfaces/product.interface';
@@ -10,7 +16,14 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, ListProductsComponent],
+  imports: [
+    CommonModule,
+    ListProductsComponent,
+    PageContainerComponent,
+    PageTitleComponent,
+    EmptyStateComponent,
+    TextComponent,
+  ],
   templateUrl: './favorites.component.html',
   styleUrl: './favorites.component.css'
 })

@@ -15,13 +15,30 @@ import { AuthService } from '../../../../services/auth.service';
 import { ImagesService } from '../../../../services/images.service';
 import { ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
-import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
+import {
+  ButtonComponent,
+  CardComponent,
+  EyebrowComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+  TextComponent,
+} from '../../../../shared/ui';
 import { ImageDropComponent } from '../../../components/image-drop/image-drop.component';
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, GreenButtonComponent, ImageDropComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    CardComponent,
+    EyebrowComponent,
+    PageContainerComponent,
+    PageTitleComponent,
+    TextComponent,
+    ImageDropComponent,
+  ],
   templateUrl: './edit-profile.component.html',
 })
 export class EditProfileComponent implements OnInit, OnDestroy {

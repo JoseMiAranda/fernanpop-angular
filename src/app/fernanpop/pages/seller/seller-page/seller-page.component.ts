@@ -10,6 +10,13 @@ import { SoldItem } from '../../../../interfaces/sold-item.interface';
 import { PurchasedItem } from '../../../../interfaces/purchased-item.interface';
 import { Review, SellerReviewsSummary } from '../../../../interfaces/review.interface';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
+import {
+  ButtonComponent,
+  CardComponent,
+  EmptyStateComponent,
+  PageContainerComponent,
+  SectionHeadingComponent,
+} from '../../../../shared/ui';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
@@ -20,7 +27,17 @@ type SellerTab = 'active' | 'sold' | 'purchased';
 @Component({
   selector: 'app-seller-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, ListProductsComponent, CurrentCurrencyPipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    ListProductsComponent,
+    CurrentCurrencyPipe,
+    ButtonComponent,
+    CardComponent,
+    EmptyStateComponent,
+    PageContainerComponent,
+    SectionHeadingComponent,
+  ],
   templateUrl: './seller-page.component.html',
 })
 export class SellerPageComponent implements OnInit, OnDestroy {

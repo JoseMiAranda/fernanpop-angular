@@ -8,8 +8,8 @@ import { CommonModule } from '@angular/common';
 import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { FavoritesService } from '../../../../services/favorites.service';
-import { GreenButtonComponent } from '../../../components/green-button/green-button.component';
 import { ImageGalleryComponent } from '../../../components/image-gallery/image-gallery.component';
+import { ButtonComponent, CardComponent, PageContainerComponent } from '../../../../shared/ui';
 import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
 import { ConditionNamePipe } from '../../../../pipes/condition-name.pipe';
 import { Category } from '../../../../interfaces/category.interface';
@@ -24,7 +24,7 @@ import { SellerReviewsSummary } from '../../../../interfaces/review.interface';
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, GreenButtonComponent, ImageGalleryComponent, CategoryNamePipe, ConditionNamePipe, RouterLink],
+  imports: [CommonModule, CurrentCurrencyPipe, ImageGalleryComponent, CategoryNamePipe, ConditionNamePipe, RouterLink, ButtonComponent, CardComponent, PageContainerComponent],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })

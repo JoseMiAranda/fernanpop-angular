@@ -11,11 +11,27 @@ import {
 import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthError } from '@angular/fire/auth';
+import {
+  ButtonComponent,
+  CardComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+  TextComponent,
+} from '../../../../shared/ui';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    PageContainerComponent,
+    CardComponent,
+    PageTitleComponent,
+    TextComponent,
+    ButtonComponent,
+  ],
   templateUrl: './login.component.html',
   styles: ``
 })

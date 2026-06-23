@@ -1,61 +1,57 @@
-<div class="flex min-h-full flex-col items-center justify-center bg-slate-100 px-4 py-6 sm:py-8">
-	<div class="mx-auto w-full rounded-2xl bg-white p-6 shadow-md sm:max-w-[500px] sm:p-8 md:p-12">
-		<div class="mb-4">
-			<h3 class="text-xl font-semibold text-gray-800 sm:text-2xl">¡Bienvenido de vuelta!</h3>
-			<p class="text-gray-500">Por favor inicie sesión con su cuenta.</p>
-		</div>
-		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-			<div class="form-group space-y-2">
-				<label class="text-sm font-medium text-gray-700 tracking-wide">Correo electrónico</label>
-				<input type="text" formControlName="email"
-					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
-				@if (submitted && f['email'].errors) {
-				<div class="invalid-feedback">
-					@if (f['email'].errors['required']) {
-					<div class="text-red-500">Correo electrónico requerido</div>
-					} @if (f['email'].errors['email']) {
-					<div class="text-red-500">Correo electrónico válido</div>
+<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-6 sm:py-8">
+	<app-page-container [narrow]="true">
+		<app-card variant="elevated" padding="lg">
+			<div class="mb-stack-md">
+				<app-page-title size="compact" [withMargin]="false">¡Bienvenido de vuelta!</app-page-title>
+				<app-text>Por favor inicie sesión con su cuenta.</app-text>
+			</div>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+				<div class="space-y-2">
+					<label class="text-sm font-medium text-on-surface-variant">Correo electrónico</label>
+					<input type="text" formControlName="email"
+						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						[class.border-error]="submitted && f['email'].errors" />
+					@if (submitted && f['email'].errors) {
+					<div>
+						@if (f['email'].errors['required']) {
+						<p class="text-error">Correo electrónico requerido</p>
+						} @if (f['email'].errors['email']) {
+						<p class="text-error">Correo electrónico válido</p>
+						}
+					</div>
 					}
 				</div>
-				}
-			</div>
-			<div class="form-group space-y-2">
-				<label class="text-sm font-medium text-gray-700 tracking-wide">Contraseña</label>
-				<input type="password" formControlName="password"
-					class="form-control w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
-					[ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
-				@if (submitted && f['password'].errors) {
-				<div class="invalid-feedback">
-					@if (f['password'].errors['required']) {
-					<div class="text-red-500">Contraseña requerida</div>
-					} @if (f['password'].errors['minlength']) {
-					<div class="text-red-500">Longitud mínima: {{ minLenght }}</div>
-					} @if (f['password'].errors['maxlength']) {
-					<div class="text-red-500">Lóngitud máxima permitida: {{ maxLenght }}</div>
+				<div class="space-y-2">
+					<label class="text-sm font-medium text-on-surface-variant">Contraseña</label>
+					<input type="password" formControlName="password"
+						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						[class.border-error]="submitted && f['password'].errors" />
+					@if (submitted && f['password'].errors) {
+					<div>
+						@if (f['password'].errors['required']) {
+						<p class="text-error">Contraseña requerida</p>
+						} @if (f['password'].errors['minlength']) {
+						<p class="text-error">Longitud mínima: {{ minLenght }}</p>
+						} @if (f['password'].errors['maxlength']) {
+						<p class="text-error">Lóngitud máxima permitida: {{ maxLenght }}</p>
+						}
+					</div>
 					}
 				</div>
+				@if(errorRegister()) {
+				<p class="text-center text-error">{{errorRegister()}}</p>
 				}
-			</div>
-			@if(errorRegister()) {
-				<div class="text-red-500 text-center">{{errorRegister()}}</div>
-			}
-			<div>
-				<button type="submit"
-					class="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
-					Iniciar sesión
-				</button>
-			</div>
-			<div class="flex flex-wrap items-center justify-center gap-1">
-				<p>¿No tienes una cuenta?</p>
-				<a [routerLink]="['/fernanpop/register']"
-					class="text-green-400  hover:text-green-500">Regístrate</a>
-			</div>
-		</form>
-		<div class="pt-5 text-center text-gray-400 text-xs">
-			<span>
+				<app-button type="submit" [fullWidth]="true">Iniciar sesión</app-button>
+				<div class="flex flex-wrap items-center justify-center gap-1 text-on-surface-variant">
+					<p>¿No tienes una cuenta?</p>
+					<a [routerLink]="['/fernanpop/register']" class="text-primary hover:text-primary-container">
+						Regístrate
+					</a>
+				</div>
+			</form>
+			<p class="pt-5 text-center text-xs text-on-surface-variant">
 				Copyright © 2024-2025
-			</span>
-		</div>
-	</div>
+			</p>
+		</app-card>
+	</app-page-container>
 </div>

@@ -4,11 +4,27 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModu
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { AuthError } from '@angular/fire/auth';
+import {
+  ButtonComponent,
+  CardComponent,
+  PageContainerComponent,
+  PageTitleComponent,
+  TextComponent,
+} from '../../../../shared/ui';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    PageContainerComponent,
+    CardComponent,
+    PageTitleComponent,
+    TextComponent,
+    ButtonComponent,
+  ],
   templateUrl: './register.component.html',
   styles: ``
 })

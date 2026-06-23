@@ -7,20 +7,19 @@
     </div>
     <div class="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
       <div class="max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest/90 p-stack-lg backdrop-blur-md">
-        <p class="mb-stack-sm text-xs font-semibold uppercase tracking-widest text-primary">Fernanpop</p>
+        <app-eyebrow>Fernanpop</app-eyebrow>
         <h1 class="mb-stack-md font-headline text-3xl font-bold tracking-tight text-on-surface sm:text-4xl md:text-5xl">
           Compra y vende de segunda mano
         </h1>
         <p class="mb-stack-lg max-w-lg font-body text-base text-on-surface-variant sm:text-lg">
           Encuentra tesoros únicos, da una segunda vida a lo que ya no usas y conecta con vendedores de tu comunidad.
         </p>
-        <button type="button" (click)="browseMarketplace()"
-          class="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:opacity-90 active:opacity-80">
+        <app-button size="lg" (action)="browseMarketplace()">
           Explorar productos
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
           </svg>
-        </button>
+        </app-button>
       </div>
     </div>
   </section>
@@ -28,8 +27,8 @@
   <!-- Categories Bento -->
   <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap md:px-margin-desktop">
     <div class="mb-stack-lg">
-      <span class="text-sm font-semibold uppercase tracking-widest text-primary">Categorías</span>
-      <h2 class="mt-2 font-headline text-2xl font-semibold text-on-surface sm:text-3xl">Encuentra lo que buscas</h2>
+      <app-eyebrow>Categorías</app-eyebrow>
+      <app-section-heading class="mt-2 block sm:text-3xl">Encuentra lo que buscas</app-section-heading>
     </div>
     <div class="grid h-auto grid-cols-1 gap-gutter md:grid-cols-4 md:grid-rows-2 md:min-h-[600px]">
       @for (tile of categoryTiles(); track tile.id) {
@@ -54,11 +53,10 @@
   <section class="bg-surface-container-low py-section-gap">
     <div class="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
       <div class="mb-stack-lg flex items-center justify-between gap-4">
-        <h2 class="font-headline text-2xl font-semibold text-on-surface sm:text-3xl">Últimos anuncios</h2>
-        <button type="button" (click)="browseMarketplace()"
-          class="hidden shrink-0 rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90 sm:inline-flex">
-          Ver todo
-        </button>
+        <app-section-heading class="sm:text-3xl">Últimos anuncios</app-section-heading>
+        <div class="hidden sm:block">
+          <app-button (action)="browseMarketplace()">Ver todo</app-button>
+        </div>
       </div>
 
       @if (productsState().type === 'loading') {
@@ -71,17 +69,14 @@
 
       @if (productsState().type === 'success') {
         @if (featuredProducts().length > 0) {
-        <app-list-products [listProducts]="featuredProducts()" variant="stitch"></app-list-products>
+        <app-list-products [listProducts]="featuredProducts()"></app-list-products>
 
         <div class="mt-stack-lg flex justify-center">
-          <button type="button" (click)="browseMarketplace()"
-            class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90">
-            Ver todo
-          </button>
+          <app-button (action)="browseMarketplace()">Ver todo</app-button>
         </div>
         } @else {
         <div class="flex min-h-[30vh] items-center justify-center">
-          <p class="text-on-surface-variant">Aún no hay productos publicados. ¡Sé el primero en vender!</p>
+          <app-text>Aún no hay productos publicados. ¡Sé el primero en vender!</app-text>
         </div>
         }
       }
@@ -90,7 +85,7 @@
 
   <!-- Community -->
   <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap text-center md:px-margin-desktop">
-    <span class="text-sm font-semibold uppercase tracking-widest text-primary">Comunidad</span>
+    <app-eyebrow>Comunidad</app-eyebrow>
     <h2 class="mx-auto mt-4 mb-stack-lg max-w-3xl font-headline text-2xl font-bold text-on-surface sm:text-3xl md:text-4xl">
       "Fernanpop me ha ayudado a dar una segunda vida a cosas que ya no usaba. Comprar y vender nunca fue tan fácil."
     </h2>

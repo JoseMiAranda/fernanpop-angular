@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RedButtonComponent } from '../red-button/red-button.component';
 
 @Component({
   selector: 'app-list-images',
