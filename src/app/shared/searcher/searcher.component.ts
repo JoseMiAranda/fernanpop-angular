@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { interval } from 'rxjs';
 
 @Component({
@@ -11,40 +12,80 @@ import { interval } from 'rxjs';
   styleUrl: './searcher.component.css'
 })
 export class SearcherComponent {
-  private cont = -1;
-  private products: string[] = ['nintendo', 'polystation', 'odoo premium', 'un café', 'como programar en Angular', 'una mazana', 'peluche Flutter Dash'];
-  darkMode = signal<boolean>(JSON.parse(localStorage.getItem('dark_mode') ?? 'false'));
-  animate = signal<boolean>(true);
-  buy = 'Busca';
-  product = signal<string>('un café');
-  messageActivate = signal<boolean>(true);
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  private suggestionIndex = 0;
+  private readonly suggestions = [
+    'Nintendo Switch',
+    'bicicleta de montaña',
+    'sofá modular',
+    'iPhone 13',
+    'zapatillas Nike',
+    'mesa de escritorio',
+    'chaqueta vintage',
+    'auriculares Bluetooth',
+  ];
+
+  suggestion = signal(this.suggestions[0]);
+  suggestionVisible = signal(true);
+  showPlaceholder = signal(true);
+  hasText = signal(false);
   text = '';
 
-
   constructor(private router: Router) {
-    interval(4000).subscribe(() => this.animate.set(!this.animate()));
-
-    interval(8000).subscribe(() => {
-      this.cont = (this.cont + 1) % this.products.length;
-      this.product.set(this.products[this.cont]);
-    });
+    interval(6000)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this.suggestionVisible.set(false);
+        setTimeout(() => {
+          this.rotateSuggestion();
+          this.suggestionVisible.set(true);
+        }, 300);
+      });
   }
 
-  changeMessage() {
-    if (this.text === '') {
-      this.messageActivate.set(!this.messageActivate());
+  private rotateSuggestion() {
+    this.suggestionIndex = (this.suggestionIndex + 1) % this.suggestions.length;
+    this.suggestion.set(this.suggestions[this.suggestionIndex]);
+  }
+
+  onFocus() {
+    if (!this.text) {
+      this.showPlaceholder.set(false);
+    }
+  }
+
+  onBlur() {
+    if (!this.text) {
+      this.showPlaceholder.set(true);
     }
   }
 
   onInput(value: string) {
     this.text = value;
+    this.hasText.set(value.length > 0);
+    this.showPlaceholder.set(value.length === 0);
   }
 
-  onSubmit() {
-    this.router.navigate(['/products'], {
-      queryParams: {
-        q: this.text
-      }
-    });
+  clear() {
+    this.text = '';
+    this.hasText.set(false);
+    this.showPlaceholder.set(true);
+    this.searchInput.nativeElement.value = '';
+    this.searchInput.nativeElement.focus();
+  }
+
+  onSubmit(event?: Event) {
+    event?.preventDefault();
+
+    const query = this.getQuery();
+    const queryParams = query ? { q: query } : {};
+
+    this.router.navigate(['/products'], { queryParams });
+  }
+
+  private getQuery(): string {
+    const value = (this.searchInput?.nativeElement?.value ?? this.text).trim();
+    return value || this.suggestion();
   }
 }
