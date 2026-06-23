@@ -8,18 +8,23 @@
         </svg>
     </button>
 
-    @for (pageNum of visiblePages; track pageNum) {
-    <button type="button" (click)="goToPage(pageNum)"
-        [class.bg-primary]="pageNum === page"
-        [class.text-white]="pageNum === page"
-        [class.text-on-surface-variant]="pageNum !== page"
-        [class.hover:bg-surface-container-high]="pageNum !== page"
-        [class.hover:text-on-surface]="pageNum !== page"
+    @for (item of pageItems; track $index) {
+    @if (item === 'ellipsis') {
+    <span class="inline-flex size-9 items-center justify-center text-sm text-on-surface-variant select-none"
+        aria-hidden="true">…</span>
+    } @else {
+    <button type="button" (click)="goToPage(item)"
+        [class.bg-primary]="item === page"
+        [class.text-white]="item === page"
+        [class.text-on-surface-variant]="item !== page"
+        [class.hover:bg-surface-container-high]="item !== page"
+        [class.hover:text-on-surface]="item !== page"
         class="inline-flex size-9 items-center justify-center rounded-md text-sm font-medium transition-colors"
-        [attr.aria-current]="pageNum === page ? 'page' : null"
-        [attr.aria-label]="'Página ' + pageNum">
-        {{ pageNum }}
+        [attr.aria-current]="item === page ? 'page' : null"
+        [attr.aria-label]="'Página ' + item">
+        {{ item }}
     </button>
+    }
     }
 
     <button type="button" (click)="goToPage(page + 1)" [disabled]="page >= totalPages"
