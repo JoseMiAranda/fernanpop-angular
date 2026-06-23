@@ -41,7 +41,7 @@ export class SearcherComponent {
   }
 
   onSubmit() {
-    this.router.navigate(['/fernanpop/products'], {
+    this.router.navigate(['/products'], {
       queryParams: {
         q: this.text
       }

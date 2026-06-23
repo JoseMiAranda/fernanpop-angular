@@ -8,7 +8,7 @@
 <app-page-container>
     <div class="mb-stack-lg flex flex-col gap-stack-md sm:flex-row sm:items-center sm:justify-between">
         <app-page-title size="compact" [withMargin]="false">Mis productos</app-page-title>
-        <app-button label="Agregar producto" [routerLink]="['/fernanpop/create-product']" />
+        <app-button label="Agregar producto" [routerLink]="['/create-product']" />
     </div>
 
     @if (productState().data.length > 0) {

@@ -84,7 +84,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     page++;
     console.log(page);
     this.queryParams = { ...this.queryParams, page };
-    this.router.navigate(['/fernanpop/user/products'], {
+    this.router.navigate(['/user/products'], {
       queryParams: { ...this.queryParams }
     });
   }
@@ -109,7 +109,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
               this.transactionsState.set(new SuccessState(transactions));
               this.openRatingDialog(acceptedTransaction);
             } else {
-              this.router.navigate(['fernanpop/error/'], {
+              this.router.navigate(['/error/'], {
                 state: {
                   message: 'Parece que no se pudo aceptar la transacción'
                 }
@@ -139,7 +139,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
               });
               this.transactionsState.set(new SuccessState(transactions));
             } else {
-              this.router.navigate(['fernanpop/error/'], {
+              this.router.navigate(['/error/'], {
                 state: {
                   message: 'Parece que no se pudo cancelar la transacción'
                 }
@@ -193,7 +193,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         });
         this.transactionsState.set(new SuccessState(transactions));
       } else {
-        this.router.navigate(['fernanpop/error/'], {
+        this.router.navigate(['/error/'], {
           state: {
             message: 'Parece que no se pudo enviar la valoración'
           }

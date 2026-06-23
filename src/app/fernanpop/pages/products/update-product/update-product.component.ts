@@ -104,7 +104,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
             condition: condition ?? '',
           });
         } else if (response instanceof ErrorResponse) {
-          this.router.navigate(['fernanpop/error/'], {
+          this.router.navigate(['/error/'], {
             state: {
               message: 'Parece que el producto no se encuentra'
             }
@@ -192,7 +192,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       const newImages: string[] = [];
       urls?.forEach((url) => {
         if (url instanceof ErrorResponse) {
-          this.router.navigate(['fernanpop/error/'], {
+          this.router.navigate(['/error/'], {
             state: {
               message: 'Parece que no se pudo subir la imagen'
             }
@@ -231,10 +231,10 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.updateProductSubscription = this.productsService.updateProduct(updatedProduct).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
-          this.router.navigate(['/fernanpop/product', response.data.slug]);
+          this.router.navigate(['/product', response.data.slug]);
           return;
         } 
-        this.router.navigate(['fernanpop/error/'], {
+        this.router.navigate(['/error/'], {
           state: {
             message: 'Parece que no se pudo modificar el producto'
           }
@@ -267,10 +267,10 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       this.deleteProductSubscription = this.productsService.deleteProduct(this.productState()!.data.id).subscribe({
         next: (response: CustomResponse) => {
           if (response instanceof SuccessResponse) {
-            this.router.navigate(['/fernanpop/user/products']);
+            this.router.navigate(['/user/products']);
             return;
           }
-          this.router.navigate(['fernanpop/error/'], {
+          this.router.navigate(['/error/'], {
             state: {
               message: 'Parece que no se pudo borrar el producto'
             }

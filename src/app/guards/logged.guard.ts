@@ -12,7 +12,7 @@ export const LoggedGuard: CanActivateFn = async () => {
   const user = await firstValueFrom(authState(auth));
 
   if (!user) {
-    router.navigate(['fernanpop/']);
+    router.navigate(['/']);
     return false;
   }
 

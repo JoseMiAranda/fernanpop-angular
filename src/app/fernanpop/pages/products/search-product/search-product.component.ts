@@ -139,7 +139,7 @@ export class SearchProductComponent implements OnInit, OnDestroy {
       delete queryParams['reserved'];
     }
 
-    this.router.navigate(['/fernanpop/products'], { queryParams });
+    this.router.navigate(['/products'], { queryParams });
   }
 
   clearFilters(): void {
@@ -148,11 +148,11 @@ export class SearchProductComponent implements OnInit, OnDestroy {
     if (q) {
       queryParams['q'] = q;
     }
-    this.router.navigate(['/fernanpop/products'], { queryParams });
+    this.router.navigate(['/products'], { queryParams });
   }
 
   onPageChange(page: number): void {
-    this.router.navigate(['/fernanpop/products'], {
+    this.router.navigate(['/products'], {
       queryParams: { ...this.queryParams, page },
     });
   }

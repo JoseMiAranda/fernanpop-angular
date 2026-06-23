@@ -13,6 +13,6 @@ export const NotLoggedGuard: CanActivateFn = async () => {
     return true;
   }
 
-  router.navigate(['fernanpop/']);
+  router.navigate(['/']);
   return false;
 };

@@ -15,7 +15,7 @@ import { FavoritesComponent } from './fernanpop/pages/favorites/favorites.compon
 
 export const routes: Routes = [
     {
-        path: 'fernanpop',
+        path: '',
         loadComponent: () => import('./fernanpop/fernanpop.component').then(c => c.FernanpopComponent),
         children: [
             {
@@ -98,16 +98,16 @@ export const routes: Routes = [
                 title: 'error',
                 loadComponent: () => ErrorComponent,
             },
-            {
-                path: '',
-                redirectTo: 'home',
-                pathMatch: 'full',
-            }
         ]
     },
     {
+        path: 'fernanpop',
+        redirectTo: '',
+        pathMatch: 'full',
+    },
+    {
         path: '**',
-        redirectTo: '/fernanpop',
+        redirectTo: '',
         pathMatch: 'full',
     }
 ];

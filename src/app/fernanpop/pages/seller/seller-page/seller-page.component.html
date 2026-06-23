@@ -55,7 +55,7 @@
                             variant="secondary"
                             size="lg"
                             label="Editar perfil"
-                            [routerLink]="['/fernanpop/user/profile']" />
+                            [routerLink]="['/user/profile']" />
                         }
                     </div>
                     <div class="mt-stack-md flex flex-wrap items-center justify-center gap-stack-md md:justify-start">
@@ -247,7 +247,7 @@
                                     </div>
                                 </td>
                                 <td class="hidden px-3 py-4 md:table-cell md:px-6 md:py-5">
-                                    <a [routerLink]="['/fernanpop/seller', item.sellerId]"
+                                    <a [routerLink]="['/seller', item.sellerId]"
                                         class="font-medium text-on-surface transition-colors hover:text-primary">
                                         {{ item.sellerName ?? item.sellerEmail }}
                                     </a>

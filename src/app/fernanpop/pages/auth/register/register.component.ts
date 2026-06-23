@@ -91,7 +91,7 @@ export class RegisterComponent {
     this.authService.loginWithGoogle().subscribe({
       next: () => {
         this.googleLoading.set(false);
-        this.router.navigate(['fernanpop']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         this.googleLoading.set(false);
@@ -116,7 +116,7 @@ export class RegisterComponent {
 
     this.authService.registerWithEmailAndPassword(email, password, firstName, lastName).subscribe({
       next: () => {
-        this.router.navigate(['fernanpop']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)

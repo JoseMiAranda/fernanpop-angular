@@ -144,7 +144,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       const newImages: string[] = [];
       urls?.forEach((url) => {
         if (url instanceof ErrorResponse) {
-          this.router.navigate(['fernanpop/error/'], {
+          this.router.navigate(['/error/'], {
             state: {
               message: 'Parece que no se pudo subir la imagen'
             }
@@ -179,10 +179,10 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     this.createProductSubscription = this.productsService.createProduct(newProduct).subscribe({
       next: (response: CustomResponse) => {
         if (response instanceof SuccessResponse) {
-          this.router.navigate(['/fernanpop/product', response.data.slug]);
+          this.router.navigate(['/product', response.data.slug]);
           return;
         }
-        this.router.navigate(['fernanpop/error/'], {
+        this.router.navigate(['/error/'], {
           state: {
             message: 'Parece que no se pudo crear el producto'
           }

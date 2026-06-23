@@ -103,7 +103,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     this.buyProductState.set(new LoadingState());
 
     if (!this.authService.currentUser()) {
-      this.router.navigate(['/fernanpop/login']);
+      this.router.navigate(['/login']);
       return;
     }
 
@@ -115,9 +115,9 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (result: CustomResponse) => {
           if (result instanceof SuccessResponse) {
-            this.router.navigate(['/fernanpop/user/transactions']);
+            this.router.navigate(['/user/transactions']);
           } else if (result instanceof ErrorResponse) {
-            this.router.navigate(['fernanpop/error/'], {
+            this.router.navigate(['/error/'], {
               state: {
                 message: 'Parece que no se puede comprar el producto'
               }
@@ -128,7 +128,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   }
 
   goToUpdate() {
-    this.router.navigate(['/fernanpop/update-product', this.productState().data.id]);
+    this.router.navigate(['/update-product', this.productState().data.id]);
   }
 
   previousImage() {
@@ -184,7 +184,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
   toggleFavorite(): void {
     if (!this.authService.currentUser()) {
-      this.router.navigate(['/fernanpop/login']);
+      this.router.navigate(['/login']);
       return;
     }
 

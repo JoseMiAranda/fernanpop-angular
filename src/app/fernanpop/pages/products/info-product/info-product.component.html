@@ -105,7 +105,7 @@
                 </p>
 
                 @if (seller(); as sellerData) {
-                <a [routerLink]="['/fernanpop/seller', sellerData.id]" class="block">
+                <a [routerLink]="['/seller', sellerData.id]" class="block">
                 <app-card variant="interactive" padding="sm">
                     <div class="flex items-center gap-4">
                     @if (sellerData.photoUrl) {

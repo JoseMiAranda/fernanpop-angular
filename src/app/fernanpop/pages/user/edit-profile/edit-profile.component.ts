@@ -165,7 +165,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       await firstValueFrom(this.authService.updateUserProfile(displayName, photoURL));
 
       this.saveState.set(new SuccessState(null));
-      this.router.navigate(['fernanpop/seller', user.uid]);
+      this.router.navigate(['/seller', user.uid]);
     } catch {
       this.errorMessage.set('No se pudieron guardar los cambios. Inténtalo de nuevo.');
       this.saveState.set(new InitialState());

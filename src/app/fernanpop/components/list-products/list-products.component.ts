@@ -68,7 +68,7 @@ export class ListProductsComponent implements OnInit, OnDestroy {
     event.stopPropagation();
 
     if (!this.user()) {
-      this.router.navigate(['/fernanpop/login']);
+      this.router.navigate(['/login']);
       return;
     }
 

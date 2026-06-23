@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
     this.authService.loginWithGoogle().subscribe({
       next: () => {
         this.googleLoading.set(false);
-        this.router.navigate(['fernanpop']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         this.googleLoading.set(false);
@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginWithEmailAndPassword(email, password).subscribe({
       next:() => {
-        this.router.navigate(['fernanpop']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         const authError = err as AuthError;

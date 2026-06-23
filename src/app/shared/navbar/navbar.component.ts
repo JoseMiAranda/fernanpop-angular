@@ -35,27 +35,27 @@ export class NavbarComponent implements OnInit {
         {
           label: 'Productos',
           icon: 'box',
-          action: () => this.router.navigate(['fernanpop/user/products']),
+          action: () => this.router.navigate(['/user/products']),
         },
         {
           label: 'Mi perfil',
           icon: 'user',
-          action: () => this.router.navigate(['fernanpop/seller', user.uid]),
+          action: () => this.router.navigate(['/seller', user.uid]),
         },
         {
           label: 'Favoritos',
           icon: 'heart',
-          action: () => this.router.navigate(['fernanpop/user/favorites']),
+          action: () => this.router.navigate(['/user/favorites']),
         },
         {
           label: 'Editar perfil',
           icon: 'user',
-          action: () => this.router.navigate(['fernanpop/user/profile']),
+          action: () => this.router.navigate(['/user/profile']),
         },
         {
           label: 'Transacciones',
           icon: 'truck',
-          action: () => this.router.navigate(['fernanpop/user/transactions']),
+          action: () => this.router.navigate(['/user/transactions']),
         },
         {
           label: 'Cerrar sesión',
@@ -90,6 +90,6 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['fernanpop']);
+    this.router.navigate(['/']);
   }
 }

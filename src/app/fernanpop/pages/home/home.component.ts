@@ -90,11 +90,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   browseMarketplace(): void {
-    this.router.navigate(['/fernanpop/products']);
+    this.router.navigate(['/products']);
   }
 
   browseCategory(categoryId: string): void {
-    this.router.navigate(['/fernanpop/products'], { queryParams: { categoryId, page: 1 } });
+    this.router.navigate(['/products'], { queryParams: { categoryId, page: 1 } });
   }
 
   scrollToTop(): void {
