@@ -44,6 +44,11 @@ export class NavbarComponent implements OnInit {
           icon: 'heart',
           action: () => this.router.navigate(['fernanpop/user/favorites']),
         });
+        menuItems.push({
+          label: 'Editar perfil',
+          icon: 'user',
+          action: () => this.router.navigate(['fernanpop/user/profile']),
+        });
       }
 
       menuItems.push({

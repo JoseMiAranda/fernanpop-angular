@@ -1,0 +1,160 @@
+<div class="min-h-full bg-surface font-body text-on-surface">
+
+    @if (pageState().type === 'loading') {
+    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-desktop">
+        <div class="mb-stack-lg h-8 w-40 rounded bg-outline-variant/40"></div>
+        <div class="mb-section-gap space-y-stack-sm">
+            <div class="h-12 w-1/3 rounded bg-outline-variant/40"></div>
+            <div class="h-4 w-2/3 rounded bg-outline-variant/40"></div>
+        </div>
+        <div class="grid grid-cols-1 items-start gap-stack-lg lg:grid-cols-12">
+            <div class="rounded-xl border border-outline-variant/40 bg-surface-container-low p-stack-lg lg:col-span-5">
+                <div class="mx-auto size-40 rounded-full bg-outline-variant/30 md:size-48"></div>
+            </div>
+            <div class="rounded-xl border border-outline-variant/40 bg-white p-stack-lg lg:col-span-7 lg:p-12">
+                <div class="space-y-stack-lg">
+                    <div class="h-12 rounded-lg bg-outline-variant/30"></div>
+                    <div class="h-12 rounded-lg bg-outline-variant/30"></div>
+                    <div class="h-12 rounded-lg bg-outline-variant/30"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if (pageState().type === 'error') {
+    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+        <p class="text-error">Debes iniciar sesión para editar tu perfil.</p>
+    </div>
+    }
+
+    @if (pageState().type === 'success') {
+    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+        <div class="mb-stack-lg">
+            <button type="button" (click)="goBack()"
+                class="group flex items-center text-on-surface-variant transition-colors hover:text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="mr-2 size-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" />
+                </svg>
+                <span class="text-sm font-semibold uppercase tracking-wider">Volver</span>
+            </button>
+        </div>
+
+        <div class="mb-section-gap">
+            <h1 class="mb-stack-sm font-headline text-3xl font-bold text-on-surface md:text-4xl lg:text-5xl">
+                Editar perfil
+            </h1>
+            <p class="max-w-2xl text-base text-on-surface-variant">
+                Actualiza tu nombre, apellidos y foto de perfil. Los cambios se verán en tu perfil público.
+            </p>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="grid grid-cols-1 items-start gap-stack-lg lg:grid-cols-12">
+                <div class="space-y-stack-lg lg:col-span-5">
+                    <div class="rounded-xl border border-outline-variant bg-surface-container-low p-stack-lg">
+                        <h3 class="mb-stack-lg text-sm font-semibold uppercase tracking-wider text-primary">
+                            Foto de perfil
+                        </h3>
+
+                        <div class="mb-stack-lg flex justify-center">
+                            @if (avatarUrl) {
+                            <img [src]="avatarUrl" alt="Foto de perfil"
+                                class="size-40 rounded-full border-4 border-white object-cover shadow-sm md:size-48" />
+                            } @else {
+                            <div
+                                class="flex size-40 items-center justify-center rounded-full border-4 border-white bg-primary-container text-3xl font-bold text-white shadow-sm md:size-48">
+                                {{ displayInitials }}
+                            </div>
+                            }
+                        </div>
+
+                        <app-image-drop [single]="true" [compact]="false" (onDrop)="onPhotoSelected($event)" />
+                        <p class="mt-stack-sm text-center text-xs text-on-surface-variant">
+                            PNG, JPG o JPEG. Una sola imagen.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div class="space-y-stack-lg rounded-xl border border-outline-variant bg-white p-stack-lg lg:p-12">
+                        <div class="grid grid-cols-1 gap-stack-lg md:grid-cols-2">
+                            <div>
+                                <label
+                                    class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Nombre
+                                </label>
+                                <input type="text" formControlName="firstName"
+                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    [class.border-error]="submitted && f['firstName'].errors" />
+                                @if (submitted && f['firstName'].errors) {
+                                <div class="mt-1 text-sm text-error">
+                                    @if (f['firstName'].errors['required']) { Nombre requerido }
+                                    @if (f['firstName'].errors['minlength']) { Mínimo 2 caracteres }
+                                    @if (f['firstName'].errors['maxlength']) { Máximo 50 caracteres }
+                                </div>
+                                }
+                            </div>
+
+                            <div>
+                                <label
+                                    class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Apellidos
+                                </label>
+                                <input type="text" formControlName="lastName"
+                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    [class.border-error]="submitted && f['lastName'].errors" />
+                                @if (submitted && f['lastName'].errors) {
+                                <div class="mt-1 text-sm text-error">
+                                    @if (f['lastName'].errors['required']) { Apellidos requeridos }
+                                    @if (f['lastName'].errors['minlength']) { Mínimo 2 caracteres }
+                                    @if (f['lastName'].errors['maxlength']) { Máximo 80 caracteres }
+                                </div>
+                                }
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label
+                                    class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                    Correo electrónico
+                                </label>
+                                <input type="email" formControlName="email" readonly
+                                    class="w-full cursor-not-allowed rounded-lg border border-outline-variant bg-surface-container-lowest px-stack-md py-3 text-base text-on-surface-variant" />
+                                <p class="mt-1 text-xs text-on-surface-variant">
+                                    El correo electrónico no se puede modificar desde aquí.
+                                </p>
+                            </div>
+                        </div>
+
+                        @if (errorMessage()) {
+                        <p class="text-sm text-error">{{ errorMessage() }}</p>
+                        }
+
+                        <div
+                            class="flex flex-col justify-end gap-stack-md border-t border-outline-variant pt-stack-lg sm:flex-row">
+                            <button type="button" (click)="goBack()"
+                                class="order-2 rounded-lg border border-outline px-stack-lg py-4 text-sm font-semibold uppercase tracking-wider text-secondary transition-all hover:bg-surface-container-high sm:order-1">
+                                Cancelar
+                            </button>
+
+                            @if (saveState().type === 'initial' || saveState().type === 'error') {
+                            <div class="order-1 sm:order-2">
+                                <app-product-button [title]="'Guardar cambios'" [submit]="!isLoading"
+                                    [isDisabled]="isLoading" />
+                            </div>
+                            } @else {
+                            <div class="order-1 sm:order-2">
+                                <app-product-button [title]="'Guardando cambios...'" [isDisabled]="true" />
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    }
+
+</div>

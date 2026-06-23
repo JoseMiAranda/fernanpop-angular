@@ -80,6 +80,13 @@ export const routes: Routes = [
                 loadComponent: () => FavoritesComponent,
             },
             {
+                canActivate: [LoggedGuard],
+                path: 'user/profile',
+                title: 'edit-profile',
+                loadComponent: () => import('./fernanpop/pages/user/edit-profile/edit-profile.component')
+                    .then(c => c.EditProfileComponent),
+            },
+            {
                 // Solamente accesible si no está logueado
                 canActivate: [LoggedGuard],
                 path: 'user/transactions',

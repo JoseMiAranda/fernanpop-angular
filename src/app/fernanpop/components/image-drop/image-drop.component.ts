@@ -1,93 +1,122 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-image-drop',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './image-drop.component.html',
   styleUrl: './image-drop.component.css'
 })
-export class ImageDropComponent implements OnInit {
+export class ImageDropComponent {
   @Input() compact = false;
-  public validImages: string[] = [
-    'image/png',
-    'image/jpeg',
-    'image/jpg',
-  ];
+  @Input() single = false;
 
   @Output() onDrop = new EventEmitter<FileList>();
-  
-  ngOnInit(): void {
-    const lblSelectedFiles = document.querySelector(
-      "#lbl-selected-files"
-    ) as HTMLParagraphElement;
-    const dropZone = document.querySelector("#drop-zone") as HTMLLabelElement;
-    const fileInput = document.querySelector(
-      "#file-upload"
-    ) as HTMLInputElement;
 
+  @ViewChild('fileInput') fileInputRef?: ElementRef<HTMLInputElement>;
+  @ViewChild('dropZone') dropZoneRef?: ElementRef<HTMLElement>;
+  @ViewChild('lblSelectedFiles') lblSelectedFilesRef?: ElementRef<HTMLElement>;
 
-    const preventDefaults = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-    };
+  private readonly validMimeTypes = new Set(['image/png', 'image/jpeg', 'image/jpg']);
+  private readonly validExtensions = new Set(['.png', '.jpg', '.jpeg']);
 
-    const highlight = (e: DragEvent) => {
-      dropZone.classList.remove('border-outline-variant');
-      dropZone.classList.add('border-primary', 'bg-surface-container-high');
-    };
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.highlight();
+  }
 
-    const unHighlight = (e: DragEvent) => {
-      dropZone.classList.remove('border-primary', 'bg-surface-container-high');
-      dropZone.classList.add('border-outline-variant');
-    };
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.unhighlight();
+  }
 
-    const createFileList = (files: File[]): FileList => {
-      const dataTransfer = new DataTransfer();
-      files.forEach(file => dataTransfer.items.add(file));
-      return dataTransfer.files;
+  onDropEvent(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.unhighlight();
+
+    const files = event.dataTransfer?.files;
+    if (files) {
+      this.handleFiles(files);
+    }
+  }
+
+  onFileInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.handleFiles(input.files);
+    }
+  }
+
+  private handleFiles(files: FileList): void {
+    let validFiles = Array.from(files).filter((file) => this.isValidImage(file));
+
+    if (this.single && validFiles.length > 1) {
+      validFiles = validFiles.slice(0, 1);
     }
 
-    const handleFiles = (files: FileList) => {
-      const validFiles = Array.from(files).filter(
-        file => file.type.startsWith('image/') 
-                && this.validImages.includes(file.type)
-      );
+    const fileInput = this.fileInputRef?.nativeElement;
+    if (fileInput && validFiles.length > 0) {
+      const dataTransfer = new DataTransfer();
+      validFiles.forEach((file) => dataTransfer.items.add(file));
+      fileInput.files = dataTransfer.files;
+    }
 
-      if (fileInput && validFiles.length > 0) {
-        fileInput.files = createFileList(validFiles);
-      }
+    this.updateLabel(validFiles.length);
 
-      lblSelectedFiles.innerHTML = `<strong>${validFiles.length} archivos seleccionados</strong>`
-      this.onDrop.emit(files);
-    };
+    if (validFiles.length > 0) {
+      const dataTransfer = new DataTransfer();
+      validFiles.forEach((file) => dataTransfer.items.add(file));
+      this.onDrop.emit(dataTransfer.files);
+    }
+  }
 
-    (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach(
-      (eventName) => {
-        dropZone.addEventListener(eventName, preventDefaults);
-        document.body.addEventListener(eventName, preventDefaults);
-      }
-    );
+  private isValidImage(file: File): boolean {
+    if (file.type.startsWith('image/') && this.validMimeTypes.has(file.type)) {
+      return true;
+    }
 
-    (['dragenter', 'dragover'] as const).forEach(
-      (eventName) => {
-        dropZone.addEventListener(eventName, highlight);
-      }
-    );
+    const extension = file.name.toLowerCase().slice(file.name.lastIndexOf('.'));
+    return this.validExtensions.has(extension);
+  }
 
-    (['dragleave', 'drop'] as const).forEach(
-      (eventName) => {
-        dropZone.addEventListener(eventName, unHighlight);
-      }
-    );
+  private updateLabel(count: number): void {
+    const label = this.lblSelectedFilesRef?.nativeElement;
+    if (!label) {
+      return;
+    }
 
-    // Sólo imágenes
-    dropZone.addEventListener('drop', (e) => {
-      const files = e.dataTransfer?.files;
+    if (this.single) {
+      label.innerHTML = count > 0
+        ? '<strong>1 imagen seleccionada</strong>'
+        : (this.compact
+          ? 'Añadir'
+          : '<span class="font-semibold">Click aquí</span> o arrastra el archivo');
+    } else {
+      label.innerHTML = `<strong>${count} archivos seleccionados</strong>`;
+    }
+  }
 
-      if (files) {
-        handleFiles(files);
-      }
-    });
+  private highlight(): void {
+    const dropZone = this.dropZoneRef?.nativeElement;
+    if (!dropZone) {
+      return;
+    }
+
+    dropZone.classList.remove('border-outline-variant');
+    dropZone.classList.add('border-primary', 'bg-surface-container-high');
+  }
+
+  private unhighlight(): void {
+    const dropZone = this.dropZoneRef?.nativeElement;
+    if (!dropZone) {
+      return;
+    }
+
+    dropZone.classList.remove('border-primary', 'bg-surface-container-high');
+    dropZone.classList.add('border-outline-variant');
   }
 }

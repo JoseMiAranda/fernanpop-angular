@@ -3,6 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SellersService } from '../../../../services/sellers.service';
 import { ReviewsService } from '../../../../services/reviews.service';
+import { AuthService } from '../../../../services/auth.service';
 import { Seller } from '../../../../interfaces/seller.interface';
 import { Product } from '../../../../interfaces/product.interface';
 import { SoldItem } from '../../../../interfaces/sold-item.interface';
@@ -38,6 +39,7 @@ export class SellerPageComponent implements OnInit, OnDestroy {
   constructor(
     private sellersService: SellersService,
     private reviewsService: ReviewsService,
+    private authService: AuthService,
     private location: Location,
   ) {}
 
@@ -115,6 +117,11 @@ export class SellerPageComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.location.back();
+  }
+
+  isOwnProfile(): boolean {
+    const currentUser = this.authService.currentUser();
+    return !!currentUser && currentUser.uid === this.sellerId;
   }
 
   sellerInitials(name: string): string {

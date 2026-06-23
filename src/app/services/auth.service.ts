@@ -77,4 +77,44 @@ export class AuthService {
     const promise = signOut(this.firebaseAuth);
     return from(promise);
   }
+
+  static parseDisplayName(displayName: string): { firstName: string; lastName: string } {
+    const trimmed = displayName.trim();
+    const spaceIndex = trimmed.indexOf(' ');
+
+    if (spaceIndex === -1) {
+      return { firstName: trimmed, lastName: '' };
+    }
+
+    return {
+      firstName: trimmed.slice(0, spaceIndex),
+      lastName: trimmed.slice(spaceIndex + 1).trim(),
+    };
+  }
+
+  updateUserProfile(displayName: string, photoURL?: string): Observable<void> {
+    const firebaseUser = this.firebaseAuth.currentUser;
+
+    if (!firebaseUser) {
+      return from(Promise.reject(new Error('No hay usuario autenticado')));
+    }
+
+    const profileUpdate: { displayName: string; photoURL?: string } = { displayName };
+    if (photoURL !== undefined) {
+      profileUpdate.photoURL = photoURL;
+    }
+
+    const promise = updateProfile(firebaseUser, profileUpdate)
+      .then(() => firebaseUser.reload())
+      .then(() => {
+        this.currentUser.set({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email!,
+          displayName: firebaseUser.displayName ?? undefined,
+          photoUrl: firebaseUser.photoURL ?? undefined,
+        });
+      });
+
+    return from(promise);
+  }
 }

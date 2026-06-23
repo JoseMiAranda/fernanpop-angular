@@ -46,6 +46,8 @@
                 </div>
 
                 <div class="flex-1 text-center md:text-left">
+                    <div class="flex flex-col items-center gap-stack-md md:flex-row md:items-start md:justify-between">
+                        <div>
                     <h1 class="font-headline text-3xl font-bold text-on-surface md:text-4xl">
                         {{ sellerData.displayName }}
                     </h1>
@@ -55,6 +57,14 @@
                         <span class="block truncate text-on-surface-variant/80 sm:inline sm:max-w-xs"> · {{ sellerData.email }}</span>
                         }
                     </p>
+                        </div>
+                        @if (isOwnProfile()) {
+                        <a routerLink="/fernanpop/user/profile"
+                            class="shrink-0 rounded-lg border border-outline px-stack-md py-3 text-sm font-semibold uppercase tracking-wider text-secondary transition-all hover:bg-surface-container-high">
+                            Editar perfil
+                        </a>
+                        }
+                    </div>
                     <div class="mt-stack-md flex flex-wrap items-center justify-center gap-stack-md md:justify-start">
                         <div class="rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-3 shadow-sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">En venta</p>
