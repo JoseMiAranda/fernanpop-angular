@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-gutter">
     @if (images.length) {
-    <div class="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl bg-gallery-bg">
+    <div class="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-gallery-bg md:rounded-3xl">
         <img [src]="images[selectedIndex()]" class="h-4/5 w-4/5 object-contain drop-shadow-2xl transition-transform duration-700"
             alt="Imagen del producto" />
     </div>
 
     @if (images.length > 1) {
-    <div class="grid grid-cols-5 gap-4">
+    <div class="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-5 md:gap-4">
         @for (image of images; track $index) {
         <button type="button" (click)="selectImage($index)"
             class="aspect-square cursor-pointer rounded-xl bg-white p-2 transition-all hover:border-primary-container hover:shadow-md"

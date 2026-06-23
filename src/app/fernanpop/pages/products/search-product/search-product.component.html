@@ -14,7 +14,7 @@
                 <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="space-y-5">
                     <div>
                         <p class="mb-3 text-sm font-medium text-on-surface">Precio</p>
-                        <div class="space-y-2">
+                        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             <div>
                                 <label class="mb-1 block text-xs text-on-surface-variant">Mínimo (€)</label>
                                 <input type="number" formControlName="price_min" min="0" placeholder="0"

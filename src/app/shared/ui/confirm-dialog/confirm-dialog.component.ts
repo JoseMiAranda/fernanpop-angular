@@ -22,7 +22,7 @@ export class ConfirmDialogComponent {
 
   get acceptButtonClasses(): string {
     const base =
-      'px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors';
+      'w-full px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors sm:w-auto';
 
     switch (this.acceptVariant) {
       case 'danger':

@@ -52,7 +52,7 @@
                     <p class="mt-stack-sm text-on-surface-variant">
                         Vendedor en Fernanpop
                         @if (sellerData.email) {
-                        <span class="text-on-surface-variant/80"> · {{ sellerData.email }}</span>
+                        <span class="block truncate text-on-surface-variant/80 sm:inline sm:max-w-xs"> · {{ sellerData.email }}</span>
                         }
                     </p>
                     <div class="mt-stack-md flex flex-wrap items-center justify-center gap-stack-md md:justify-start">
@@ -89,9 +89,9 @@
     </div>
 
     <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-        <div class="mb-stack-lg flex gap-2">
+        <div class="mb-stack-lg flex flex-wrap gap-2">
             <button type="button" (click)="setTab('active')"
-                class="rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                class="rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:px-5 sm:py-2.5"
                 [class.bg-primary]="activeTab() === 'active'"
                 [class.text-white]="activeTab() === 'active'"
                 [class.bg-surface-container-low]="activeTab() !== 'active'"
@@ -99,7 +99,7 @@
                 En venta
             </button>
             <button type="button" (click)="setTab('sold')"
-                class="rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                class="rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:px-5 sm:py-2.5"
                 [class.bg-primary]="activeTab() === 'sold'"
                 [class.text-white]="activeTab() === 'sold'"
                 [class.bg-surface-container-low]="activeTab() !== 'sold'"
@@ -107,7 +107,7 @@
                 Vendidos
             </button>
             <button type="button" (click)="setTab('purchased')"
-                class="rounded-full px-5 py-2.5 text-sm font-semibold transition-colors"
+                class="rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:px-5 sm:py-2.5"
                 [class.bg-primary]="activeTab() === 'purchased'"
                 [class.text-white]="activeTab() === 'purchased'"
                 [class.bg-surface-container-low]="activeTab() !== 'purchased'"
@@ -147,19 +147,19 @@
             } @else {
             <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
                 <div class="overflow-x-auto">
-                    <table class="w-full border-collapse text-left">
+                    <table class="w-full min-w-[560px] border-collapse text-left">
                         <thead class="border-b border-outline-variant bg-surface-container">
                             <tr>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                     Fecha
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                     Producto
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                     Importe
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="hidden px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant sm:table-cell md:px-6 md:py-4">
                                     Valoración
                                 </th>
                             </tr>
@@ -167,20 +167,20 @@
                         <tbody>
                             @for (item of soldItems(); track item.id) {
                             <tr class="border-b border-outline-variant/40 transition-colors last:border-0 hover:bg-surface-container-low/50">
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-on-surface-variant md:px-6 md:py-5">
                                     {{ formatSoldDate(item.soldAt) }}
                                 </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-4">
+                                <td class="px-3 py-4 md:px-6 md:py-5">
+                                    <div class="flex items-center gap-3 md:gap-4">
                                         <img [src]="item.image" [alt]="item.title"
-                                            class="size-12 shrink-0 rounded-lg border border-outline-variant/40 object-cover" />
-                                        <span class="font-medium text-on-surface">{{ item.title | titlecase }}</span>
+                                            class="size-10 shrink-0 rounded-lg border border-outline-variant/40 object-cover md:size-12" />
+                                        <span class="line-clamp-2 font-medium text-on-surface md:line-clamp-none">{{ item.title | titlecase }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-5 font-semibold text-on-surface">
+                                <td class="whitespace-nowrap px-3 py-4 font-semibold text-on-surface md:px-6 md:py-5">
                                     {{ item.price | monetary }}
                                 </td>
-                                <td class="px-6 py-5">
+                                <td class="hidden px-3 py-4 sm:table-cell md:px-6 md:py-5">
                                     @if (item.review) {
                                     <div>
                                         <p class="font-semibold text-primary">★ {{ item.review.score }}/5</p>
@@ -217,22 +217,22 @@
             } @else {
             <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
                 <div class="overflow-x-auto">
-                    <table class="w-full border-collapse text-left">
+                    <table class="w-full min-w-[640px] border-collapse text-left">
                         <thead class="border-b border-outline-variant bg-surface-container">
                             <tr>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                     Fecha
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                     Producto
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="hidden px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:table-cell md:px-6 md:py-4">
                                     Vendedor
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                     Importe
                                 </th>
-                                <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                                <th class="hidden px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant sm:table-cell md:px-6 md:py-4">
                                     Valoración
                                 </th>
                             </tr>
@@ -240,26 +240,26 @@
                         <tbody>
                             @for (item of purchasedItems(); track item.id) {
                             <tr class="border-b border-outline-variant/40 transition-colors last:border-0 hover:bg-surface-container-low/50">
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-on-surface-variant md:px-6 md:py-5">
                                     {{ formatPurchasedDate(item.purchasedAt) }}
                                 </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-4">
+                                <td class="px-3 py-4 md:px-6 md:py-5">
+                                    <div class="flex items-center gap-3 md:gap-4">
                                         <img [src]="item.image" [alt]="item.title"
-                                            class="size-12 shrink-0 rounded-lg border border-outline-variant/40 object-cover" />
-                                        <span class="font-medium text-on-surface">{{ item.title | titlecase }}</span>
+                                            class="size-10 shrink-0 rounded-lg border border-outline-variant/40 object-cover md:size-12" />
+                                        <span class="line-clamp-2 font-medium text-on-surface md:line-clamp-none">{{ item.title | titlecase }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                                <td class="hidden px-3 py-4 md:table-cell md:px-6 md:py-5">
                                     <a [routerLink]="['/fernanpop/seller', item.sellerId]"
                                         class="font-medium text-on-surface transition-colors hover:text-primary">
                                         {{ item.sellerName ?? item.sellerEmail }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-5 font-semibold text-on-surface">
+                                <td class="whitespace-nowrap px-3 py-4 font-semibold text-on-surface md:px-6 md:py-5">
                                     {{ item.price | monetary }}
                                 </td>
-                                <td class="px-6 py-5">
+                                <td class="hidden px-3 py-4 sm:table-cell md:px-6 md:py-5">
                                     @if (item.review) {
                                     <div>
                                         <p class="font-semibold text-primary">★ {{ item.review.score }}/5</p>

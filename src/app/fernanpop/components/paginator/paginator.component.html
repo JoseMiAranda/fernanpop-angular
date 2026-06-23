@@ -1,5 +1,5 @@
 @if (totalPages > 1) {
-<nav class="flex items-center justify-center gap-1 py-4" aria-label="Paginación">
+<nav class="flex flex-wrap items-center justify-center gap-1 py-4" aria-label="Paginación">
     <button type="button" (click)="goToPage(page - 1)" [disabled]="page <= 1"
         class="inline-flex size-9 items-center justify-center rounded-md text-slate-300 transition-colors hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         aria-label="Página anterior">

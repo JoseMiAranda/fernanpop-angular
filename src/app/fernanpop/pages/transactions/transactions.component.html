@@ -56,7 +56,7 @@
 
         <div class="mb-stack-lg">
             <p class="mb-stack-sm text-sm font-medium text-on-surface-variant">Mi cuenta</p>
-            <h1 class="font-headline text-4xl font-bold text-on-surface md:text-5xl">Transacciones</h1>
+            <h1 class="font-headline text-3xl font-bold text-on-surface md:text-4xl lg:text-5xl">Transacciones</h1>
         </div>
 
         @if (transactionsState().data.length === 0) {
@@ -67,25 +67,25 @@
         } @else {
         <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
             <div class="overflow-x-auto">
-                <table class="w-full border-collapse text-left">
+                <table class="w-full min-w-[720px] border-collapse text-left">
                     <thead class="border-b border-outline-variant bg-surface-container">
                         <tr>
-                            <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                 Fecha
                             </th>
-                            <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            <th class="hidden px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:table-cell md:px-6 md:py-4">
                                 ID
                             </th>
-                            <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                 Producto
                             </th>
-                            <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            <th class="px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                 Importe
                             </th>
-                            <th class="px-6 py-4 text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            <th class="hidden px-3 py-3 text-sm font-semibold uppercase tracking-wider text-on-surface-variant sm:table-cell md:px-6 md:py-4">
                                 Estado
                             </th>
-                            <th class="px-6 py-4 text-right text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            <th class="px-3 py-3 text-right text-sm font-semibold uppercase tracking-wider text-on-surface-variant md:px-6 md:py-4">
                                 Acciones
                             </th>
                         </tr>
@@ -93,32 +93,32 @@
                     <tbody class="divide-y divide-outline-variant">
                         @for (transaction of transactionsState().data; track transaction.id) {
                         <tr class="transition-colors hover:bg-surface-container-low">
-                            <td class="whitespace-nowrap px-6 py-5">
-                                <p class="text-base text-on-surface">
+                            <td class="whitespace-nowrap px-3 py-4 md:px-6 md:py-5">
+                                <p class="text-sm text-on-surface md:text-base">
                                     {{ transaction.updatedAt | date:'d MMM yyyy' }}
                                 </p>
                                 <p class="text-xs text-outline">
                                     {{ transaction.updatedAt | date:'HH:mm' }}
                                 </p>
                             </td>
-                            <td class="whitespace-nowrap px-6 py-5">
-                                <span class="font-mono text-base text-secondary">
+                            <td class="hidden whitespace-nowrap px-3 py-4 md:table-cell md:px-6 md:py-5">
+                                <span class="font-mono text-sm text-secondary md:text-base">
                                     #{{ transaction.id.slice(0, 8) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-5">
-                                <div class="flex items-center gap-4">
+                            <td class="px-3 py-4 md:px-6 md:py-5">
+                                <div class="flex items-center gap-3 md:gap-4">
                                     <div
-                                        class="size-12 shrink-0 overflow-hidden rounded-lg border border-outline-variant bg-surface-container">
+                                        class="size-10 shrink-0 overflow-hidden rounded-lg border border-outline-variant bg-surface-container md:size-12">
                                         <img class="h-full w-full object-cover" [src]="transaction.image"
                                             [alt]="transaction.title" loading="lazy" />
                                     </div>
-                                    <div>
-                                        <a class="font-medium text-on-surface transition-colors hover:text-primary"
+                                    <div class="min-w-0">
+                                        <a class="line-clamp-2 font-medium text-on-surface transition-colors hover:text-primary md:line-clamp-none"
                                             [routerLink]="['/fernanpop/product', transaction.productId]">
                                             {{ transaction.title | titlecase }}
                                         </a>
-                                        <p class="text-xs text-outline">
+                                        <p class="truncate text-xs text-outline">
                                             @if (transaction.sellerId == currentUser()!.uid) {
                                             Comprador: {{ transaction.buyerName }}
                                             } @else {
@@ -128,12 +128,12 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="whitespace-nowrap px-6 py-5">
-                                <p class="text-base font-semibold text-on-surface">
+                            <td class="whitespace-nowrap px-3 py-4 md:px-6 md:py-5">
+                                <p class="text-sm font-semibold text-on-surface md:text-base">
                                     {{ transaction.price | monetary }}
                                 </p>
                             </td>
-                            <td class="whitespace-nowrap px-6 py-5">
+                            <td class="hidden whitespace-nowrap px-3 py-4 sm:table-cell md:px-6 md:py-5">
                                 @switch (transaction.status) {
                                 @case ('received') {
                                 <span
@@ -158,7 +158,7 @@
                                 }
                                 }
                             </td>
-                            <td class="whitespace-nowrap px-6 py-5 text-right">
+                            <td class="whitespace-nowrap px-3 py-4 text-right md:px-6 md:py-5">
                                 @if (transaction.status != 'canceled' && transaction.status != 'received') {
                                 <div class="flex items-center justify-end gap-2">
                                     @if (transaction.sellerId == currentUser()!.uid) {

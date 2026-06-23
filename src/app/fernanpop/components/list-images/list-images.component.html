@@ -1,4 +1,4 @@
-<div class="grid grid-cols-4 gap-stack-sm">
+<div class="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-stack-sm">
     @for (image of images; track image; let i = $index) {
     <div class="group relative aspect-square cursor-pointer rounded-lg border bg-white p-2 transition-colors"
         [class.border-2]="i === selectedIndex"

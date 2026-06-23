@@ -1,7 +1,7 @@
-<div class="flex flex-col h-full items-center justify-center bg-slate-100">
-	<div class="p-12 bg-white mx-auto rounded-2xl w-full sm:max-w-[500px] shadow-md">
+<div class="flex min-h-full flex-col items-center justify-center bg-slate-100 px-4 py-6 sm:py-8">
+	<div class="mx-auto w-full rounded-2xl bg-white p-6 shadow-md sm:max-w-[500px] sm:p-8 md:p-12">
 		<div class="mb-4">
-			<h3 class="font-semibold text-2xl text-gray-800">¡Bienvenido de vuelta!</h3>
+			<h3 class="text-xl font-semibold text-gray-800 sm:text-2xl">¡Bienvenido de vuelta!</h3>
 			<p class="text-gray-500">Por favor inicie sesión con su cuenta.</p>
 		</div>
 		<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
@@ -46,7 +46,7 @@
 					Iniciar sesión
 				</button>
 			</div>
-			<div class="flex justify-center">
+			<div class="flex flex-wrap items-center justify-center gap-1">
 				<p>¿No tienes una cuenta?</p>
 				<a [routerLink]="['/fernanpop/register']"
 					class="text-green-400  hover:text-green-500">Regístrate</a>

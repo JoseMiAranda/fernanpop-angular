@@ -34,7 +34,7 @@
 
     @if (productState().type === 'success') {
     <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-        <div class="mb-stack-lg flex items-center justify-between gap-stack-md">
+        <div class="mb-stack-lg flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <button type="button" (click)="goBack()"
                 class="group flex items-center text-on-surface-variant transition-colors hover:text-primary">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -58,8 +58,9 @@
 
             @if (deleteProductState().type === 'initial') {
             <button type="button" (click)="onDelete($event!)" [disabled]="isLoading"
-                class="text-sm font-semibold uppercase tracking-wider text-error transition-colors hover:text-error/80 disabled:opacity-50">
-                Eliminar producto
+                class="self-start text-sm font-semibold uppercase tracking-wider text-error transition-colors hover:text-error/80 disabled:opacity-50 sm:self-auto">
+                <span class="hidden sm:inline">Eliminar producto</span>
+                <span class="sm:hidden">Eliminar</span>
             </button>
             } @else {
             <span class="text-sm font-semibold uppercase tracking-wider text-on-surface-variant">Eliminando...</span>
@@ -67,7 +68,7 @@
         </div>
 
         <div class="mb-section-gap">
-            <h1 class="mb-stack-sm font-headline text-4xl font-bold text-on-surface md:text-5xl">Editar producto</h1>
+            <h1 class="mb-stack-sm font-headline text-3xl font-bold text-on-surface md:text-4xl lg:text-5xl">Editar producto</h1>
             <p class="max-w-2xl text-base text-on-surface-variant">
                 Modifica los detalles de tu producto. Asegúrate de que la información esté completa antes de guardar.
             </p>

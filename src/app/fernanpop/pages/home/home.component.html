@@ -6,7 +6,7 @@
 
 @if (productsState().type === 'success') {
 <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
-    <h1 class="mb-stack-lg font-headline text-2xl font-bold text-on-surface">Últimos productos</h1>
+    <h1 class="mb-stack-lg font-headline text-xl font-bold text-on-surface sm:text-2xl">Últimos productos</h1>
 
     @if (productsState().data['products'].length > 0) {
     <app-list-products [listProducts]="productsState().data['products']"></app-list-products>
