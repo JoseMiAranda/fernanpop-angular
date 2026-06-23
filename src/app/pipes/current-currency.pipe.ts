@@ -9,7 +9,7 @@ export class CurrentCurrencyPipe implements PipeTransform {
   currentCurrency: string  = '€';
 
   transform(value: number): string {
-    return this.currentCurrency + value;
+    return `${value} ${this.currentCurrency}`;
   }
 
 }
