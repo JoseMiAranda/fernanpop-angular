@@ -38,6 +38,8 @@ export class SearchProductComponent implements OnInit, OnDestroy {
       price_min: [null, [Validators.min(0)]],
       price_max: [null, [Validators.min(0)]],
       categoryId: [''],
+      sort: ['newest'],
+      reserved: ['all'],
     });
   }
 
@@ -82,7 +84,7 @@ export class SearchProductComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const { price_min, price_max, categoryId } = this.filterForm.value;
+    const { price_min, price_max, categoryId, sort, reserved } = this.filterForm.value;
     const queryParams: Params = {
       ...this.queryParams,
       page: 1,
@@ -104,6 +106,18 @@ export class SearchProductComponent implements OnInit, OnDestroy {
       queryParams['categoryId'] = categoryId;
     } else {
       delete queryParams['categoryId'];
+    }
+
+    if (sort && sort !== 'newest') {
+      queryParams['sort'] = sort;
+    } else {
+      delete queryParams['sort'];
+    }
+
+    if (reserved && reserved !== 'all') {
+      queryParams['reserved'] = reserved;
+    } else {
+      delete queryParams['reserved'];
     }
 
     this.router.navigate(['/fernanpop/products'], { queryParams });
@@ -129,6 +143,8 @@ export class SearchProductComponent implements OnInit, OnDestroy {
       price_min: params['price_min'] ?? null,
       price_max: params['price_max'] ?? null,
       categoryId: params['categoryId'] ?? '',
+      sort: params['sort'] ?? 'newest',
+      reserved: params['reserved'] ?? 'all',
     }, { emitEvent: false });
   }
 
@@ -139,6 +155,8 @@ export class SearchProductComponent implements OnInit, OnDestroy {
       price_min: params['price_min'] != null ? Number(params['price_min']) : undefined,
       price_max: params['price_max'] != null ? Number(params['price_max']) : undefined,
       categoryId: params['categoryId'] ?? undefined,
+      sort: (params['sort'] as 'newest' | 'oldest') ?? 'newest',
+      reserved: (params['reserved'] as 'all' | 'yes' | 'no') ?? 'all',
     };
   }
 }

@@ -39,6 +39,25 @@
                         </select>
                     </div>
 
+                    <div>
+                        <p class="mb-3 text-sm font-medium text-on-surface">Ordenar por fecha</p>
+                        <select formControlName="sort"
+                            class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+                            <option value="newest">Más recientes primero</option>
+                            <option value="oldest">Menos recientes primero</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <p class="mb-3 text-sm font-medium text-on-surface">Estado de reserva</p>
+                        <select formControlName="reserved"
+                            class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+                            <option value="all">Todos</option>
+                            <option value="yes">Solo reservados</option>
+                            <option value="no">Solo no reservados</option>
+                        </select>
+                    </div>
+
                     <div class="flex flex-col gap-2 pt-2">
                         <button type="submit"
                             class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:opacity-90">

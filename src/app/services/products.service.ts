@@ -22,16 +22,22 @@ export class ProductsService {
     price_min,
     price_max,
     categoryId,
+    sort = 'newest',
+    reserved = 'all',
   }: {
     page?: number;
     q?: string;
     price_min?: number;
     price_max?: number;
     categoryId?: string;
+    sort?: 'newest' | 'oldest';
+    reserved?: 'all' | 'yes' | 'no';
   } = {}): Observable<CustomResponse> {
     let params = new HttpParams()
       .set('page', page)
-      .set('q', q);
+      .set('q', q)
+      .set('sort', sort)
+      .set('reserved', reserved);
 
     if (price_min != null && price_min > 0) {
       params = params.set('price_min', price_min);
