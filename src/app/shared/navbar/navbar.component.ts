@@ -5,12 +5,13 @@ import { TitleComponent } from '../title/title.component';
 import { SearcherComponent } from '../searcher/searcher.component';
 import { DropdownMenuComponent } from '../ui/dropdown-menu/dropdown-menu.component';
 import { DropdownMenuItem } from '../ui/dropdown-menu/dropdown-menu-item.model';
+import { ButtonComponent } from '../ui/button/button.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, TitleComponent, SearcherComponent, DropdownMenuComponent],
+  imports: [CommonModule, TitleComponent, SearcherComponent, DropdownMenuComponent, ButtonComponent],
   templateUrl: './navbar.component.html',
   styles: ``
 })
@@ -24,53 +25,44 @@ export class NavbarComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authService.user$.subscribe(async (user) => {
-      const menuItems: DropdownMenuItem[] = [
+    this.authService.user$.subscribe((user) => {
+      if (!user) {
+        this.items.set([]);
+        return;
+      }
+
+      this.items.set([
         {
           label: 'Productos',
           icon: 'box',
           action: () => this.router.navigate(['fernanpop/user/products']),
         },
-      ];
-
-      if (user) {
-        menuItems.push({
+        {
           label: 'Mi perfil',
           icon: 'user',
           action: () => this.router.navigate(['fernanpop/seller', user.uid]),
-        });
-        menuItems.push({
+        },
+        {
           label: 'Favoritos',
           icon: 'heart',
           action: () => this.router.navigate(['fernanpop/user/favorites']),
-        });
-        menuItems.push({
+        },
+        {
           label: 'Editar perfil',
           icon: 'user',
           action: () => this.router.navigate(['fernanpop/user/profile']),
-        });
-      }
-
-      menuItems.push({
-        label: 'Transacciones',
-        icon: 'truck',
-        action: () => this.router.navigate(['fernanpop/user/transactions']),
-      });
-
-      if (!user) {
-        menuItems.push({
-          label: 'Iniciar sesión',
-          icon: 'sign-in',
-          action: () => this.router.navigate(['fernanpop/login']),
-        });
-      } else {
-        menuItems.push({
+        },
+        {
+          label: 'Transacciones',
+          icon: 'truck',
+          action: () => this.router.navigate(['fernanpop/user/transactions']),
+        },
+        {
           label: 'Cerrar sesión',
           icon: 'sign-out',
           action: () => this.logout(),
-        });
-      }
-      this.items.set(menuItems);
+        },
+      ]);
     });
   }
 
