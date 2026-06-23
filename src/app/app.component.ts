@@ -24,12 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authService.user$.subscribe((user) => {
       if (user) {
-        this.authService.currentUser.set({
-          uid: user.uid,
-          email: user.email!,
-          displayName: user.displayName ?? undefined,
-          photoUrl: user.photoURL ?? undefined,
-        });
+        this.authService.currentUser.set(AuthService.mapFirebaseUser(user));
 
         void this.authService.refreshAccessToken().then(() => {
           this.favoritesService.loadFavoriteIds();

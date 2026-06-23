@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import {
+  User as FirebaseUser,
   UserCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -85,7 +86,18 @@ export class AuthService {
   loginWithGoogle(): Observable<void> {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    const promise = signInWithPopup(this.firebaseAuth, provider).then(() => {});
+    const promise = signInWithPopup(this.firebaseAuth, provider).then(async (credential) => {
+      const firebaseUser = credential.user;
+      const photoURL = AuthService.resolvePhotoUrl(firebaseUser);
+
+      if (photoURL && !firebaseUser.photoURL) {
+        await updateProfile(firebaseUser, {
+          displayName: firebaseUser.displayName ?? '',
+          photoURL,
+        });
+        await firebaseUser.reload();
+      }
+    });
     return from(promise);
   }
 
@@ -107,6 +119,31 @@ export class AuthService {
   logout(): Observable<void> {
     const promise = signOut(this.firebaseAuth);
     return from(promise);
+  }
+
+  static resolvePhotoUrl(user: {
+    photoURL?: string | null;
+    providerData?: { providerId: string; photoURL?: string | null }[];
+  }): string | undefined {
+    if (user.photoURL) {
+      return user.photoURL;
+    }
+
+    const googleProvider = user.providerData?.find((p) => p.providerId === 'google.com');
+    if (googleProvider?.photoURL) {
+      return googleProvider.photoURL;
+    }
+
+    return user.providerData?.find((p) => p.photoURL)?.photoURL ?? undefined;
+  }
+
+  static mapFirebaseUser(user: FirebaseUser): User {
+    return {
+      uid: user.uid,
+      email: user.email!,
+      displayName: user.displayName ?? undefined,
+      photoUrl: AuthService.resolvePhotoUrl(user),
+    };
   }
 
   static parseDisplayName(displayName: string): { firstName: string; lastName: string } {
@@ -138,12 +175,7 @@ export class AuthService {
     const promise = updateProfile(firebaseUser, profileUpdate)
       .then(() => firebaseUser.reload())
       .then(() => {
-        this.currentUser.set({
-          uid: firebaseUser.uid,
-          email: firebaseUser.email!,
-          displayName: firebaseUser.displayName ?? undefined,
-          photoUrl: firebaseUser.photoURL ?? undefined,
-        });
+        this.currentUser.set(AuthService.mapFirebaseUser(firebaseUser));
       });
 
     return from(promise);

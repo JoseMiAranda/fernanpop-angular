@@ -81,7 +81,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
         const { firstName, lastName } = AuthService.parseDisplayName(firebaseUser.displayName ?? '');
 
-        this.currentPhotoUrl.set(firebaseUser.photoURL ?? undefined);
+        this.currentPhotoUrl.set(AuthService.resolvePhotoUrl(firebaseUser));
         this.form = this.formBuilder.group({
           firstName: [firstName || null, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
           lastName: [lastName || null, [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
