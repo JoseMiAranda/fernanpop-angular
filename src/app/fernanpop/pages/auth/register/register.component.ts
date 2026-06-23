@@ -32,6 +32,7 @@ export class RegisterComponent {
   public minLenght = 6;
   public maxLenght = 20;
   public errorRegister = signal<string | undefined>(undefined);
+  public showPassword = signal(false);
 
   form: FormGroup = new FormGroup({
     firstName: new FormControl(null),
@@ -67,6 +68,10 @@ export class RegisterComponent {
   // Obtenemos un campo del formulario
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update((visible) => !visible);
   }
 
   onSubmit(): void {

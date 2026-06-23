@@ -1,86 +1,130 @@
-<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-6 sm:py-8">
+<div class="relative flex min-h-full flex-col items-center justify-center overflow-hidden bg-surface px-4 py-8 sm:py-12">
+	<div class="pointer-events-none absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+		<div class="absolute -right-[10%] -top-[10%] size-[600px] rounded-full bg-primary blur-[120px]"></div>
+		<div class="absolute -bottom-[10%] -left-[10%] size-[400px] rounded-full bg-secondary-container blur-[100px]"></div>
+	</div>
+
 	<app-page-container [narrow]="true">
 		<app-card variant="elevated" padding="lg">
-			<div class="mb-stack-md">
-				<app-page-title size="compact" [withMargin]="false">¡Conozca Fernanpop!</app-page-title>
-				<app-text>Crea una cuenta para comprar y vender productos.</app-text>
-			</div>
-			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-				<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-					<div class="space-y-2">
-						<label class="text-sm font-medium text-on-surface-variant">Nombre</label>
-						<input type="text" formControlName="firstName"
-							class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+			<header class="mb-stack-lg text-center">
+				<app-page-title size="compact" [withMargin]="false">Crea tu cuenta</app-page-title>
+				<div class="mt-2">
+					<app-text size="sm">
+						Únete para publicar anuncios, guardar favoritos y gestionar tus compras.
+					</app-text>
+				</div>
+			</header>
+
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-stack-md">
+				<div class="grid grid-cols-1 gap-stack-md sm:grid-cols-2">
+					<div>
+						<label for="register-firstName" class="mb-2 block text-sm font-medium text-on-surface-variant">
+							Nombre
+						</label>
+						<input
+							id="register-firstName"
+							type="text"
+							formControlName="firstName"
+							autocomplete="given-name"
+							placeholder="María"
+							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							[class.border-error]="submitted && f['firstName'].errors" />
 						@if (submitted && f['firstName'].errors) {
-						<div>
-							@if (f['firstName'].errors['required']) {
-							<p class="text-error">Nombre requerido</p>
-							} @if (f['firstName'].errors['minlength']) {
-							<p class="text-error">Mínimo 2 caracteres</p>
-							} @if (f['firstName'].errors['maxlength']) {
-							<p class="text-error">Máximo 50 caracteres</p>
-							}
+						<div class="mt-1 text-sm text-error">
+							@if (f['firstName'].errors['required']) { Nombre requerido }
+							@else if (f['firstName'].errors['minlength']) { Mínimo 2 caracteres }
+							@else if (f['firstName'].errors['maxlength']) { Máximo 50 caracteres }
 						</div>
 						}
 					</div>
-					<div class="space-y-2">
-						<label class="text-sm font-medium text-on-surface-variant">Apellidos</label>
-						<input type="text" formControlName="lastName"
-							class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+
+					<div>
+						<label for="register-lastName" class="mb-2 block text-sm font-medium text-on-surface-variant">
+							Apellidos
+						</label>
+						<input
+							id="register-lastName"
+							type="text"
+							formControlName="lastName"
+							autocomplete="family-name"
+							placeholder="García"
+							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							[class.border-error]="submitted && f['lastName'].errors" />
 						@if (submitted && f['lastName'].errors) {
-						<div>
-							@if (f['lastName'].errors['required']) {
-							<p class="text-error">Apellidos requeridos</p>
-							} @if (f['lastName'].errors['minlength']) {
-							<p class="text-error">Mínimo 2 caracteres</p>
-							} @if (f['lastName'].errors['maxlength']) {
-							<p class="text-error">Máximo 80 caracteres</p>
-							}
+						<div class="mt-1 text-sm text-error">
+							@if (f['lastName'].errors['required']) { Apellidos requeridos }
+							@else if (f['lastName'].errors['minlength']) { Mínimo 2 caracteres }
+							@else if (f['lastName'].errors['maxlength']) { Máximo 80 caracteres }
 						</div>
 						}
 					</div>
 				</div>
-				<div class="space-y-2">
-					<label class="text-sm font-medium text-on-surface-variant">Correo electrónico</label>
-					<input type="text" formControlName="email"
-						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+
+				<div>
+					<label for="register-email" class="mb-2 block text-sm font-medium text-on-surface-variant">
+						Correo electrónico
+					</label>
+					<input
+						id="register-email"
+						type="email"
+						formControlName="email"
+						autocomplete="email"
+						placeholder="nombre@ejemplo.com"
+						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						[class.border-error]="submitted && f['email'].errors" />
 					@if (submitted && f['email'].errors) {
-					<div>
-						@if (f['email'].errors['required']) {
-						<p class="text-error">Correo electrónico requerido</p>
-						} @if (f['email'].errors['email']) {
-						<p class="text-error">Correo electrónico válido</p>
-						}
+					<div class="mt-1 text-sm text-error">
+						@if (f['email'].errors['required']) { Correo electrónico requerido }
+						@else if (f['email'].errors['email']) { Introduce un correo electrónico válido }
 					</div>
 					}
 				</div>
-				<div class="space-y-2">
-					<label class="text-sm font-medium text-on-surface-variant">Contraseña</label>
-					<input type="password" formControlName="password"
-						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-						[class.border-error]="submitted && f['password'].errors" />
+
+				<div>
+					<label for="register-password" class="mb-2 block text-sm font-medium text-on-surface-variant">
+						Contraseña
+					</label>
+					<div class="relative">
+						<input
+							id="register-password"
+							[type]="showPassword() ? 'text' : 'password'"
+							formControlName="password"
+							autocomplete="new-password"
+							placeholder="Crea una contraseña"
+							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 pr-12 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+							[class.border-error]="submitted && f['password'].errors" />
+						<button
+							type="button"
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary transition-colors hover:text-primary"
+							[attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+							(click)="togglePasswordVisibility()">
+							<span class="material-symbols-outlined text-[20px]">
+								{{ showPassword() ? 'visibility_off' : 'visibility' }}
+							</span>
+						</button>
+					</div>
+					<p class="mt-2 flex items-center gap-1 text-xs text-on-surface-variant">
+						<span class="material-symbols-outlined text-sm">info</span>
+						Mínimo {{ minLenght }} caracteres.
+					</p>
 					@if (submitted && f['password'].errors) {
-					<div>
-						@if (f['password'].errors['required']) {
-						<p class="text-error">Contraseña requerida</p>
-						} @if (f['password'].errors['minlength']) {
-						<p class="text-error">Longitud mínima: {{ minLenght }}</p>
-						} @if (f['password'].errors['maxlength']) {
-						<p class="text-error">Lóngitud máxima permitida: {{ maxLenght }}</p>
-						}
+					<div class="mt-1 text-sm text-error">
+						@if (f['password'].errors['required']) { Contraseña requerida }
+						@else if (f['password'].errors['minlength']) { Longitud mínima: {{ minLenght }} }
+						@else if (f['password'].errors['maxlength']) { Longitud máxima: {{ maxLenght }} }
 					</div>
 					}
 				</div>
+
 				<div>
 					<label class="flex cursor-pointer items-start gap-3">
-						<input type="checkbox" formControlName="acceptTerms"
+						<input
+							type="checkbox"
+							formControlName="acceptTerms"
 							class="mt-1 size-4 rounded border-outline-variant text-primary focus:ring-primary" />
 						<span class="text-sm text-on-surface-variant">
 							Acepto los
-							<a href="#" class="text-primary underline hover:text-primary-container" (click)="$event.preventDefault()">
+							<a href="#" class="font-medium text-primary hover:underline" (click)="$event.preventDefault()">
 								términos y condiciones
 							</a>
 						</span>
@@ -89,20 +133,22 @@
 					<p class="mt-2 text-sm text-error">Debes aceptar los términos y condiciones</p>
 					}
 				</div>
-				@if(errorRegister()) {
-				<p class="text-center text-error">{{errorRegister()}}</p>
+
+				@if (errorRegister()) {
+				<p class="text-center text-sm text-error">{{ errorRegister() }}</p>
 				}
-				<app-button type="submit" [fullWidth]="true">Registrarse</app-button>
-				<div class="flex flex-wrap items-center justify-center gap-1 text-on-surface-variant">
-					<p>¿Ya tienes una cuenta?</p>
-					<a [routerLink]="['/fernanpop/login']" class="text-primary hover:text-primary-container">
-						Inicia sesión
-					</a>
+
+				<app-button type="submit" [fullWidth]="true">Crear cuenta</app-button>
+
+				<div class="border-t border-outline-variant pt-stack-md text-center">
+					<p class="text-sm text-on-surface-variant">
+						¿Ya tienes una cuenta?
+						<a [routerLink]="['/fernanpop/login']" class="font-medium text-primary hover:underline">
+							Inicia sesión
+						</a>
+					</p>
 				</div>
 			</form>
-			<p class="pt-5 text-center text-xs text-on-surface-variant">
-				Copyright © 2024-2025
-			</p>
 		</app-card>
 	</app-page-container>
 </div>

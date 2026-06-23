@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive';
@@ -26,6 +26,16 @@ export class ButtonComponent {
   /** Button text. Required when using routerLink; optional otherwise (ng-content fallback). */
   @Input() label = '';
   @Output() action = new EventEmitter<void>();
+
+  @HostBinding('class.block')
+  get hostBlock(): boolean {
+    return this.fullWidth;
+  }
+
+  @HostBinding('class.w-full')
+  get hostFullWidth(): boolean {
+    return this.fullWidth;
+  }
 
   private readonly variantClasses: Record<ButtonVariant, string> = {
     primary:

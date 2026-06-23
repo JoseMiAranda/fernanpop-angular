@@ -1,57 +1,81 @@
-<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-6 sm:py-8">
+<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-8 sm:py-12">
 	<app-page-container [narrow]="true">
 		<app-card variant="elevated" padding="lg">
-			<div class="mb-stack-md">
-				<app-page-title size="compact" [withMargin]="false">¡Bienvenido de vuelta!</app-page-title>
-				<app-text>Por favor inicie sesión con su cuenta.</app-text>
+			<div class="mb-stack-lg text-center">
+				<app-page-title size="compact" [withMargin]="false">Bienvenido de vuelta</app-page-title>
+				<div class="mt-2">
+					<app-text size="sm">Inicia sesión para comprar y vender en Fernanpop.</app-text>
+				</div>
 			</div>
-			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-				<div class="space-y-2">
-					<label class="text-sm font-medium text-on-surface-variant">Correo electrónico</label>
-					<input type="text" formControlName="email"
-						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-stack-md">
+				<div>
+					<label for="login-email" class="mb-2 block text-sm font-medium text-on-surface-variant">
+						Correo electrónico
+					</label>
+					<input
+						id="login-email"
+						type="email"
+						formControlName="email"
+						autocomplete="email"
+						placeholder="nombre@ejemplo.com"
+						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						[class.border-error]="submitted && f['email'].errors" />
 					@if (submitted && f['email'].errors) {
-					<div>
-						@if (f['email'].errors['required']) {
-						<p class="text-error">Correo electrónico requerido</p>
-						} @if (f['email'].errors['email']) {
-						<p class="text-error">Correo electrónico válido</p>
-						}
+					<div class="mt-1 text-sm text-error">
+						@if (f['email'].errors['required']) { Correo electrónico requerido }
+						@else if (f['email'].errors['email']) { Introduce un correo electrónico válido }
 					</div>
 					}
 				</div>
-				<div class="space-y-2">
-					<label class="text-sm font-medium text-on-surface-variant">Contraseña</label>
-					<input type="password" formControlName="password"
-						class="w-full rounded-lg border border-outline-variant px-4 py-2 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-						[class.border-error]="submitted && f['password'].errors" />
+
+				<div>
+					<label for="login-password" class="mb-2 block text-sm font-medium text-on-surface-variant">
+						Contraseña
+					</label>
+					<div class="relative">
+						<input
+							id="login-password"
+							[type]="showPassword() ? 'text' : 'password'"
+							formControlName="password"
+							autocomplete="current-password"
+							placeholder="••••••••"
+							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 pr-12 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+							[class.border-error]="submitted && f['password'].errors" />
+						<button
+							type="button"
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary transition-colors hover:text-primary"
+							[attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+							(click)="togglePasswordVisibility()">
+							<span class="material-symbols-outlined text-[20px]">
+								{{ showPassword() ? 'visibility_off' : 'visibility' }}
+							</span>
+						</button>
+					</div>
 					@if (submitted && f['password'].errors) {
-					<div>
-						@if (f['password'].errors['required']) {
-						<p class="text-error">Contraseña requerida</p>
-						} @if (f['password'].errors['minlength']) {
-						<p class="text-error">Longitud mínima: {{ minLenght }}</p>
-						} @if (f['password'].errors['maxlength']) {
-						<p class="text-error">Lóngitud máxima permitida: {{ maxLenght }}</p>
-						}
+					<div class="mt-1 text-sm text-error">
+						@if (f['password'].errors['required']) { Contraseña requerida }
+						@else if (f['password'].errors['minlength']) { Longitud mínima: {{ minLenght }} }
+						@else if (f['password'].errors['maxlength']) { Longitud máxima: {{ maxLenght }} }
 					</div>
 					}
 				</div>
-				@if(errorRegister()) {
-				<p class="text-center text-error">{{errorRegister()}}</p>
+
+				@if (errorRegister()) {
+				<p class="text-center text-sm text-error">{{ errorRegister() }}</p>
 				}
+
 				<app-button type="submit" [fullWidth]="true">Iniciar sesión</app-button>
-				<div class="flex flex-wrap items-center justify-center gap-1 text-on-surface-variant">
-					<p>¿No tienes una cuenta?</p>
-					<a [routerLink]="['/fernanpop/register']" class="text-primary hover:text-primary-container">
-						Regístrate
-					</a>
+
+				<div class="border-t border-outline-variant pt-stack-md text-center">
+					<p class="text-sm text-on-surface-variant">
+						¿No tienes una cuenta?
+						<a [routerLink]="['/fernanpop/register']" class="font-medium text-primary hover:underline">
+							Regístrate
+						</a>
+					</p>
 				</div>
 			</form>
-			<p class="pt-5 text-center text-xs text-on-surface-variant">
-				Copyright © 2024-2025
-			</p>
 		</app-card>
 	</app-page-container>
 </div>

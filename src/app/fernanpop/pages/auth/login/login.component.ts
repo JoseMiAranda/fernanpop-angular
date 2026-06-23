@@ -38,6 +38,7 @@ import {
 export class LoginComponent implements OnInit {
 
   public errorRegister = signal<string | undefined>(undefined);
+  public showPassword = signal(false);
 
   public minLenght = 6;
   public maxLenght = 20;
@@ -70,6 +71,10 @@ export class LoginComponent implements OnInit {
   // Obtenemos un campo del formulario
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update((visible) => !visible);
   }
 
   onSubmit(): void {
