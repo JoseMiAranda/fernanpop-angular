@@ -1,5 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, Auth, signOut, user, updateProfile } from '@angular/fire/auth';
+import {
+  UserCredential,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  Auth,
+  signOut,
+  user,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from '@angular/fire/auth';
 import { User } from '../interfaces/user.interface';
 import { from, Observable } from 'rxjs';
 
@@ -70,6 +80,27 @@ export class AuthService {
   loginWithEmailAndPassword(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(() => {});
     return from(promise);
+  }
+
+  loginWithGoogle(): Observable<void> {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const promise = signInWithPopup(this.firebaseAuth, provider).then(() => {});
+    return from(promise);
+  }
+
+  static mapGoogleAuthError(code: string, context: 'login' | 'register' = 'login'): string | undefined {
+    switch (code) {
+      case 'auth/account-exists-with-different-credential':
+        return 'Este correo ya está registrado con contraseña. Inicia sesión con email y contraseña.';
+      case 'auth/popup-closed-by-user':
+      case 'auth/cancelled-popup-request':
+        return undefined;
+      default:
+        return context === 'register'
+          ? 'Actualmente no podemos registrar usuarios con Google'
+          : 'Actualmente no podemos iniciar sesión con Google';
+    }
   }
 
   // LOGOUT

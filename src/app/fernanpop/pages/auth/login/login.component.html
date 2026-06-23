@@ -8,6 +8,20 @@
 				</div>
 			</div>
 
+			<app-google-sign-in-button
+				[loading]="googleLoading()"
+				(signIn)="onGoogleSignIn()" />
+
+			@if (errorRegister()) {
+			<p class="mt-stack-md text-center text-sm text-error">{{ errorRegister() }}</p>
+			}
+
+			<div class="my-stack-md flex items-center gap-3">
+				<div class="h-px flex-1 bg-outline-variant"></div>
+				<span class="text-sm text-on-surface-variant">o</span>
+				<div class="h-px flex-1 bg-outline-variant"></div>
+			</div>
+
 			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-stack-md">
 				<div>
 					<label for="login-email" class="mb-2 block text-sm font-medium text-on-surface-variant">
@@ -60,10 +74,6 @@
 					</div>
 					}
 				</div>
-
-				@if (errorRegister()) {
-				<p class="text-center text-sm text-error">{{ errorRegister() }}</p>
-				}
 
 				<app-button type="submit" [fullWidth]="true">Iniciar sesión</app-button>
 

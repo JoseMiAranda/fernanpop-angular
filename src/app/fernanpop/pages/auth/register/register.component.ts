@@ -4,6 +4,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModu
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { AuthError } from '@angular/fire/auth';
+import { GoogleSignInButtonComponent } from '../google-sign-in-button/google-sign-in-button.component';
 import {
   ButtonComponent,
   CardComponent,
@@ -24,6 +25,7 @@ import {
     PageTitleComponent,
     TextComponent,
     ButtonComponent,
+    GoogleSignInButtonComponent,
   ],
   templateUrl: './register.component.html',
   styles: ``
@@ -33,6 +35,7 @@ export class RegisterComponent {
   public maxLenght = 20;
   public errorRegister = signal<string | undefined>(undefined);
   public showPassword = signal(false);
+  public googleLoading = signal(false);
 
   form: FormGroup = new FormGroup({
     firstName: new FormControl(null),
@@ -74,8 +77,36 @@ export class RegisterComponent {
     this.showPassword.update((visible) => !visible);
   }
 
+  onGoogleSignIn(): void {
+    this.errorRegister.set(undefined);
+
+    if (!this.form.get('acceptTerms')?.value) {
+      this.submitted = true;
+      this.errorRegister.set('Debes aceptar los términos y condiciones');
+      return;
+    }
+
+    this.googleLoading.set(true);
+
+    this.authService.loginWithGoogle().subscribe({
+      next: () => {
+        this.googleLoading.set(false);
+        this.router.navigate(['fernanpop']);
+      },
+      error: (err) => {
+        this.googleLoading.set(false);
+        const authError = err as AuthError;
+        const message = AuthService.mapGoogleAuthError(authError.code, 'register');
+        if (message) {
+          this.errorRegister.set(message);
+        }
+      },
+    });
+  }
+
   onSubmit(): void {
     this.submitted = true;
+    this.errorRegister.set(undefined);
 
     if (this.form.invalid) {
       return;

@@ -16,6 +16,38 @@
 			</header>
 
 			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-stack-md">
+				<div>
+					<label class="flex cursor-pointer items-start gap-3">
+						<input
+							type="checkbox"
+							formControlName="acceptTerms"
+							class="mt-1 size-4 rounded border-outline-variant text-primary focus:ring-primary" />
+						<span class="text-sm text-on-surface-variant">
+							Acepto los
+							<a href="#" class="font-medium text-primary hover:underline" (click)="$event.preventDefault()">
+								términos y condiciones
+							</a>
+						</span>
+					</label>
+					@if (submitted && f['acceptTerms'].errors) {
+					<p class="mt-2 text-sm text-error">Debes aceptar los términos y condiciones</p>
+					}
+				</div>
+
+				@if (errorRegister()) {
+				<p class="text-center text-sm text-error">{{ errorRegister() }}</p>
+				}
+
+				<app-google-sign-in-button
+					[loading]="googleLoading()"
+					(signIn)="onGoogleSignIn()" />
+
+				<div class="flex items-center gap-3">
+					<div class="h-px flex-1 bg-outline-variant"></div>
+					<span class="text-sm text-on-surface-variant">o</span>
+					<div class="h-px flex-1 bg-outline-variant"></div>
+				</div>
+
 				<div class="grid grid-cols-1 gap-stack-md sm:grid-cols-2">
 					<div>
 						<label for="register-firstName" class="mb-2 block text-sm font-medium text-on-surface-variant">
@@ -115,28 +147,6 @@
 					</div>
 					}
 				</div>
-
-				<div>
-					<label class="flex cursor-pointer items-start gap-3">
-						<input
-							type="checkbox"
-							formControlName="acceptTerms"
-							class="mt-1 size-4 rounded border-outline-variant text-primary focus:ring-primary" />
-						<span class="text-sm text-on-surface-variant">
-							Acepto los
-							<a href="#" class="font-medium text-primary hover:underline" (click)="$event.preventDefault()">
-								términos y condiciones
-							</a>
-						</span>
-					</label>
-					@if (submitted && f['acceptTerms'].errors) {
-					<p class="mt-2 text-sm text-error">Debes aceptar los términos y condiciones</p>
-					}
-				</div>
-
-				@if (errorRegister()) {
-				<p class="text-center text-sm text-error">{{ errorRegister() }}</p>
-				}
 
 				<app-button type="submit" [fullWidth]="true">Crear cuenta</app-button>
 

@@ -11,6 +11,7 @@ import {
 import { AuthService } from '../../../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthError } from '@angular/fire/auth';
+import { GoogleSignInButtonComponent } from '../google-sign-in-button/google-sign-in-button.component';
 import {
   ButtonComponent,
   CardComponent,
@@ -31,6 +32,7 @@ import {
     PageTitleComponent,
     TextComponent,
     ButtonComponent,
+    GoogleSignInButtonComponent,
   ],
   templateUrl: './login.component.html',
   styles: ``
@@ -39,6 +41,7 @@ export class LoginComponent implements OnInit {
 
   public errorRegister = signal<string | undefined>(undefined);
   public showPassword = signal(false);
+  public googleLoading = signal(false);
 
   public minLenght = 6;
   public maxLenght = 20;
@@ -77,8 +80,29 @@ export class LoginComponent implements OnInit {
     this.showPassword.update((visible) => !visible);
   }
 
+  onGoogleSignIn(): void {
+    this.errorRegister.set(undefined);
+    this.googleLoading.set(true);
+
+    this.authService.loginWithGoogle().subscribe({
+      next: () => {
+        this.googleLoading.set(false);
+        this.router.navigate(['fernanpop']);
+      },
+      error: (err) => {
+        this.googleLoading.set(false);
+        const authError = err as AuthError;
+        const message = AuthService.mapGoogleAuthError(authError.code, 'login');
+        if (message) {
+          this.errorRegister.set(message);
+        }
+      },
+    });
+  }
+
   onSubmit(): void {
     this.submitted = true;
+    this.errorRegister.set(undefined);
 
     if (this.form.invalid) {
       return;
