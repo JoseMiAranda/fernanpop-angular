@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Transaction } from '../interfaces/transaction.interface';
 import { Observable, catchError, map, of } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
-import { getErrorMessage } from '../utils/utils';
+import { getErrorMessage, isEmailNotVerifiedError } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { getErrorMessage } from '../utils/utils';
 export class TransactionsService {
 
   private baseUrl: string = import.meta.env.NG_APP_BASE_URL;
+  private router = inject(Router);
 
   constructor(private http: HttpClient) { }
 
@@ -19,8 +21,11 @@ export class TransactionsService {
       map((transaction: Transaction) => {
         return new SuccessResponse(transaction);
       }),
-      catchError((err) => {
-        console.log(err);
+      catchError((err: HttpErrorResponse) => {
+        if (isEmailNotVerifiedError(err)) {
+          void this.router.navigate(['/verify-email'], { queryParams: { returnUrl: this.router.url } });
+        }
+
         return of(new ErrorResponse(getErrorMessage(err)));
       })
     );

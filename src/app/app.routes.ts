@@ -12,6 +12,7 @@ import { CreateProductComponent } from './fernanpop/pages/products/create-produc
 import { UpdateProductComponent } from './fernanpop/pages/products/update-product/update-product.component';
 import { TransactionsComponent } from './fernanpop/pages/transactions/transactions.component';
 import { FavoritesComponent } from './fernanpop/pages/favorites/favorites.component';
+import { EmailVerifiedGuard } from './guards/email-verified.guard';
 
 export const routes: Routes = [
     {
@@ -60,15 +61,21 @@ export const routes: Routes = [
                 loadComponent: () => RegisterComponent,
             },
             {
-                // Solamente accesible si no está logueado
                 canActivate: [LoggedGuard],
+                path: 'verify-email',
+                title: 'verify-email',
+                loadComponent: () => import('./fernanpop/pages/auth/verify-email/verify-email.component')
+                    .then(c => c.VerifyEmailComponent),
+            },
+            {
+                // Solamente accesible si no está logueado
+                canActivate: [LoggedGuard, EmailVerifiedGuard],
                 path: 'create-product',
                 title: 'create-product',
                 loadComponent: () => CreateProductComponent,
             },
             {
-                // Solamente accesible si no está logueado
-                canActivate: [LoggedGuard],
+                canActivate: [LoggedGuard, EmailVerifiedGuard],
                 path: 'update-product/:id',
                 title: 'update-product',
                 loadComponent: () => UpdateProductComponent,

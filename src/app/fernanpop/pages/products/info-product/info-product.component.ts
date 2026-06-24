@@ -107,6 +107,10 @@ export class InfoProductComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.redirectIfEmailNotVerified()) {
+      return;
+    }
+
     if (this.productState().type !== 'success') {
       return;
     }
@@ -117,6 +121,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
           if (result instanceof SuccessResponse) {
             this.router.navigate(['/user/transactions']);
           } else if (result instanceof ErrorResponse) {
+            this.buyProductState.set(new InitialState());
             this.router.navigate(['/error/'], {
               state: {
                 message: 'Parece que no se puede comprar el producto'
@@ -128,7 +133,27 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   }
 
   goToUpdate() {
+    if (this.redirectIfEmailNotVerified()) {
+      return;
+    }
+
     this.router.navigate(['/update-product', this.productState().data.id]);
+  }
+
+  needsEmailVerification(): boolean {
+    const user = this.currentUser();
+    return !!user && !user.emailVerified;
+  }
+
+  private redirectIfEmailNotVerified(): boolean {
+    if (!this.needsEmailVerification()) {
+      return false;
+    }
+
+    this.router.navigate(['/verify-email'], {
+      queryParams: { returnUrl: this.router.url },
+    });
+    return true;
   }
 
   previousImage() {

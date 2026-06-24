@@ -140,9 +140,21 @@
                 <div class="pt-4">
                     @if (productState().data.status == 'reserved') {
                     } @else if (productState().data.sellerId == currentUser()?.uid) {
-                    <app-button [fullWidth]="true" (action)="goToUpdate()">Modificar</app-button>
+                    @if (needsEmailVerification()) {
+                    <p class="mb-stack-sm text-center text-sm text-on-surface-variant">
+                        Verifica tu correo para modificar este producto.
+                    </p>
+                    <app-button [fullWidth]="true" (action)="goToUpdate()">Verificar correo</app-button>
                     } @else {
-                    @if (buyProductState().type === 'initial') {
+                    <app-button [fullWidth]="true" (action)="goToUpdate()">Modificar</app-button>
+                    }
+                    } @else {
+                    @if (needsEmailVerification()) {
+                    <p class="mb-stack-sm text-center text-sm text-on-surface-variant">
+                        Verifica tu correo para comprar este producto.
+                    </p>
+                    <app-button [fullWidth]="true" (action)="buy()">Verificar correo</app-button>
+                    } @else if (buyProductState().type === 'initial') {
                     <app-button [fullWidth]="true" (action)="buy()">Comprar</app-button>
                     } @else {
                     <app-button [fullWidth]="true" [disabled]="true">Comprando...</app-button>

@@ -1,6 +1,16 @@
 import { HttpErrorResponse } from "@angular/common/http";
 
+export const EMAIL_NOT_VERIFIED = 'email-not-verified';
+
+export function isEmailNotVerifiedError(error: HttpErrorResponse): boolean {
+    return error.status === 403 && error.error?.message === EMAIL_NOT_VERIFIED;
+}
+
 export function getErrorMessage(error: HttpErrorResponse): string {
+    if (isEmailNotVerifiedError(error)) {
+        return EMAIL_NOT_VERIFIED;
+    }
+
     switch (error.status) {
         case 0:
             return 'Sin conexión.';

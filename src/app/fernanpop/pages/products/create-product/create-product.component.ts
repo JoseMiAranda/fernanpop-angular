@@ -18,6 +18,7 @@ import {
 } from '../../../../shared/ui';
 import { ImageDropComponent } from '../../../components/image-drop/image-drop.component';
 import { ImagesService } from '../../../../services/images.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-create-product',
@@ -64,7 +65,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder, private productsService: ProductsService,
     private categoriesService: CategoriesService,
-    private imagesService: ImagesService, private router: Router) { }
+    private imagesService: ImagesService, private router: Router,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.categoriesSubscription = this.categoriesService.getCategories().subscribe({
@@ -198,6 +200,12 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     const valid = this.form.valid && this.existImage;
 
     if (!valid) {
+      return;
+    }
+
+    const user = this.authService.currentUser();
+    if (user && !user.emailVerified) {
+      this.router.navigate(['/verify-email'], { queryParams: { returnUrl: '/create-product' } });
       return;
     }
 

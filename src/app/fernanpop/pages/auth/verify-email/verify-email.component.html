@@ -1,0 +1,42 @@
+<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-8 sm:py-12">
+	<app-page-container [narrow]="true">
+		<app-card variant="elevated" padding="lg">
+			<div class="mb-stack-lg text-center">
+				<app-page-title size="compact" [withMargin]="false">Verifica tu correo</app-page-title>
+				<div class="mt-2">
+					<app-text size="sm">
+						Hemos enviado un enlace de verificación a
+						@if (userEmail()) {
+						<span class="font-medium text-on-surface">{{ userEmail() }}</span>
+						}. Haz clic en el enlace para poder crear, editar y comprar productos.
+					</app-text>
+				</div>
+			</div>
+
+			@if (errorMessage()) {
+			<p class="mb-stack-md text-center text-sm text-error">{{ errorMessage() }}</p>
+			}
+
+			@if (successMessage()) {
+			<p class="mb-stack-md text-center text-sm text-primary">{{ successMessage() }}</p>
+			}
+
+			<div class="space-y-stack-md">
+				<app-button
+					[fullWidth]="true"
+					[disabled]="checkLoading()"
+					(action)="onCheckVerified()">
+					{{ checkLoading() ? 'Comprobando...' : 'Ya verifiqué mi correo' }}
+				</app-button>
+
+				<app-button
+					variant="secondary"
+					[fullWidth]="true"
+					[disabled]="resendLoading()"
+					(action)="onResendEmail()">
+					{{ resendLoading() ? 'Enviando...' : 'Reenviar correo' }}
+				</app-button>
+			</div>
+		</app-card>
+	</app-page-container>
+</div>

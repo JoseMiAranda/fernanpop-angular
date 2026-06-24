@@ -1,10 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Product, } from '../interfaces/product.interface';
 import { ProductsResponse } from '../interfaces/products-response';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../interfaces/response-interface';
-import { getErrorMessage } from '../utils/utils';
+import { getErrorMessage, isEmailNotVerifiedError } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,17 @@ import { getErrorMessage } from '../utils/utils';
 export class ProductsService {
 
   private baseUrl: string = import.meta.env.NG_APP_BASE_URL;
+  private router = inject(Router);
 
   constructor(private http: HttpClient) { }
+
+  private handleMutationError(error: HttpErrorResponse): Observable<ErrorResponse> {
+    if (isEmailNotVerifiedError(error)) {
+      void this.router.navigate(['/verify-email'], { queryParams: { returnUrl: this.router.url } });
+    }
+
+    return of(new ErrorResponse(getErrorMessage(error)));
+  }
 
   // SELECT
   getProducts({
@@ -100,9 +110,7 @@ export class ProductsService {
       map((response: Product) => {
         return new SuccessResponse(response);
       }),
-      catchError((err) => {
-        return of(new ErrorResponse(getErrorMessage(err)));
-      })
+      catchError((err: HttpErrorResponse) => this.handleMutationError(err))
     );
   }
 
@@ -114,9 +122,7 @@ export class ProductsService {
       map((response: Product) => {
         return new SuccessResponse(response);
       }),
-      catchError((err) => {
-        return of(new ErrorResponse(getErrorMessage(err)));
-      })
+      catchError((err: HttpErrorResponse) => this.handleMutationError(err))
     );
   }
 
@@ -126,9 +132,7 @@ export class ProductsService {
       map((response: Product) => {
         return new SuccessResponse(response);
       }),
-      catchError((err) => {
-        return of(new ErrorResponse(getErrorMessage(err)));
-      })
+      catchError((err: HttpErrorResponse) => this.handleMutationError(err))
     );
   }
 

@@ -21,6 +21,7 @@ import {
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 import { ImageDropComponent } from "../../../components/image-drop/image-drop.component";
 import { ImagesService } from '../../../../services/images.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-update-product',
@@ -78,6 +79,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     private categoriesService: CategoriesService,
     private imagesService: ImagesService,
     private router: Router,
+    private authService: AuthService,
     private location: Location,
   ) { }
 
@@ -250,6 +252,14 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     const valid = this.form.valid && this.existImage;
   
     if (!valid) {
+      return;
+    }
+
+    const user = this.authService.currentUser();
+    if (user && !user.emailVerified) {
+      this.router.navigate(['/verify-email'], {
+        queryParams: { returnUrl: `/update-product/${this.productId}` },
+      });
       return;
     }
   

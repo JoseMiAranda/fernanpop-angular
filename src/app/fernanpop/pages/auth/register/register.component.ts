@@ -115,7 +115,7 @@ export class RegisterComponent {
 
     this.authService.registerWithEmailAndPassword(email, password, firstName, lastName).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/verify-email']);
       },
       error: (err) => {
         // No hace falta validar el min lenght de firebase porque ya no hemos hecho (min 6 como firebase)

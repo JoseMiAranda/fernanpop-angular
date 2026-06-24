@@ -10,6 +10,7 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
+  sendEmailVerification,
 } from '@angular/fire/auth';
 import { User } from '../interfaces/user.interface';
 import { from, Observable } from 'rxjs';
@@ -70,11 +71,39 @@ export class AuthService {
     lastName: string,
   ): Observable<void> {
     const displayName = `${firstName.trim()} ${lastName.trim()}`.trim();
-    const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password).then((resp: UserCredential) =>
-      updateProfile(resp.user, { displayName })
+    const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password).then(
+      async (resp: UserCredential) => {
+        await updateProfile(resp.user, { displayName });
+        await sendEmailVerification(resp.user);
+      },
     );
 
     return from(promise);
+  }
+
+  sendVerificationEmail(): Observable<void> {
+    const firebaseUser = this.firebaseAuth.currentUser;
+
+    if (!firebaseUser) {
+      return from(Promise.reject(new Error('No hay usuario autenticado')));
+    }
+
+    return from(sendEmailVerification(firebaseUser));
+  }
+
+  async reloadCurrentUser(): Promise<User | null> {
+    const firebaseUser = this.firebaseAuth.currentUser;
+
+    if (!firebaseUser) {
+      this.currentUser.set(null);
+      return null;
+    }
+
+    await firebaseUser.reload();
+    const mappedUser = AuthService.mapFirebaseUser(firebaseUser);
+    this.currentUser.set(mappedUser);
+    await this.refreshAccessToken();
+    return mappedUser;
   }
 
   // LOGIN
@@ -141,6 +170,7 @@ export class AuthService {
     return {
       uid: user.uid,
       email: user.email!,
+      emailVerified: user.emailVerified,
       displayName: user.displayName ?? undefined,
       photoUrl: AuthService.resolvePhotoUrl(user),
     };
