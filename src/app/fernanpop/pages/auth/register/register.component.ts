@@ -34,7 +34,6 @@ export class RegisterComponent {
   public minLenght = 6;
   public maxLenght = 20;
   public errorRegister = signal<string | undefined>(undefined);
-  public showPassword = signal(false);
   public googleLoading = signal(false);
 
   form: FormGroup = new FormGroup({
@@ -46,6 +45,7 @@ export class RegisterComponent {
   });
 
   submitted = false;
+  googleTermsAttempted = false;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
@@ -73,18 +73,16 @@ export class RegisterComponent {
     return this.form.controls;
   }
 
-  togglePasswordVisibility(): void {
-    this.showPassword.update((visible) => !visible);
-  }
-
   onGoogleSignIn(): void {
     this.errorRegister.set(undefined);
 
     if (!this.form.get('acceptTerms')?.value) {
-      this.submitted = true;
-      this.errorRegister.set('Debes aceptar los términos y condiciones');
+      this.googleTermsAttempted = true;
+      this.form.get('acceptTerms')?.markAsTouched();
       return;
     }
+
+    this.googleTermsAttempted = false;
 
     this.googleLoading.set(true);
 
@@ -106,6 +104,7 @@ export class RegisterComponent {
 
   onSubmit(): void {
     this.submitted = true;
+    this.googleTermsAttempted = false;
     this.errorRegister.set(undefined);
 
     if (this.form.invalid) {

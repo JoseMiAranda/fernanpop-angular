@@ -16,24 +16,6 @@
 			</header>
 
 			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-stack-md">
-				<div>
-					<label class="flex cursor-pointer items-start gap-3">
-						<input
-							type="checkbox"
-							formControlName="acceptTerms"
-							class="mt-1 size-4 rounded border-outline-variant text-primary focus:ring-primary" />
-						<span class="text-sm text-on-surface-variant">
-							Acepto los
-							<a href="#" class="font-medium text-primary hover:underline" (click)="$event.preventDefault()">
-								términos y condiciones
-							</a>
-						</span>
-					</label>
-					@if (submitted && f['acceptTerms'].errors) {
-					<p class="mt-2 text-sm text-error">Debes aceptar los términos y condiciones</p>
-					}
-				</div>
-
 				@if (errorRegister()) {
 				<p class="text-center text-sm text-error">{{ errorRegister() }}</p>
 				}
@@ -116,25 +98,14 @@
 					<label for="register-password" class="mb-2 block text-sm font-medium text-on-surface-variant">
 						Contraseña
 					</label>
-					<div class="relative">
-						<input
-							id="register-password"
-							[type]="showPassword() ? 'text' : 'password'"
-							formControlName="password"
-							autocomplete="new-password"
-							placeholder="Crea una contraseña"
-							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 pr-12 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-							[class.border-error]="submitted && f['password'].errors" />
-						<button
-							type="button"
-							class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary transition-colors hover:text-primary"
-							[attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-							(click)="togglePasswordVisibility()">
-							<span class="material-symbols-outlined text-[20px]">
-								{{ showPassword() ? 'visibility_off' : 'visibility' }}
-							</span>
-						</button>
-					</div>
+					<input
+						id="register-password"
+						type="password"
+						formControlName="password"
+						autocomplete="new-password"
+						placeholder="Crea una contraseña"
+						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						[class.border-error]="submitted && f['password'].errors" />
 					<p class="mt-2 flex items-center gap-1 text-xs text-on-surface-variant">
 						<span class="material-symbols-outlined text-sm">info</span>
 						Mínimo {{ minLenght }} caracteres.
@@ -145,6 +116,24 @@
 						@else if (f['password'].errors['minlength']) { Longitud mínima: {{ minLenght }} }
 						@else if (f['password'].errors['maxlength']) { Longitud máxima: {{ maxLenght }} }
 					</div>
+					}
+				</div>
+
+				<div>
+					<label class="flex cursor-pointer items-start gap-3">
+						<input
+							type="checkbox"
+							formControlName="acceptTerms"
+							class="mt-1 size-4 rounded border-outline-variant text-primary focus:ring-primary" />
+						<span class="text-sm text-on-surface-variant">
+							Acepto los
+							<a href="#" class="font-medium text-primary hover:underline" (click)="$event.preventDefault()">
+								términos y condiciones
+							</a>
+						</span>
+					</label>
+					@if ((submitted || googleTermsAttempted) && f['acceptTerms'].errors) {
+					<p class="mt-2 text-sm text-error">Debes aceptar los términos y condiciones</p>
 					}
 				</div>
 
