@@ -34,8 +34,15 @@ export const appConfig: ApplicationConfig = {
       player: () => player,
     }),
     // Obtenemos el auth de Firebase
-    importProvidersFrom(provideFirebaseApp(() => initializeApp(firebaseCredentials))), importProvidersFrom(provideAuth(() => getAuth())
-  )]
+    importProvidersFrom(provideFirebaseApp(() => initializeApp(firebaseCredentials))),
+    importProvidersFrom(
+      provideAuth(() => {
+        const auth = getAuth();
+        auth.languageCode = 'es';
+        return auth;
+      }),
+    ),
+  ]
 };
 
 
