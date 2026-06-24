@@ -10,10 +10,12 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
-  sendEmailVerification,
 } from '@angular/fire/auth';
 import { User } from '../interfaces/user.interface';
-import { from, Observable } from 'rxjs';
+import { firstValueFrom, from, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { EmailVerificationService } from './email-verification.service';
+import { RateLimitResult } from '../utils/rate-limiter';
 
 export const ACCESS_TOKEN_KEY = 'access_token';
 
@@ -22,6 +24,7 @@ export const ACCESS_TOKEN_KEY = 'access_token';
 })
 export class AuthService {
   private firebaseAuth = inject(Auth);
+  private emailVerificationService = inject(EmailVerificationService);
   private refreshPromise: Promise<string | null> | null = null;
 
   public user$ = user(this.firebaseAuth);
@@ -74,7 +77,8 @@ export class AuthService {
     const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password).then(
       async (resp: UserCredential) => {
         await updateProfile(resp.user, { displayName });
-        await sendEmailVerification(resp.user);
+        await this.refreshAccessToken();
+        await firstValueFrom(this.emailVerificationService.sendVerificationEmail());
       },
     );
 
@@ -88,15 +92,47 @@ export class AuthService {
       return from(Promise.reject(new Error('No hay usuario autenticado')));
     }
 
-    return from(sendEmailVerification(firebaseUser));
+    return this.emailVerificationService.sendVerificationEmail().pipe(
+      catchError((err) => EmailVerificationService.handleError(err, 'send')),
+    );
   }
 
-  async reloadCurrentUser(): Promise<User | null> {
+  async getVerificationLimits(): Promise<{ send: RateLimitResult; check: RateLimitResult }> {
+    try {
+      return await firstValueFrom(this.emailVerificationService.getLimits());
+    } catch {
+      return {
+        send: { allowed: true, remaining: 0, retryAfterMs: 0 },
+        check: { allowed: true, remaining: 0, retryAfterMs: 0 },
+      };
+    }
+  }
+
+  async reloadCurrentUser(options?: { forEmailVerification?: boolean }): Promise<User | null> {
     const firebaseUser = this.firebaseAuth.currentUser;
 
     if (!firebaseUser) {
       this.currentUser.set(null);
       return null;
+    }
+
+    if (options?.forEmailVerification) {
+      let result;
+      try {
+        result = await firstValueFrom(this.emailVerificationService.checkVerificationStatus());
+      } catch (err) {
+        throw EmailVerificationService.mapHttpError(err, 'check');
+      }
+
+      if (result.emailVerified) {
+        await firebaseUser.reload();
+        const mappedUser = AuthService.mapFirebaseUser(firebaseUser);
+        this.currentUser.set(mappedUser);
+        await this.refreshAccessToken();
+        return mappedUser;
+      }
+
+      return AuthService.mapFirebaseUser(firebaseUser);
     }
 
     await firebaseUser.reload();

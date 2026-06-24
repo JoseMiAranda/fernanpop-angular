@@ -24,17 +24,29 @@
 			<div class="space-y-stack-md">
 				<app-button
 					[fullWidth]="true"
-					[disabled]="checkLoading()"
+					[disabled]="checkLoading() || checkCooldownSeconds() > 0"
 					(action)="onCheckVerified()">
-					{{ checkLoading() ? 'Comprobando...' : 'Ya verifiqué mi correo' }}
+					@if (checkLoading()) {
+					Comprobando...
+					} @else if (checkCooldownSeconds() > 0) {
+					Espera {{ checkCooldownSeconds() }} s
+					} @else {
+					Ya verifiqué mi correo
+					}
 				</app-button>
 
 				<app-button
 					variant="secondary"
 					[fullWidth]="true"
-					[disabled]="resendLoading()"
+					[disabled]="resendLoading() || resendCooldownSeconds() > 0"
 					(action)="onResendEmail()">
-					{{ resendLoading() ? 'Enviando...' : 'Reenviar correo' }}
+					@if (resendLoading()) {
+					Enviando...
+					} @else if (resendCooldownSeconds() > 0) {
+					Reenviar en {{ resendCooldownSeconds() }} s
+					} @else {
+					Reenviar correo
+					}
 				</app-button>
 			</div>
 		</app-card>
