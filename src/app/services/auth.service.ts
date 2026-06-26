@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import {
   User as FirebaseUser,
   UserCredential,
+  applyActionCode,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   Auth,
@@ -106,6 +107,21 @@ export class AuthService {
         check: { allowed: true, remaining: 0, retryAfterMs: 0 },
       };
     }
+  }
+
+  async applyEmailVerificationCode(oobCode: string): Promise<{ verified: boolean; user: User | null }> {
+    await applyActionCode(this.firebaseAuth, oobCode);
+
+    const firebaseUser = this.firebaseAuth.currentUser;
+    if (!firebaseUser) {
+      return { verified: true, user: null };
+    }
+
+    await firebaseUser.reload();
+    const mappedUser = AuthService.mapFirebaseUser(firebaseUser);
+    this.currentUser.set(mappedUser);
+    await this.refreshAccessToken();
+    return { verified: mappedUser.emailVerified, user: mappedUser };
   }
 
   async reloadCurrentUser(options?: { forEmailVerification?: boolean }): Promise<User | null> {

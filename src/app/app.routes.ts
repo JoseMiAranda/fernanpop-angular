@@ -61,7 +61,6 @@ export const routes: Routes = [
                 loadComponent: () => RegisterComponent,
             },
             {
-                canActivate: [LoggedGuard],
                 path: 'verify-email',
                 title: 'verify-email',
                 loadComponent: () => import('./fernanpop/pages/auth/verify-email/verify-email.component')

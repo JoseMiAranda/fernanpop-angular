@@ -1,6 +1,36 @@
 <div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-8 sm:py-12">
 	<app-page-container [narrow]="true">
 		<app-card variant="elevated" padding="lg">
+			@if (view() === 'processing-link') {
+			<div class="mb-stack-lg text-center">
+				<app-page-title size="compact" [withMargin]="false">Verificando enlace</app-page-title>
+				<div class="mt-2">
+					<app-text size="sm">Estamos confirmando tu correo. Espera un momento...</app-text>
+				</div>
+			</div>
+			} @else if (view() === 'success') {
+			<div class="mb-stack-lg text-center">
+				<app-page-title size="compact" [withMargin]="false">Correo verificado</app-page-title>
+				<div class="mt-2">
+					<app-text size="sm">Tu cuenta ya está activa. Te redirigiremos al inicio.</app-text>
+				</div>
+			</div>
+			} @else if (view() === 'error') {
+			<div class="mb-stack-lg text-center">
+				<app-page-title size="compact" [withMargin]="false">No se pudo verificar</app-page-title>
+				<div class="mt-2">
+					<app-text size="sm">
+						El enlace no es válido o ha caducado. Inicia sesión y solicita un nuevo correo de verificación.
+					</app-text>
+				</div>
+			</div>
+
+			<div class="space-y-stack-md">
+				<app-button [fullWidth]="true" (action)="onGoToLogin()">
+					Ir a iniciar sesión
+				</app-button>
+			</div>
+			} @else {
 			<div class="mb-stack-lg text-center">
 				<app-page-title size="compact" [withMargin]="false">Verifica tu correo</app-page-title>
 				<div class="mt-2">
@@ -12,14 +42,6 @@
 					</app-text>
 				</div>
 			</div>
-
-			@if (errorMessage()) {
-			<p class="mb-stack-md text-center text-sm text-error">{{ errorMessage() }}</p>
-			}
-
-			@if (successMessage()) {
-			<p class="mb-stack-md text-center text-sm text-primary">{{ successMessage() }}</p>
-			}
 
 			<div class="space-y-stack-md">
 				<app-button
@@ -49,6 +71,15 @@
 					}
 				</app-button>
 			</div>
+			}
+
+			@if (errorMessage()) {
+			<p class="mb-stack-md text-center text-sm text-error">{{ errorMessage() }}</p>
+			}
+
+			@if (successMessage()) {
+			<p class="mb-stack-md text-center text-sm text-primary">{{ successMessage() }}</p>
+			}
 		</app-card>
 	</app-page-container>
 </div>

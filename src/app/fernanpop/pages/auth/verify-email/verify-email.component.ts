@@ -11,6 +11,8 @@ import {
   TextComponent,
 } from '../../../../shared/ui';
 
+type VerifyEmailView = 'processing-link' | 'waiting' | 'success' | 'error';
+
 @Component({
   selector: 'app-verify-email',
   standalone: true,
@@ -25,6 +27,7 @@ import {
   templateUrl: './verify-email.component.html',
 })
 export class VerifyEmailComponent implements OnInit, OnDestroy {
+  public view = signal<VerifyEmailView>('waiting');
   public errorMessage = signal<string | undefined>(undefined);
   public successMessage = signal<string | undefined>(undefined);
   public resendLoading = signal(false);
@@ -43,14 +46,29 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/';
+
+    const mode = this.route.snapshot.queryParamMap.get('mode');
+    const oobCode = this.route.snapshot.queryParamMap.get('oobCode');
+
+    if (mode === 'verifyEmail' && oobCode) {
+      void this.processVerificationLink(oobCode);
+      return;
+    }
+
     const user = this.authService.currentUser();
-    if (user?.emailVerified) {
+    if (!user) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/verify-email' } });
+      return;
+    }
+
+    if (user.emailVerified) {
       this.navigateAfterVerification();
       return;
     }
 
-    this.userEmail.set(user?.email);
-    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/';
+    this.userEmail.set(user.email);
+    this.view.set('waiting');
     this.startCooldownTimer();
   }
 
@@ -105,6 +123,33 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
       this.checkLoading.set(false);
       this.handleCheckError(err);
       void this.updateCooldowns();
+    }
+  }
+
+  onGoToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
+  private async processVerificationLink(oobCode: string): Promise<void> {
+    this.view.set('processing-link');
+    this.errorMessage.set(undefined);
+    this.successMessage.set(undefined);
+
+    try {
+      const result = await this.authService.applyEmailVerificationCode(oobCode);
+
+      if (result.verified) {
+        this.view.set('success');
+        this.successMessage.set('Correo verificado correctamente. Redirigiendo...');
+        setTimeout(() => this.navigateAfterVerification(), 1500);
+        return;
+      }
+
+      this.view.set('error');
+      this.errorMessage.set('No se pudo verificar tu correo. Solicita un nuevo enlace e inténtalo de nuevo.');
+    } catch {
+      this.view.set('error');
+      this.errorMessage.set('El enlace de verificación no es válido o ha expirado. Solicita un nuevo correo.');
     }
   }
 
