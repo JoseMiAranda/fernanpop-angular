@@ -120,6 +120,26 @@
 				</div>
 
 				<div>
+					<label for="register-confirmPassword" class="mb-2 block text-sm font-medium text-on-surface-variant">
+						Confirmar contraseña
+					</label>
+					<input
+						id="register-confirmPassword"
+						type="password"
+						formControlName="confirmPassword"
+						autocomplete="new-password"
+						placeholder="Repite tu contraseña"
+						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						[class.border-error]="submitted && f['confirmPassword'].errors" />
+					@if (submitted && f['confirmPassword'].errors) {
+					<div class="mt-1 text-sm text-error">
+						@if (f['confirmPassword'].errors['required']) { Debes confirmar tu contraseña }
+						@else if (f['confirmPassword'].errors['passwordMismatch']) { Las contraseñas no coinciden }
+					</div>
+					}
+				</div>
+
+				<div>
 					<label class="flex cursor-pointer items-start gap-3">
 						<input
 							type="checkbox"

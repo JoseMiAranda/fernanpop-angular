@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { AuthError } from '@angular/fire/auth';
@@ -41,6 +49,7 @@ export class RegisterComponent {
     lastName: new FormControl(null),
     email: new FormControl(null),
     password: new FormControl(null),
+    confirmPassword: new FormControl(null),
     acceptTerms: new FormControl(false),
   });
 
@@ -63,10 +72,23 @@ export class RegisterComponent {
             Validators.maxLength(this.maxLenght),
           ],
         ],
+        confirmPassword: [null, [Validators.required, this.passwordsMatchValidator]],
         acceptTerms: [false, Validators.requiredTrue],
       },
     );
+
+    this.form.get('password')?.valueChanges.subscribe(() => {
+      this.form.get('confirmPassword')?.updateValueAndValidity({ emitEvent: false });
+    });
   }
+
+  private passwordsMatchValidator = (control: AbstractControl): ValidationErrors | null => {
+    const password = control.parent?.get('password')?.value;
+    if (control.value && password !== control.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  };
 
   // Obtenemos un campo del formulario
   get f(): { [key: string]: AbstractControl } {
