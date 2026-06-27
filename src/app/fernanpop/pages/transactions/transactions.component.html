@@ -178,7 +178,7 @@
 
         <!-- Vista desktop: tabla -->
         <div class="hidden lg:block">
-        <app-card variant="elevated" padding="none" class="overflow-hidden">
+        <div class="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
             <div class="overflow-x-auto">
             <table class="w-full border-collapse text-left">
                 <thead class="border-b border-outline-variant bg-surface-container">
@@ -314,7 +314,7 @@
                     {{ transactionsState().data.length === 1 ? 'transacción' : 'transacciones' }}
                 </p>
             </div>
-        </app-card>
+        </div>
         </div>
         }
     </app-page-container>
