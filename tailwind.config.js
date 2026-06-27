@@ -32,6 +32,7 @@ module.exports = {
       },
       spacing: {
         'margin-desktop': '64px',
+        'margin-tablet': '32px',
         'margin-mobile': '16px',
         'stack-sm': '8px',
         'stack-md': '16px',

@@ -1,7 +1,7 @@
 <div class="min-h-full bg-surface font-body text-on-surface">
 
     @if (pageState().type === 'loading') {
-    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
         <div class="mb-stack-lg flex flex-col items-center gap-stack-md md:flex-row md:items-start">
             <div class="size-40 rounded-full bg-outline-variant/40 md:size-48"></div>
             <div class="flex-1 space-y-3 text-center md:text-left">
@@ -22,7 +22,7 @@
     }
 
     @if (pageState().type === 'success' && seller(); as sellerData) {
-    <div class="border-b border-outline-variant bg-surface-container-lowest px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div class="border-b border-outline-variant bg-surface-container-lowest px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
         <div class="mx-auto max-w-container-max">
             <div class="flex flex-col items-center gap-stack-lg md:flex-row md:items-start">
                 <div class="relative shrink-0">

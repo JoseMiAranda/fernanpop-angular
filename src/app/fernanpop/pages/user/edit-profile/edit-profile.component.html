@@ -1,7 +1,7 @@
 <div class="min-h-full bg-surface font-body text-on-surface">
 
     @if (pageState().type === 'loading') {
-    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
         <div class="mb-stack-lg h-8 w-40 rounded bg-outline-variant/40"></div>
         <div class="mb-section-gap space-y-stack-sm">
             <div class="h-12 w-1/3 rounded bg-outline-variant/40"></div>
@@ -23,7 +23,7 @@
     }
 
     @if (pageState().type === 'error') {
-    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
         <p class="text-error">Debes iniciar sesión para editar tu perfil.</p>
     </div>
     }

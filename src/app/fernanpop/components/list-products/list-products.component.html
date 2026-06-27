@@ -1,7 +1,7 @@
-<div class="grid gap-3 sm:gap-4"
+<div class="grid gap-3 sm:gap-4 lg:gap-gutter"
     [ngClass]="compact
         ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'">
+        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'">
     @for (product of listProducts; track product.id) {
     <div class="group cursor-pointer overflow-hidden transition-transform hover:-translate-y-1">
         <app-card variant="elevated" padding="none">

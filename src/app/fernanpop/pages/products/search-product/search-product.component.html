@@ -11,7 +11,7 @@
             <app-card variant="elevated" padding="md">
                 <p class="mb-stack-md text-sm font-semibold uppercase tracking-wider text-on-surface">Filtros</p>
 
-                <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="space-y-5">
+                <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
                     <div>
                         <p class="mb-stack-md text-sm font-medium text-on-surface">Precio</p>
                         <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -58,7 +58,7 @@
                         </select>
                     </div>
 
-                    <div class="flex flex-col gap-2 pt-2">
+                    <div class="flex flex-col gap-2 pt-2 sm:col-span-2 lg:col-span-1">
                         <app-button type="submit" [fullWidth]="true">Aplicar filtros</app-button>
                         <app-button
                             type="button"

@@ -5,7 +5,7 @@
       <div class="h-full w-full bg-cover bg-center" [style.background-image]="'url(' + heroImage + ')'"></div>
       <div class="absolute inset-0 bg-black/30"></div>
     </div>
-    <div class="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
+    <div class="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-tablet lg:px-margin-desktop">
       <div class="max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest/90 p-stack-lg backdrop-blur-md">
         <app-eyebrow>Fernanpop</app-eyebrow>
         <h1 class="mb-stack-md font-headline text-3xl font-bold tracking-tight text-on-surface sm:text-4xl md:text-5xl">
@@ -25,16 +25,16 @@
   </section>
 
   <!-- Categories Bento -->
-  <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap md:px-margin-desktop">
+  <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap md:px-margin-tablet lg:px-margin-desktop">
     <div class="mb-stack-lg">
       <app-eyebrow>Categorías</app-eyebrow>
       <app-section-heading class="mt-2 block sm:text-3xl">Encuentra lo que buscas</app-section-heading>
     </div>
-    <div class="grid h-auto grid-cols-1 gap-gutter md:grid-cols-4 md:grid-rows-2 md:min-h-[600px]">
+    <div class="grid h-auto grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 lg:min-h-[600px]">
       @for (tile of categoryTiles(); track tile.id) {
       <button type="button" (click)="browseCategory(tile.id)"
-        class="group relative min-h-[200px] overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low text-left md:min-h-0"
-        [class.md:col-span-2]="tile.colSpan === 2">
+        class="group relative min-h-[200px] overflow-hidden rounded-xl border border-outline-variant bg-surface-container-low text-left sm:min-h-[240px] lg:min-h-0"
+        [class.sm:col-span-2]="tile.colSpan === 2">
         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
           [style.background-image]="'url(' + tile.image + ')'"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
@@ -51,7 +51,7 @@
 
   <!-- Featured Products -->
   <section class="bg-surface-container-low py-section-gap">
-    <div class="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+    <div class="mx-auto max-w-container-max px-margin-mobile md:px-margin-tablet lg:px-margin-desktop">
       <div class="mb-stack-lg flex items-center justify-between gap-4">
         <app-section-heading class="sm:text-3xl">Últimos anuncios</app-section-heading>
         <div class="hidden sm:block">
@@ -84,7 +84,7 @@
   </section>
 
   <!-- Community -->
-  <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap text-center md:px-margin-desktop">
+  <section class="mx-auto max-w-container-max px-margin-mobile py-section-gap text-center md:px-margin-tablet lg:px-margin-desktop">
     <app-eyebrow>Comunidad</app-eyebrow>
     <h2 class="mx-auto mt-4 mb-stack-lg max-w-3xl font-headline text-2xl font-bold text-on-surface sm:text-3xl md:text-4xl">
       "Fernanpop me ha ayudado a dar una segunda vida a cosas que ya no usaba. Comprar y vender nunca fue tan fácil."

@@ -1,13 +1,13 @@
 <div class="min-h-full bg-surface font-body text-on-surface">
 
     @if (transactionsState().type === 'loading') {
-    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-desktop">
+    <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
         <div class="mb-stack-lg space-y-stack-sm">
             <div class="h-4 w-32 rounded bg-outline-variant/40"></div>
             <div class="h-12 w-64 rounded bg-outline-variant/40"></div>
         </div>
         <div class="overflow-hidden rounded-xl border border-outline-variant/40 bg-surface-container-lowest md:border-outline-variant/40">
-            <div class="space-y-3 p-4 md:hidden">
+            <div class="space-y-3 p-4 lg:hidden">
                 @for (row of [1, 2, 3]; track row) {
                 <div class="animate-pulse rounded-xl border border-outline-variant/30 p-4">
                     <div class="flex gap-3">
@@ -25,7 +25,7 @@
                 </div>
                 }
             </div>
-            <div class="hidden overflow-hidden md:block">
+            <div class="hidden overflow-hidden lg:block">
             <div class="border-b border-outline-variant/40 bg-surface-container px-6 py-4">
                 <div class="flex gap-8">
                     @for (i of [1, 2, 3, 4, 5, 6]; track i) {
@@ -85,7 +85,7 @@
             description="Cuando compres o vendas un producto, aparecerá aquí." />
         } @else {
         <!-- Vista móvil: tarjetas -->
-        <div class="space-y-3 md:hidden">
+        <div class="space-y-3 lg:hidden">
             @for (transaction of transactionsState().data; track transaction.id) {
             <app-card variant="elevated" padding="sm">
                 <div class="flex gap-3">
@@ -177,8 +177,9 @@
         </div>
 
         <!-- Vista desktop: tabla -->
-        <div class="hidden md:block">
+        <div class="hidden lg:block">
         <app-card variant="elevated" padding="none" class="overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full border-collapse text-left">
                 <thead class="border-b border-outline-variant bg-surface-container">
                     <tr>
@@ -305,6 +306,7 @@
                     }
                 </tbody>
             </table>
+            </div>
 
             <div class="border-t border-outline-variant bg-surface-container-lowest px-6 py-4">
                 <p class="text-xs text-on-surface-variant">
