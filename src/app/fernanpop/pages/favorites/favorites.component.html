@@ -6,7 +6,13 @@
 
 @if (favoritesState().type === 'success') {
 <app-page-container>
-    <app-page-title size="compact">Mis favoritos</app-page-title>
+    <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Mis favoritos' }]" />
+    <div class="mb-stack-lg">
+        <app-page-title size="compact" [withMargin]="false">Mis favoritos</app-page-title>
+        <p class="mt-stack-sm text-base text-on-surface-variant">
+            Productos que has guardado para revisar más tarde.
+        </p>
+    </div>
 
     @if (displayedProducts().length > 0) {
     <app-list-products [listProducts]="displayedProducts()"></app-list-products>

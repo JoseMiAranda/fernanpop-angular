@@ -12,6 +12,7 @@ import { StatusPipe } from '../../../pipes/status.pipe';
 import { ConfirmDialogComponent } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { RatingDialogComponent } from '../../../shared/ui/rating-dialog/rating-dialog.component';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
   EmptyStateComponent,
@@ -35,6 +36,7 @@ import { CreateReviewPayload } from '../../../interfaces/review.interface';
     DatePipe,
     PageContainerComponent,
     PageTitleComponent,
+    BreadcrumbsComponent,
     EmptyStateComponent,
     CardComponent,
     ButtonComponent,

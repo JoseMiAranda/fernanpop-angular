@@ -1,6 +1,7 @@
 <div class="min-h-full bg-surface font-body text-on-surface">
   <app-page-container>
-    <div class="py-8">
+    <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Mensajes', link: '/user/messages' }, { label: 'Chat' }]" />
+    <div class="py-4">
       @if (conversationState().type === 'loading') {
       <div class="animate-pulse rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-6">
         <div class="h-5 w-40 rounded bg-outline-variant/30"></div>

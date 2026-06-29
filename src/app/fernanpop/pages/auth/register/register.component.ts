@@ -16,6 +16,7 @@ import { GoogleSignInButtonComponent } from '../google-sign-in-button/google-sig
 import {
   ButtonComponent,
   CardComponent,
+  EyebrowComponent,
   PageContainerComponent,
   PageTitleComponent,
   TextComponent,
@@ -30,6 +31,7 @@ import {
     RouterLink,
     PageContainerComponent,
     CardComponent,
+    EyebrowComponent,
     PageTitleComponent,
     TextComponent,
     ButtonComponent,

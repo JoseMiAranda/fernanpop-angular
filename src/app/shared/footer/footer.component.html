@@ -1,6 +1,55 @@
-<div class="flex justify-center bg-surface-container-low p-4 text-center text-sm text-on-surface-variant sm:p-6 sm:text-base">
-    <p>
-        Autor:
-        <a class="text-primary hover:text-primary-container hover:underline" href="https://github.com/JoseMiAranda">JoseMiAranda</a>
-    </p>
-</div>
+<footer class="bg-surface-container-low">
+    <div class="mx-auto max-w-container-max px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
+        <div class="grid grid-cols-1 gap-stack-lg sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+                <a routerLink="/" class="mb-stack-md inline-flex items-center gap-2">
+                    <img src="assets/brand/fernanpop-icon.png" alt="" width="32" height="32" class="size-8" aria-hidden="true" />
+                    <span class="font-headline text-lg font-bold text-primary">Fernanpop</span>
+                </a>
+                <p class="max-w-xs text-sm text-on-surface-variant">
+                    Compra y vende de segunda mano. Encuentra tesoros únicos y da una segunda vida a lo que ya no usas.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="mb-stack-md font-headline text-sm font-semibold uppercase tracking-wider text-on-surface">Marketplace</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a routerLink="/products" class="text-on-surface-variant transition-colors hover:text-primary">Explorar productos</a>
+                    </li>
+                    <li>
+                        <a routerLink="/create-product" class="text-on-surface-variant transition-colors hover:text-primary">Vender un artículo</a>
+                    </li>
+                    <li>
+                        <a routerLink="/user/favorites" class="text-on-surface-variant transition-colors hover:text-primary">Mis favoritos</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="mb-stack-md font-headline text-sm font-semibold uppercase tracking-wider text-on-surface">Mi cuenta</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a routerLink="/login" class="text-on-surface-variant transition-colors hover:text-primary">Iniciar sesión</a>
+                    </li>
+                    <li>
+                        <a routerLink="/register" class="text-on-surface-variant transition-colors hover:text-primary">Registrarse</a>
+                    </li>
+                    <li>
+                        <a routerLink="/user/products" class="text-on-surface-variant transition-colors hover:text-primary">Mis productos</a>
+                    </li>
+                    <li>
+                        <a routerLink="/user/transactions" class="text-on-surface-variant transition-colors hover:text-primary">Transacciones</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-stack-lg border-t border-outline-variant/40 pt-stack-md text-center text-sm text-on-surface-variant">
+            <p>
+                Autor:
+                <a class="text-primary hover:text-primary-container hover:underline" href="https://github.com/JoseMiAranda">JoseMiAranda</a>
+            </p>
+        </div>
+    </div>
+</footer>

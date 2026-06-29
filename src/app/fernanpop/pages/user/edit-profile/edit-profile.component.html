@@ -30,8 +30,9 @@
 
     @if (pageState().type === 'success') {
     <app-page-container>
+        <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Editar perfil' }]" />
         <div class="mb-section-gap">
-            <app-page-title [withMargin]="false">Editar perfil</app-page-title>
+            <app-page-title size="compact" [withMargin]="false">Editar perfil</app-page-title>
             <p class="mt-stack-sm max-w-2xl font-body text-base text-on-surface-variant">Actualiza tu nombre, apellidos y foto de perfil. Los cambios se verán en tu perfil público.</p>
         </div>
 

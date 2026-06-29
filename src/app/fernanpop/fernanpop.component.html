@@ -1,10 +1,8 @@
-<div class="min-h-screen flex flex-col justify-between">
+<div class="flex min-h-screen flex-col">
     <app-navbar />
-    <div class="flex flex-grow">
-        <div class="flex-grow overflow-auto">
-            <router-outlet/>
-        </div>
-    </div>
+    <main class="flex-grow">
+        <router-outlet/>
+    </main>
     <app-footer />
     <app-message-notifications />
 </div>

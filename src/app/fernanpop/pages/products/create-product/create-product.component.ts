@@ -10,10 +10,12 @@ import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { InitialState, LoadingState, State } from '../../../../states/state.interface';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
   PageContainerComponent,
   PageTitleComponent,
+  SectionHeadingComponent,
   TextComponent,
 } from '../../../../shared/ui';
 import { ImageDropComponent } from '../../../components/image-drop/image-drop.component';
@@ -27,9 +29,11 @@ import { AuthService } from '../../../../services/auth.service';
     CommonModule,
     ReactiveFormsModule,
     ButtonComponent,
+    BreadcrumbsComponent,
     CardComponent,
     PageContainerComponent,
     PageTitleComponent,
+    SectionHeadingComponent,
     TextComponent,
     ImageDropComponent,
   ],
@@ -129,6 +133,10 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 
   onDrop(files: FileList) {
     this.imagesSignal.set(files);
+  }
+
+  selectCondition(conditionId: string): void {
+    this.form.patchValue({ condition: conditionId });
   }
 
   async uploadImages(): Promise<void> {

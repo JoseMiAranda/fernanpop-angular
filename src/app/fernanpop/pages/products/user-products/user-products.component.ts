@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ProductsService } from '../../../../services/products.service';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   EmptyStateComponent,
   PageContainerComponent,
@@ -21,6 +22,7 @@ import { Subscription } from 'rxjs';
     ListProductsComponent,
     PageContainerComponent,
     PageTitleComponent,
+    BreadcrumbsComponent,
     ButtonComponent,
     EmptyStateComponent,
     TextComponent,

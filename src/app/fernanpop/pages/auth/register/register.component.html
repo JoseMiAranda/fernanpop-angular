@@ -5,6 +5,7 @@
 	</div>
 
 	<app-page-container [narrow]="true">
+		<app-eyebrow class="mb-stack-md block text-center">Registro</app-eyebrow>
 		<app-card variant="elevated" padding="lg">
 			<header class="mb-stack-lg text-center">
 				<app-page-title size="compact" [withMargin]="false">Crea tu cuenta</app-page-title>
@@ -41,7 +42,7 @@
 							formControlName="firstName"
 							autocomplete="given-name"
 							placeholder="María"
-							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+							class="w-full rounded-xl border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							[class.border-error]="submitted && f['firstName'].errors" />
 						@if (submitted && f['firstName'].errors) {
 						<div class="mt-1 text-sm text-error">
@@ -62,7 +63,7 @@
 							formControlName="lastName"
 							autocomplete="family-name"
 							placeholder="García"
-							class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+							class="w-full rounded-xl border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							[class.border-error]="submitted && f['lastName'].errors" />
 						@if (submitted && f['lastName'].errors) {
 						<div class="mt-1 text-sm text-error">
@@ -84,7 +85,7 @@
 						formControlName="email"
 						autocomplete="email"
 						placeholder="nombre@ejemplo.com"
-						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						class="w-full rounded-xl border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						[class.border-error]="submitted && f['email'].errors" />
 					@if (submitted && f['email'].errors) {
 					<div class="mt-1 text-sm text-error">
@@ -104,7 +105,7 @@
 						formControlName="password"
 						autocomplete="new-password"
 						placeholder="Crea una contraseña"
-						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						class="w-full rounded-xl border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						[class.border-error]="submitted && f['password'].errors" />
 					<p class="mt-2 flex items-center gap-1 text-xs text-on-surface-variant">
 						<span class="material-symbols-outlined text-sm">info</span>
@@ -129,7 +130,7 @@
 						formControlName="confirmPassword"
 						autocomplete="new-password"
 						placeholder="Repite tu contraseña"
-						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						class="w-full rounded-xl border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						[class.border-error]="submitted && f['confirmPassword'].errors" />
 					@if (submitted && f['confirmPassword'].errors) {
 					<div class="mt-1 text-sm text-error">

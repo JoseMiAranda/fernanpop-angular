@@ -12,11 +12,12 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
 import { forkJoin, Subscription } from 'rxjs';
 import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
-  EyebrowComponent,
   PageContainerComponent,
   PageTitleComponent,
+  SectionHeadingComponent,
 } from '../../../../shared/ui';
 import { ListImagesComponent } from '../../../components/list-images/list-images.component';
 import { ImageDropComponent } from "../../../components/image-drop/image-drop.component";
@@ -33,10 +34,11 @@ import { AuthService } from '../../../../services/auth.service';
     ListImagesComponent,
     ImageDropComponent,
     ButtonComponent,
+    BreadcrumbsComponent,
     CardComponent,
-    EyebrowComponent,
     PageContainerComponent,
     PageTitleComponent,
+    SectionHeadingComponent,
   ],
   templateUrl: './update-product.component.html',
   styleUrl: './update-product.component.css',
@@ -177,6 +179,10 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
   onDrop(files: FileList) {
     this.imagesSignal.set(files);
+  }
+
+  selectCondition(conditionId: string): void {
+    this.form.patchValue({ condition: conditionId });
   }
 
   async uploadImages(): Promise<void> {

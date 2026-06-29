@@ -8,7 +8,7 @@ import { CurrentCurrencyPipe } from '../../../../pipes/current-currency.pipe';
 import { TransactionsService } from '../../../../services/transactions.service';
 import { FavoritesService } from '../../../../services/favorites.service';
 import { ImageGalleryComponent } from '../../../components/image-gallery/image-gallery.component';
-import { ButtonComponent, CardComponent, PageContainerComponent } from '../../../../shared/ui';
+import { ButtonComponent, BadgeComponent, BreadcrumbsComponent, CardComponent, PageContainerComponent, SectionHeadingComponent } from '../../../../shared/ui';
 import { CategoryNamePipe } from '../../../../pipes/category-name.pipe';
 import { ConditionNamePipe } from '../../../../pipes/condition-name.pipe';
 import { Category } from '../../../../interfaces/category.interface';
@@ -24,7 +24,7 @@ import { ConversationsService } from '../../../../services/conversations.service
 @Component({
   selector: 'app-info-product',
   standalone: true,
-  imports: [CommonModule, CurrentCurrencyPipe, ImageGalleryComponent, CategoryNamePipe, ConditionNamePipe, RouterLink, ButtonComponent, CardComponent, PageContainerComponent],
+  imports: [CommonModule, CurrentCurrencyPipe, ImageGalleryComponent, CategoryNamePipe, ConditionNamePipe, RouterLink, ButtonComponent, BadgeComponent, BreadcrumbsComponent, CardComponent, PageContainerComponent, SectionHeadingComponent],
   templateUrl: './info-product.component.html',
   styleUrl: './info-product.component.css'
 })
@@ -258,6 +258,28 @@ export class InfoProductComponent implements OnInit, OnDestroy {
 
     const product = this.productState().data;
     return !product.status.includes('sold') && !product.status.includes('deleted');
+  }
+
+  breadcrumbItems() {
+    if (this.productState().type !== 'success') {
+      return [{ label: 'Inicio', link: '/' }];
+    }
+
+    const product = this.productState().data;
+    const items: { label: string; link?: string | string[] }[] = [
+      { label: 'Inicio', link: '/' },
+      { label: 'Marketplace', link: '/products' },
+    ];
+
+    if (product.categoryId) {
+      const category = this.categories.find((c) => c.id === product.categoryId);
+      if (category) {
+        items.push({ label: category.name, link: '/products' });
+      }
+    }
+
+    items.push({ label: product.title });
+    return items;
   }
 
 }

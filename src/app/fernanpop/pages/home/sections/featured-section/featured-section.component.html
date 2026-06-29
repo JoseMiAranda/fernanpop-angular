@@ -1,0 +1,37 @@
+<section class="pb-section-gap pt-section-gap">
+  <div class="mx-auto max-w-container-max px-margin-mobile md:px-margin-tablet lg:px-margin-desktop">
+    <div class="mb-stack-lg flex items-end justify-between gap-4">
+      <div>
+        <p class="mb-stack-sm text-xs font-semibold uppercase tracking-widest text-primary">Destacados</p>
+        <app-section-heading class="sm:text-3xl">Colecciones destacadas</app-section-heading>
+        <p class="mt-2 max-w-lg text-sm text-on-surface-variant">
+          Los últimos anuncios publicados en el marketplace.
+        </p>
+      </div>
+      <div class="hidden shrink-0 sm:block">
+        <app-button (action)="onBrowseMarketplace()">Ver todo</app-button>
+      </div>
+    </div>
+
+    @if (productsState.type === 'loading') {
+    <p class="text-on-surface-variant">Cargando productos...</p>
+    }
+
+    @if (productsState.type === 'error') {
+    <p class="text-on-surface-variant">Error: {{ productsState.error }}</p>
+    }
+
+    @if (productsState.type === 'success') {
+      @if (featuredProducts.length > 0) {
+      <app-list-products [listProducts]="featuredProducts"></app-list-products>
+      <div class="mt-stack-lg flex justify-center sm:hidden">
+        <app-button (action)="onBrowseMarketplace()">Ver todo</app-button>
+      </div>
+      } @else {
+      <div class="flex min-h-[30vh] items-center justify-center">
+        <app-text>Aún no hay productos publicados. ¡Sé el primero en vender!</app-text>
+      </div>
+      }
+    }
+  </div>
+</section>

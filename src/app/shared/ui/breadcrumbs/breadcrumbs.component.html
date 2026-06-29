@@ -1,0 +1,16 @@
+<nav aria-label="Migas de pan" class="mb-stack-md">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
+    @for (item of items; track item.label; let last = $last) {
+    <li class="inline-flex items-center gap-2">
+      @if (!last && item.link) {
+      <a [routerLink]="item.link" class="transition-colors hover:text-primary">{{ item.label }}</a>
+      } @else {
+      <span [class.text-on-surface]="last">{{ item.label }}</span>
+      }
+      @if (!last) {
+      <span aria-hidden="true" class="text-outline-variant">/</span>
+      }
+    </li>
+    }
+  </ol>
+</nav>

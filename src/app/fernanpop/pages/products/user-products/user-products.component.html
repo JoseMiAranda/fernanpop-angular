@@ -6,8 +6,14 @@
 
 @if (productState().type === 'success') {
 <app-page-container>
+    <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Mis productos' }]" />
     <div class="mb-stack-lg flex flex-col gap-stack-md sm:flex-row sm:items-center sm:justify-between">
-        <app-page-title size="compact" [withMargin]="false">Mis productos</app-page-title>
+        <div>
+            <app-page-title size="compact" [withMargin]="false">Mis productos</app-page-title>
+            <p class="mt-stack-sm text-base text-on-surface-variant">
+                Gestiona tus anuncios publicados en el marketplace.
+            </p>
+        </div>
         <app-button label="Agregar producto" [routerLink]="['/create-product']" />
     </div>
 

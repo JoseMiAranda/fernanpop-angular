@@ -16,3 +16,15 @@ export { CardComponent } from './card/card.component';
 export type { CardVariant, CardPadding } from './card/card.component';
 
 export { EmptyStateComponent } from './empty-state/empty-state.component';
+
+export { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+export type { BreadcrumbItem } from './breadcrumbs/breadcrumb-item.model';
+
+export { BadgeComponent } from './badge/badge.component';
+export type { BadgeVariant } from './badge/badge.component';
+
+export { SegmentedControlComponent } from './segmented-control/segmented-control.component';
+export type { SegmentedOption } from './segmented-control/segmented-control.component';
+
+export { FilterGroupComponent } from './filter-group/filter-group.component';
+export type { FilterOption } from './filter-group/filter-group.component';

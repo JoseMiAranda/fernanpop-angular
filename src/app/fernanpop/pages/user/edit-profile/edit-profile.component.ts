@@ -16,6 +16,7 @@ import { ImagesService } from '../../../../services/images.service';
 import { ErrorResponse, SuccessResponse } from '../../../../interfaces/response-interface';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
   EyebrowComponent,
@@ -32,6 +33,7 @@ import { ImageDropComponent } from '../../../components/image-drop/image-drop.co
     CommonModule,
     ReactiveFormsModule,
     ButtonComponent,
+    BreadcrumbsComponent,
     CardComponent,
     EyebrowComponent,
     PageContainerComponent,

@@ -1,0 +1,21 @@
+<div>
+  <p class="mb-stack-md text-sm font-semibold uppercase tracking-wider text-on-surface">{{ label }}</p>
+  <ul class="space-y-2">
+    @for (option of options; track option.value) {
+    <li>
+      <label class="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-surface-container-high">
+        <input
+          type="radio"
+          [name]="name"
+          [value]="option.value"
+          [checked]="value === option.value"
+          (change)="select(option.value)"
+          class="size-4 border-outline-variant text-primary focus:ring-primary" />
+        <span class="text-sm text-on-surface-variant" [class.font-semibold]="value === option.value" [class.text-on-surface]="value === option.value">
+          {{ option.label }}
+        </span>
+      </label>
+    </li>
+    }
+  </ul>
+</div>

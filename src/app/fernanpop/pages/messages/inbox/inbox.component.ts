@@ -7,6 +7,7 @@ import { CustomResponse, ErrorResponse, SuccessResponse } from '../../../../inte
 import { ConversationsService } from '../../../../services/conversations.service';
 import { ErrorState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
   EmptyStateComponent,
@@ -24,6 +25,7 @@ import { AuthService } from '../../../../services/auth.service';
     DatePipe,
     PageContainerComponent,
     PageTitleComponent,
+    BreadcrumbsComponent,
     EmptyStateComponent,
     CardComponent,
     ButtonComponent,

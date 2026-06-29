@@ -1,7 +1,11 @@
 <div class="min-h-full bg-surface font-body text-on-surface">
   <app-page-container>
-    <div class="py-8">
-      <app-page-title>Mensajes</app-page-title>
+    <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Mensajes' }]" />
+    <div class="py-4">
+      <app-page-title size="compact" [withMargin]="false">Mensajes</app-page-title>
+      <p class="mt-stack-sm text-base text-on-surface-variant">
+        Tus conversaciones con compradores y vendedores.
+      </p>
 
       @if (conversationsState().type === 'loading') {
       <div class="mt-6 space-y-4">

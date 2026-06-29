@@ -24,6 +24,7 @@
     @if (pageState().type === 'success' && seller(); as sellerData) {
     <div class="border-b border-outline-variant bg-surface-container-lowest px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
         <div class="mx-auto max-w-container-max">
+            <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: sellerData.displayName }]" />
             <div class="flex flex-col items-center gap-stack-lg md:flex-row md:items-start">
                 <div class="relative shrink-0">
                     @if (sellerData.photoUrl) {

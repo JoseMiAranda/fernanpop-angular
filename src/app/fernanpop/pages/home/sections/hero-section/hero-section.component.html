@@ -1,0 +1,64 @@
+<section class="mx-auto max-w-container-max px-margin-mobile pt-stack-lg md:px-margin-tablet lg:px-margin-desktop">
+  <div class="relative overflow-hidden rounded-3xl">
+    <div class="absolute inset-0 z-0">
+      <div class="h-full w-full bg-cover bg-center" [style.background-image]="'url(' + heroImage + ')'"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 flex min-h-[440px] items-center px-6 py-12 sm:min-h-[500px] sm:px-10 md:min-h-[560px] md:px-14">
+      <div class="max-w-xl">
+        <h1 class="mb-stack-md font-headline text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
+          De segunda mano.<br />
+          <span class="text-primary-container">Re-encuentra.</span>
+        </h1>
+        <p class="mb-stack-lg max-w-md font-body text-base text-white/90 sm:text-lg">
+          Encuentra tesoros únicos, da una segunda vida a lo que ya no usas y conecta con vendedores de tu comunidad.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <button
+            type="button"
+            (click)="onBrowseMarketplace()"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white shadow-sm transition-colors hover:bg-primary-container active:scale-95">
+            Explorar productos
+          </button>
+          <button
+            type="button"
+            (click)="onSellClick()"
+            class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:bg-white/20 active:scale-95">
+            Vender tus artículos
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-20 -mt-8 px-2 sm:-mt-10 sm:px-6">
+    <div class="rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-4 shadow-lg sm:p-5">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="w-full sm:w-44 sm:shrink-0">
+          <app-segmented-control
+            [options]="modeOptions"
+            [value]="searchMode"
+            ariaLabel="Modo de búsqueda"
+            (valueChange)="onModeChange($event)" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <app-searcher />
+        </div>
+      </div>
+      @if (categories.length > 0) {
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Popular:</span>
+        @for (category of categories; track category.id) {
+        <button
+          type="button"
+          (click)="onBrowseCategory(category.id)"
+          class="rounded-full border border-outline-variant bg-surface-container-low px-3 py-1 text-xs font-medium text-on-surface-variant transition-colors hover:border-primary hover:text-primary">
+          {{ category.name }}
+        </button>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</section>

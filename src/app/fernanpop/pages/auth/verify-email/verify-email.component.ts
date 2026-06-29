@@ -6,6 +6,7 @@ import { RateLimitError } from '../../../../utils/rate-limiter';
 import {
   ButtonComponent,
   CardComponent,
+  EyebrowComponent,
   PageContainerComponent,
   PageTitleComponent,
   TextComponent,
@@ -20,6 +21,7 @@ type VerifyEmailView = 'processing-link' | 'waiting' | 'success' | 'error';
     CommonModule,
     PageContainerComponent,
     CardComponent,
+    EyebrowComponent,
     PageTitleComponent,
     TextComponent,
     ButtonComponent,

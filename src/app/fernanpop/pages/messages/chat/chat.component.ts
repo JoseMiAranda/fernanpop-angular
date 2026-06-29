@@ -10,7 +10,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { ConversationRealtimeService } from '../../../../services/conversation-realtime.service';
 import { ConversationsService } from '../../../../services/conversations.service';
 import { ErrorState, InitialState, LoadingState, State, SuccessState } from '../../../../states/state.interface';
-import { ButtonComponent, CardComponent, EmptyStateComponent, PageContainerComponent } from '../../../../shared/ui';
+import { BreadcrumbsComponent, ButtonComponent, CardComponent, EmptyStateComponent, PageContainerComponent } from '../../../../shared/ui';
 
 @Component({
   selector: 'app-chat',
@@ -21,6 +21,7 @@ import { ButtonComponent, CardComponent, EmptyStateComponent, PageContainerCompo
     RouterLink,
     DatePipe,
     PageContainerComponent,
+    BreadcrumbsComponent,
     CardComponent,
     ButtonComponent,
     EmptyStateComponent,

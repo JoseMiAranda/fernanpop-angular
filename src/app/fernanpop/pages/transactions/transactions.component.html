@@ -74,9 +74,13 @@
             (skip)="onRatingSkip()">
         </app-rating-dialog>
 
+        <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Transacciones' }]" />
+
         <div class="mb-stack-lg">
-            <p class="mb-stack-sm text-sm font-medium text-on-surface-variant">Mi cuenta</p>
-            <app-page-title [withMargin]="false">Transacciones</app-page-title>
+            <app-page-title size="compact" [withMargin]="false">Transacciones</app-page-title>
+            <p class="mt-stack-sm text-base text-on-surface-variant">
+                Gestiona tus compras y ventas en curso.
+            </p>
         </div>
 
         @if (transactionsState().data.length === 0) {

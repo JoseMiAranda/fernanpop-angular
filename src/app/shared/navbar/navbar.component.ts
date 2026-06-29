@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TitleComponent } from '../title/title.component';
 import { SearcherComponent } from '../searcher/searcher.component';
 import { DropdownMenuComponent } from '../ui/dropdown-menu/dropdown-menu.component';
 import { DropdownMenuItem } from '../ui/dropdown-menu/dropdown-menu-item.model';
 import { ButtonComponent } from '../ui/button/button.component';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',

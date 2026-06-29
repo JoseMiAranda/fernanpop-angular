@@ -11,6 +11,7 @@ import { PurchasedItem } from '../../../../interfaces/purchased-item.interface';
 import { Review, SellerReviewsSummary } from '../../../../interfaces/review.interface';
 import { ListProductsComponent } from '../../../components/list-products/list-products.component';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
   EmptyStateComponent,
@@ -36,6 +37,7 @@ type SellerTab = 'active' | 'sold' | 'purchased';
     CardComponent,
     EmptyStateComponent,
     PageContainerComponent,
+    BreadcrumbsComponent,
     SectionHeadingComponent,
   ],
   templateUrl: './seller-page.component.html',

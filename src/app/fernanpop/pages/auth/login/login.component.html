@@ -1,5 +1,6 @@
 <div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-8 sm:py-12">
 	<app-page-container [narrow]="true">
+		<app-eyebrow class="mb-stack-md block text-center">Acceso</app-eyebrow>
 		<app-card variant="elevated" padding="lg">
 			<div class="mb-stack-lg text-center">
 				<app-page-title size="compact" [withMargin]="false">Bienvenido de vuelta</app-page-title>
@@ -33,7 +34,7 @@
 						formControlName="email"
 						autocomplete="email"
 						placeholder="nombre@ejemplo.com"
-						class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+						class="w-full rounded-xl border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						[class.border-error]="submitted && f['email'].errors" />
 					@if (submitted && f['email'].errors) {
 					<div class="mt-1 text-sm text-error">

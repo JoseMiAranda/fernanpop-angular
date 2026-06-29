@@ -2,30 +2,20 @@
 
     @if (productState().type === 'loading') {
     <div class="mx-auto max-w-container-max animate-pulse px-margin-mobile py-stack-lg md:px-margin-tablet lg:px-margin-desktop">
-        <div class="mb-stack-lg h-8 w-40 rounded bg-outline-variant/40"></div>
+        <div class="mb-stack-lg h-4 w-64 rounded bg-outline-variant/40"></div>
         <div class="mb-section-gap space-y-stack-sm">
             <div class="h-12 w-1/3 rounded bg-outline-variant/40"></div>
             <div class="h-4 w-2/3 rounded bg-outline-variant/40"></div>
         </div>
         <div class="grid grid-cols-1 items-start gap-stack-lg lg:grid-cols-12">
             <div class="space-y-stack-lg lg:col-span-5">
-                <div class="rounded-xl border border-outline-variant/40 bg-surface-container-low p-stack-lg">
-                    <div class="mb-stack-md aspect-square rounded-lg bg-white"></div>
-                    <div class="grid grid-cols-4 gap-stack-sm">
-                        @for (i of [1, 2, 3, 4]; track i) {
-                        <div class="aspect-square rounded-lg bg-outline-variant/30"></div>
-                        }
-                    </div>
-                </div>
+                <div class="aspect-square rounded-xl bg-outline-variant/30"></div>
             </div>
-            <div class="rounded-xl border border-outline-variant/40 bg-white p-stack-lg lg:col-span-7 lg:p-12">
+            <div class="rounded-xl border border-outline-variant/40 bg-white p-stack-lg lg:col-span-7">
                 <div class="space-y-stack-lg">
+                    @for (i of [1, 2, 3, 4]; track i) {
                     <div class="h-12 rounded-lg bg-outline-variant/30"></div>
-                    <div class="grid grid-cols-2 gap-stack-lg">
-                        <div class="h-12 rounded-lg bg-outline-variant/30"></div>
-                        <div class="h-12 rounded-lg bg-outline-variant/30"></div>
-                    </div>
-                    <div class="h-32 rounded-lg bg-outline-variant/30"></div>
+                    }
                 </div>
             </div>
         </div>
@@ -34,7 +24,15 @@
 
     @if (productState().type === 'success') {
     <app-page-container>
-        <div class="mb-stack-lg flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+        <app-breadcrumbs [items]="[{ label: 'Inicio', link: '/' }, { label: 'Mis productos', link: '/user/products' }, { label: 'Editar' }]" />
+
+        <div class="mb-stack-lg flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <app-page-title size="compact" [withMargin]="false">Editar producto</app-page-title>
+                <p class="mt-stack-sm max-w-2xl text-base text-on-surface-variant">
+                    Modifica los detalles de tu producto antes de guardar.
+                </p>
+            </div>
             <app-confirm-dialog
                 [visible]="confirmVisible()"
                 header="Confirmación de eliminación"
@@ -45,97 +43,73 @@
                 (accept)="onConfirmAccept()"
                 (reject)="onConfirmReject()">
             </app-confirm-dialog>
-
             @if (deleteProductState().type === 'initial') {
-            <app-button variant="destructive" (action)="onDelete()">
-                <span class="hidden sm:inline">Eliminar producto</span>
-                <span class="sm:hidden">Eliminar</span>
-            </app-button>
+            <app-button variant="destructive" (action)="onDelete()">Eliminar</app-button>
             } @else {
-            <span class="text-sm font-semibold uppercase tracking-wider text-on-surface-variant">Eliminando...</span>
+            <span class="text-sm font-semibold text-on-surface-variant">Eliminando...</span>
             }
         </div>
 
-        <div class="mb-section-gap">
-            <app-page-title [withMargin]="false">Editar producto</app-page-title>
-            <p class="mt-stack-sm max-w-2xl font-body text-base text-on-surface-variant">
-                Modifica los detalles de tu producto. Asegúrate de que la información esté completa antes de guardar.
-            </p>
-        </div>
-
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="grid grid-cols-1 items-start gap-stack-lg lg:grid-cols-12">
-                <div class="space-y-stack-lg lg:col-span-5">
-                    <app-card variant="filled" padding="lg">
-                        <app-eyebrow>Imágenes del producto</app-eyebrow>
-
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-section-gap">
+            <section>
+                <app-section-heading>Muestra tu artículo</app-section-heading>
+                <app-card variant="filled" padding="lg" class="mt-stack-md block">
+                    @if (productState().data.images.length > 0) {
+                    <div class="relative mb-stack-md aspect-square max-h-80 overflow-hidden rounded-xl bg-white">
+                        <img class="h-full w-full object-contain p-stack-lg"
+                            [src]="productState().data.images[previewIndex()]" alt="Vista previa del producto" />
+                    </div>
+                    }
+                    <div class="space-y-stack-sm">
                         @if (productState().data.images.length > 0) {
-                        <div class="relative mb-stack-md aspect-square overflow-hidden rounded-lg bg-white">
-                            <img class="h-full w-full object-contain p-stack-lg"
-                                [src]="productState().data.images[previewIndex()]" alt="Vista previa del producto" />
-                        </div>
+                        <app-list-images
+                            [images]="productState().data.images"
+                            [selectedIndex]="previewIndex()"
+                            (selectImage)="previewIndex.set($event)"
+                            (deleteImage)="deleteImage($event)">
+                            <app-image-drop [compact]="true" (onDrop)="onDrop($event)" />
+                        </app-list-images>
+                        } @else {
+                        <app-image-drop (onDrop)="onDrop($event)" />
                         }
+                        @if (submitted && !existImage) {
+                        <p class="text-sm text-error">Imagen requerida</p>
+                        }
+                    </div>
+                </app-card>
+            </section>
 
-                        <div class="space-y-stack-sm">
-                            @if (productState().data.images.length > 0) {
-                            <app-list-images
-                                [images]="productState().data.images"
-                                [selectedIndex]="previewIndex()"
-                                (selectImage)="previewIndex.set($event)"
-                                (deleteImage)="deleteImage($event)">
-                                <app-image-drop [compact]="true" (onDrop)="onDrop($event)" />
-                            </app-list-images>
-                            } @else {
-                            <app-image-drop (onDrop)="onDrop($event)" />
-                            }
-
-                            @if (submitted && !existImage) {
-                            <p class="text-sm text-error">Imagen requerida</p>
-                            }
-                        </div>
-                    </app-card>
-                </div>
-
-                <div class="lg:col-span-7">
-                    <app-card variant="elevated" padding="lg">
+            <section>
+                <app-section-heading>Detalles del producto</app-section-heading>
+                <app-card variant="elevated" padding="lg" class="mt-stack-md block">
+                    <div class="grid grid-cols-1 gap-stack-lg md:grid-cols-2">
                         <div class="space-y-stack-lg">
-                        <div class="grid grid-cols-1 gap-stack-lg md:grid-cols-2">
-                            <div class="md:col-span-2">
-                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
-                                    Título
-                                </label>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-on-surface-variant">Título</label>
                                 <input type="text" formControlName="title"
-                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    class="w-full rounded-xl border border-outline-variant px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                                     [class.border-error]="submitted && f['title'].errors" />
                                 @if (submitted && f['title'].errors) {
-                                <div class="mt-1 text-sm text-error">
+                                <div class="text-sm text-error">
                                     @if (f['title'].errors['required']) { Título requerido }
                                     @if (f['title'].errors['minlength']) { Longitud mínima: {{ minLenght }} }
-                                    @if (f['title'].errors['maxlength']) { Longitud máxima permitida: {{ maxLenght }} }
+                                    @if (f['title'].errors['maxlength']) { Longitud máxima: {{ maxLenght }} }
                                 </div>
                                 }
                             </div>
-
-                            <div class="md:col-span-2">
-                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
-                                    Precio
-                                </label>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-on-surface-variant">Precio (€)</label>
                                 <input type="number" formControlName="price"
-                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    class="w-full rounded-xl border border-outline-variant px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                                     [class.border-error]="submitted && f['price'].errors" />
                                 @if (submitted && f['price'].errors) {
-                                <div class="mt-1 text-sm text-error">
-                                    @if (f['price'].errors['required']) { Precio requerido }
-                                </div>
+                                <p class="text-sm text-error">Precio requerido</p>
                                 }
                             </div>
-
-                            <div class="md:col-span-2">
-                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
-                                    Categoría
-                                </label>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-on-surface-variant">Categoría</label>
                                 <select formControlName="categoryId"
-                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    class="w-full rounded-xl border border-outline-variant px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                                     [class.border-error]="submitted && f['categoryId'].errors">
                                     <option value="" disabled>Selecciona una categoría</option>
                                     @for (category of categories; track category.id) {
@@ -143,70 +117,56 @@
                                     }
                                 </select>
                                 @if (submitted && f['categoryId'].errors) {
-                                <div class="mt-1 text-sm text-error">
-                                    @if (f['categoryId'].errors['required']) { Categoría requerida }
-                                </div>
+                                <p class="text-sm text-error">Categoría requerida</p>
                                 }
                             </div>
-
-                            <div class="md:col-span-2">
-                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
-                                    Estado
-                                </label>
-                                <select formControlName="condition"
-                                    class="w-full rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                                    [class.border-error]="submitted && f['condition'].errors">
-                                    <option value="" disabled>Selecciona el estado</option>
+                        </div>
+                        <div class="space-y-stack-lg">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-on-surface-variant">Estado</label>
+                                <div class="grid grid-cols-2 gap-2">
                                     @for (condition of conditions; track condition.id) {
-                                    <option [value]="condition.id">{{ condition.name }}</option>
+                                    <button
+                                        type="button"
+                                        (click)="selectCondition(condition.id)"
+                                        class="rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors"
+                                        [ngClass]="{
+                                            'border-primary bg-primary-container/10 text-primary': f['condition'].value === condition.id,
+                                            'border-outline-variant text-on-surface-variant': f['condition'].value !== condition.id
+                                        }">
+                                        {{ condition.name }}
+                                    </button>
                                     }
-                                </select>
-                                @if (submitted && f['condition'].errors) {
-                                <div class="mt-1 text-sm text-error">
-                                    @if (f['condition'].errors['required']) { Estado requerido }
                                 </div>
+                                @if (submitted && f['condition'].errors) {
+                                <p class="text-sm text-error">Estado requerido</p>
                                 }
                             </div>
-
-                            <div class="md:col-span-2">
-                                <label class="mb-2 block text-sm font-semibold uppercase tracking-wider text-on-surface-variant">
-                                    Descripción
-                                </label>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-on-surface-variant">Descripción</label>
                                 <textarea formControlName="desc" rows="5"
-                                    class="w-full resize-none rounded-lg border border-outline-variant bg-surface-container-low px-stack-md py-3 text-base transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                    class="w-full resize-none rounded-xl border border-outline-variant px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                                     [class.border-error]="submitted && f['desc'].errors"></textarea>
                                 @if (submitted && f['desc'].errors) {
-                                <div class="mt-1 text-sm text-error">
+                                <div class="text-sm text-error">
                                     @if (f['desc'].errors['required']) { Descripción requerida }
                                     @if (f['desc'].errors['minlength']) { Longitud mínima: {{ minLenght }} }
-                                    @if (f['desc'].errors['maxlength']) { Longitud máxima permitida: {{ maxDescLenght }} }
+                                    @if (f['desc'].errors['maxlength']) { Longitud máxima: {{ maxDescLenght }} }
                                 </div>
                                 }
                             </div>
                         </div>
+                    </div>
+                </app-card>
+            </section>
 
-                        <div class="flex flex-col justify-end gap-stack-md border-t border-outline-variant pt-stack-lg sm:flex-row">
-                            <div class="order-2 sm:order-1">
-                                <app-button variant="secondary" size="lg" label="Cancelar" (action)="goBack()" />
-                            </div>
-
-                            @if (updateProductState().type === 'initial') {
-                            <div class="order-1 sm:order-2">
-                                <app-button type="submit" size="lg" [fullWidth]="true" [disabled]="isLoading">
-                                    Guardar cambios
-                                </app-button>
-                            </div>
-                            } @else {
-                            <div class="order-1 sm:order-2">
-                                <app-button size="lg" [fullWidth]="true" [disabled]="true">
-                                    Guardando cambios...
-                                </app-button>
-                            </div>
-                            }
-                        </div>
-                        </div>
-                    </app-card>
-                </div>
+            <div class="flex flex-col justify-end gap-stack-md border-t border-outline-variant pt-stack-lg sm:flex-row">
+                <app-button variant="secondary" size="lg" label="Cancelar" (action)="goBack()" />
+                @if (updateProductState().type === 'initial') {
+                <app-button type="submit" size="lg" [disabled]="isLoading">Guardar cambios</app-button>
+                } @else {
+                <app-button size="lg" [disabled]="true">Guardando...</app-button>
+                }
             </div>
         </form>
     </app-page-container>

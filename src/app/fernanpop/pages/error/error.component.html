@@ -1,6 +1,11 @@
-<div class="flex h-full flex-col items-center justify-center px-4 py-8">
-    <main class="w-full max-w-[500px]" lottie [options]="options" (animationCreated)="animationCreated($event)"></main>
-    <div class="mt-4 text-center text-lg sm:text-2xl">
-        {{ message }}
-    </div>
+<div class="flex min-h-full flex-col items-center justify-center bg-surface px-4 py-8">
+    <app-page-container [narrow]="true">
+        <app-card variant="elevated" padding="lg" class="text-center">
+            <main class="mx-auto w-full max-w-[400px]" lottie [options]="options" (animationCreated)="animationCreated($event)"></main>
+            <h1 class="mt-stack-lg font-headline text-xl font-semibold text-on-surface sm:text-2xl">{{ message }}</h1>
+            <div class="mt-stack-md">
+                <app-button label="Volver al inicio" [routerLink]="['/']" />
+            </div>
+        </app-card>
+    </app-page-container>
 </div>

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AnimationItem } from 'lottie-web';
 import { LottieDirective, AnimationOptions } from 'ngx-lottie';
+import { ButtonComponent, CardComponent, PageContainerComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-error',
   standalone: true,
-  imports: [LottieDirective],
+  imports: [LottieDirective, RouterLink, ButtonComponent, CardComponent, PageContainerComponent],
   templateUrl: './error.component.html',
   styleUrl: './error.component.css'
 })

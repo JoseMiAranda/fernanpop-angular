@@ -6,15 +6,45 @@
 
 @if (productsState().type === 'success') {
 <app-page-container>
+    <app-breadcrumbs [items]="breadcrumbItems()" />
+
+    <div class="mb-stack-lg">
+        <app-page-title size="compact" [withMargin]="false">{{ pageTitle() }}</app-page-title>
+        <p class="mt-stack-sm max-w-2xl text-base text-on-surface-variant">
+            Explora productos de segunda mano. Filtra por categoría, precio y estado para encontrar lo que buscas.
+        </p>
+    </div>
+
     <div class="flex flex-col gap-stack-lg lg:flex-row lg:gap-gutter">
         <aside class="sticky top-4 w-full shrink-0 lg:w-64">
             <app-card variant="elevated" padding="md">
                 <p class="mb-stack-md text-sm font-semibold uppercase tracking-wider text-on-surface">Filtros</p>
 
-                <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="space-y-6">
+                    <app-filter-group
+                        label="Categoría"
+                        name="category"
+                        [options]="categoryOptions"
+                        [value]="filterForm.value.categoryId || ''"
+                        (valueChange)="onCategoryChange($event)" />
+
+                    <app-filter-group
+                        label="Ordenar"
+                        name="sort"
+                        [options]="sortOptions"
+                        [value]="filterForm.value.sort || 'newest'"
+                        (valueChange)="onSortChange($event)" />
+
+                    <app-filter-group
+                        label="Reserva"
+                        name="reserved"
+                        [options]="reservedOptions"
+                        [value]="filterForm.value.reserved || 'all'"
+                        (valueChange)="onReservedChange($event)" />
+
                     <div>
-                        <p class="mb-stack-md text-sm font-medium text-on-surface">Precio</p>
-                        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        <p class="mb-stack-md text-sm font-semibold uppercase tracking-wider text-on-surface">Precio</p>
+                        <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="mb-1 block text-xs text-on-surface-variant">Mínimo (€)</label>
                                 <input type="number" formControlName="price_min" min="0" placeholder="0"
@@ -28,37 +58,7 @@
                         </div>
                     </div>
 
-                    <div>
-                        <p class="mb-stack-md text-sm font-medium text-on-surface">Categoría</p>
-                        <select formControlName="categoryId"
-                            class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
-                            <option value="">Todas las categorías</option>
-                            @for (category of categories; track category.id) {
-                            <option [value]="category.id">{{ category.name }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div>
-                        <p class="mb-stack-md text-sm font-medium text-on-surface">Ordenar por fecha</p>
-                        <select formControlName="sort"
-                            class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
-                            <option value="newest">Más recientes primero</option>
-                            <option value="oldest">Menos recientes primero</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <p class="mb-stack-md text-sm font-medium text-on-surface">Estado de reserva</p>
-                        <select formControlName="reserved"
-                            class="w-full rounded-lg border border-outline-variant px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
-                            <option value="all">Todos</option>
-                            <option value="yes">Solo reservados</option>
-                            <option value="no">Solo no reservados</option>
-                        </select>
-                    </div>
-
-                    <div class="flex flex-col gap-2 pt-2 sm:col-span-2 lg:col-span-1">
+                    <div class="flex flex-col gap-2 pt-2">
                         <app-button type="submit" [fullWidth]="true">Aplicar filtros</app-button>
                         <app-button
                             type="button"
@@ -72,10 +72,22 @@
         </aside>
 
         <main class="min-w-0 flex-1">
-            <app-page-title size="compact">
-                {{ productsState().data['total'] }}
-                {{ productsState().data['total'] === 1 ? 'resultado' : 'resultados' }}
-            </app-page-title>
+            <div class="mb-stack-md flex flex-col gap-3 border-b border-outline-variant/40 pb-stack-md sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-sm text-on-surface-variant">
+                    Mostrando <span class="font-semibold text-on-surface">{{ productsState().data['total'] }}</span>
+                    {{ productsState().data['total'] === 1 ? 'resultado' : 'resultados' }}
+                </p>
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-on-surface-variant">Ordenar:</label>
+                    <select
+                        [value]="filterForm.value.sort || 'newest'"
+                        (change)="onSortSelectChange($event)"
+                        class="rounded-lg border border-outline-variant px-3 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="newest">Más recientes</option>
+                        <option value="oldest">Menos recientes</option>
+                    </select>
+                </div>
+            </div>
 
             @if (productsState().data['products'].length > 0) {
             <app-list-products [listProducts]="productsState().data['products']"></app-list-products>

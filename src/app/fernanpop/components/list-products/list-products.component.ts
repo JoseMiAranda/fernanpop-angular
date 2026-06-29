@@ -11,12 +11,12 @@ import { CategoriesService } from '../../../services/categories.service';
 import { FavoritesService } from '../../../services/favorites.service';
 import { CustomResponse, SuccessResponse } from '../../../interfaces/response-interface';
 import { Subscription } from 'rxjs';
-import { ButtonComponent, CardComponent } from '../../../shared/ui';
+import { BadgeComponent, ButtonComponent, CardComponent } from '../../../shared/ui';
 
 @Component({
   selector: 'app-list-products',
   standalone: true,
-  imports: [CommonModule, RouterLink, CurrentCurrencyPipe, CategoryNamePipe, ConditionNamePipe, CardComponent, ButtonComponent],
+  imports: [CommonModule, RouterLink, CurrentCurrencyPipe, CategoryNamePipe, ConditionNamePipe, CardComponent, BadgeComponent, ButtonComponent],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })

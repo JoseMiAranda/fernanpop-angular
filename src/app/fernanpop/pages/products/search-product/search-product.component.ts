@@ -11,9 +11,12 @@ import { CommonModule } from '@angular/common';
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
 import { Category } from '../../../../interfaces/category.interface';
 import {
+  BreadcrumbsComponent,
   ButtonComponent,
   CardComponent,
   EmptyStateComponent,
+  FilterGroupComponent,
+  FilterOption,
   PageContainerComponent,
   PageTitleComponent,
   TextComponent,
@@ -33,6 +36,8 @@ import {
     CardComponent,
     EmptyStateComponent,
     TextComponent,
+    BreadcrumbsComponent,
+    FilterGroupComponent,
   ],
   templateUrl: './search-product.component.html',
 })
@@ -41,6 +46,24 @@ export class SearchProductComponent implements OnInit, OnDestroy {
   public productsState = signal<State>(new LoadingState());
   public categories: Category[] = [];
   public filterForm: FormGroup;
+
+  readonly sortOptions: FilterOption[] = [
+    { value: 'newest', label: 'Más recientes' },
+    { value: 'oldest', label: 'Menos recientes' },
+  ];
+
+  readonly reservedOptions: FilterOption[] = [
+    { value: 'all', label: 'Todos' },
+    { value: 'yes', label: 'Solo reservados' },
+    { value: 'no', label: 'Solo no reservados' },
+  ];
+
+  get categoryOptions(): FilterOption[] {
+    return [
+      { value: '', label: 'Todas las categorías' },
+      ...this.categories.map((c) => ({ value: c.id, label: c.name })),
+    ];
+  }
   private queryParams: Params = {};
   private queryParamsSubscription: Subscription = new Subscription();
   private productsSubscription: Subscription = new Subscription();
@@ -155,6 +178,53 @@ export class SearchProductComponent implements OnInit, OnDestroy {
     this.router.navigate(['/products'], {
       queryParams: { ...this.queryParams, page },
     });
+  }
+
+  pageTitle(): string {
+    const categoryId = this.queryParams['categoryId'];
+    if (categoryId) {
+      const category = this.categories.find((c) => c.id === categoryId);
+      return category?.name ?? 'Productos';
+    }
+    if (this.queryParams['q']) {
+      return `Resultados para "${this.queryParams['q']}"`;
+    }
+    return 'Productos';
+  }
+
+  breadcrumbItems(): { label: string; link?: string }[] {
+    const items: { label: string; link?: string }[] = [
+      { label: 'Inicio', link: '/' },
+      { label: 'Marketplace', link: '/products' },
+    ];
+    const categoryId = this.queryParams['categoryId'];
+    if (categoryId) {
+      const category = this.categories.find((c) => c.id === categoryId);
+      if (category) {
+        items.push({ label: category.name });
+      }
+    } else {
+      items.push({ label: 'Productos' });
+    }
+    return items;
+  }
+
+  onCategoryChange(value: string): void {
+    this.filterForm.patchValue({ categoryId: value });
+  }
+
+  onSortChange(value: string): void {
+    this.filterForm.patchValue({ sort: value });
+  }
+
+  onReservedChange(value: string): void {
+    this.filterForm.patchValue({ reserved: value });
+  }
+
+  onSortSelectChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.filterForm.patchValue({ sort: value });
+    this.applyFilters();
   }
 
   private syncFormFromQueryParams(params: Params): void {
