@@ -19,6 +19,7 @@ import { RouterLink } from '@angular/router';
 import { SellerSummary } from '../../../../interfaces/seller.interface';
 import { ReviewsService } from '../../../../services/reviews.service';
 import { SellerReviewsSummary } from '../../../../interfaces/review.interface';
+import { ConversationsService } from '../../../../services/conversations.service';
 
 @Component({
   selector: 'app-info-product',
@@ -41,8 +42,10 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   public sellerReviewsSummary = signal<SellerReviewsSummary>({ averageScore: 0, totalReviews: 0, reviews: [] });
   public categories: Category[] = [];
   private buyProductSubscription: Subscription = new Subscription();
+  private conversationSubscription: Subscription = new Subscription();
   private categoriesSubscription: Subscription = new Subscription();
   private reviewsSubscription: Subscription = new Subscription();
+  public contactSellerState = signal<State>(new InitialState());
 
   constructor(
     private transactionsService: TransactionsService,
@@ -50,6 +53,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     private productService: ProductsService,
     private categoriesService: CategoriesService,
     private reviewsService: ReviewsService,
+    private conversationsService: ConversationsService,
     private authService: AuthService,
     private router: Router,
   ) { }
@@ -84,6 +88,7 @@ export class InfoProductComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.getProductsByIdSubscription.unsubscribe();
     this.buyProductSubscription.unsubscribe();
+    this.conversationSubscription.unsubscribe();
     this.categoriesSubscription.unsubscribe();
     this.reviewsSubscription.unsubscribe();
   }
@@ -218,6 +223,41 @@ export class InfoProductComponent implements OnInit, OnDestroy {
     }
 
     this.favoritesService.toggleFavorite(this.productState().data.id).subscribe();
+  }
+
+  contactSeller(): void {
+    if (!this.authService.currentUser()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (this.productState().type !== 'success') {
+      return;
+    }
+
+    this.contactSellerState.set(new LoadingState());
+    this.conversationSubscription.unsubscribe();
+    this.conversationSubscription = this.conversationsService
+      .createOrGetConversation(this.productState().data.id)
+      .subscribe({
+        next: (response: CustomResponse) => {
+          if (response instanceof SuccessResponse) {
+            this.contactSellerState.set(new InitialState());
+            this.router.navigate(['/user/messages', response.data.id]);
+          } else if (response instanceof ErrorResponse) {
+            this.contactSellerState.set(new ErrorState(response.error));
+          }
+        },
+      });
+  }
+
+  canContactSeller(): boolean {
+    if (this.productState().type !== 'success') {
+      return false;
+    }
+
+    const product = this.productState().data;
+    return !product.status.includes('sold') && !product.status.includes('deleted');
   }
 
 }

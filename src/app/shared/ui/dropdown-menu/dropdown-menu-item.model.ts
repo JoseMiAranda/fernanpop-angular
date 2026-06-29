@@ -1,4 +1,4 @@
-export type DropdownMenuIcon = 'box' | 'truck' | 'heart' | 'user' | 'sign-in' | 'sign-out';
+export type DropdownMenuIcon = 'box' | 'truck' | 'heart' | 'user' | 'message' | 'sign-in' | 'sign-out';
 
 export interface DropdownMenuItem {
   label: string;

@@ -100,6 +100,20 @@ export const routes: Routes = [
                 loadComponent: () => TransactionsComponent,
             },
             {
+                canActivate: [LoggedGuard],
+                path: 'user/messages',
+                title: 'messages',
+                loadComponent: () => import('./fernanpop/pages/messages/inbox/inbox.component')
+                    .then(c => c.InboxComponent),
+            },
+            {
+                canActivate: [LoggedGuard],
+                path: 'user/messages/:id',
+                title: 'conversation',
+                loadComponent: () => import('./fernanpop/pages/messages/chat/chat.component')
+                    .then(c => c.ChatComponent),
+            },
+            {
                 path: 'error',
                 title: 'error',
                 loadComponent: () => ErrorComponent,

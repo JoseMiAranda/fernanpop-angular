@@ -149,15 +149,35 @@
                     <app-button [fullWidth]="true" (action)="goToUpdate()">Modificar</app-button>
                     }
                     } @else {
+                    @if (canContactSeller()) {
+                    <app-button
+                        [fullWidth]="true"
+                        variant="secondary"
+                        [disabled]="contactSellerState().type === 'loading'"
+                        (action)="contactSeller()">
+                        {{ contactSellerState().type === 'loading' ? 'Abriendo chat...' : 'Contactar vendedor' }}
+                    </app-button>
+
+                    @if (contactSellerState().type === 'error') {
+                    <p class="mt-2 text-center text-sm text-error">
+                        No se pudo abrir el chat. {{ contactSellerState().error }}
+                    </p>
+                    }
+                    }
+
                     @if (needsEmailVerification()) {
-                    <p class="mb-stack-sm text-center text-sm text-on-surface-variant">
+                    <p class="mb-stack-sm mt-4 text-center text-sm text-on-surface-variant">
                         Verifica tu correo para comprar este producto.
                     </p>
                     <app-button [fullWidth]="true" (action)="buy()">Verificar correo</app-button>
                     } @else if (buyProductState().type === 'initial') {
+                    <div class="mt-4">
                     <app-button [fullWidth]="true" (action)="buy()">Comprar</app-button>
+                    </div>
                     } @else {
+                    <div class="mt-4">
                     <app-button [fullWidth]="true" [disabled]="true">Comprando...</app-button>
+                    </div>
                     }
                     }
                 </div>

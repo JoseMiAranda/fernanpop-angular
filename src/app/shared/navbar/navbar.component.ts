@@ -48,6 +48,11 @@ export class NavbarComponent implements OnInit {
           action: () => this.router.navigate(['/user/favorites']),
         },
         {
+          label: 'Mensajes',
+          icon: 'message',
+          action: () => this.router.navigate(['/user/messages']),
+        },
+        {
           label: 'Editar perfil',
           icon: 'user',
           action: () => this.router.navigate(['/user/profile']),

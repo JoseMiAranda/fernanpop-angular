@@ -4,6 +4,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptor';
@@ -35,6 +36,7 @@ export const appConfig: ApplicationConfig = {
     }),
     // Obtenemos el auth de Firebase
     importProvidersFrom(provideFirebaseApp(() => initializeApp(firebaseCredentials))),
+    importProvidersFrom(provideFirestore(() => getFirestore())),
     importProvidersFrom(
       provideAuth(() => {
         const auth = getAuth();
