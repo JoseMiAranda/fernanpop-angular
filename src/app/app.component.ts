@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { FavoritesService } from './services/favorites.service';
+import { MessageNotificationService } from './services/message-notification.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   authService = inject(AuthService);
   favoritesService = inject(FavoritesService);
+  private messageNotificationService = inject(MessageNotificationService);
   private router = inject(Router);
   private routerSubscription?: Subscription;
 
@@ -28,11 +30,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
         void this.authService.refreshAccessToken().then(() => {
           this.favoritesService.loadFavoriteIds();
+          this.messageNotificationService.start(user.uid);
         });
       } else {
         this.authService.clearAccessToken();
         this.authService.currentUser.set(null);
         this.favoritesService.clearFavorites();
+        this.messageNotificationService.stop();
       }
     });
 

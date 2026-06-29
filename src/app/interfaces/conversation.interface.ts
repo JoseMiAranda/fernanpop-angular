@@ -15,4 +15,5 @@ export interface Conversation {
   createdAt: string | Date;
   updatedAt: string | Date;
   lastMessageAt: string | Date;
+  lastMessageSenderId?: string;
 }
